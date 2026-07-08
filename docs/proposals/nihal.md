@@ -1,6 +1,6 @@
 # Capstone Project Proposal: Agent-Based Swarm Modeling for Decentralized Energy Grid Optimization
 
-**Team Members:** Nihal, Kanishka, Swati, Priya 
+**Student:** Nihal 
 **Course:** DAMO-699-1: Summer 2026 Capstone Project 
 **Supervisor:** Professor Mehdi Mostofi 
 **Methodology:** CRISP-DM Framework with MLOps Data Streaming 
@@ -9,7 +9,17 @@
 ---
 
 ## 1. Problem Statement (Business Understanding)
-Traditional energy grids rely on top-down, centralized optimization models that struggle to adapt to the dynamic, high-frequency volatility of renewable energy sources and shifting consumer demands. As the global infrastructure transitions toward a decentralized energy era, there is a critical need for localized resource routing. This project proposes an Agent-Based Swarm Modeling approach, where independent nodes operate under localized reinforcement learning rules to collectively balance grid loads. This localized "swarm intelligence" presents a highly scalable alternative to traditional macro-level predictive modeling and sets a foundational architectural framework applicable to broader dynamic networks.
+Traditional macro-systems frequently rely on top-down, centralized optimization models that struggle to adapt to the dynamic, high-frequency volatility and shifting parameters of complex environments. As global infrastructures, natural observations, and analytical domains transition toward a decentralized era, there is a critical need for localized, autonomous resource routing and decision-making. /
+
+This project proposes an Agent-Based Swarm Modeling approach, where independent, decentralized nodes operate under localized rules (such as reinforcement learning policies or kinetic laws) to collectively balance, optimize, or map the broader system. This localized "swarm intelligence" presents a highly scalable alternative to traditional macro-level predictive modeling. By focusing on bottom-up emergent phenomena, this project sets a foundational architectural framework applicable to any dynamic, decentralized network. /
+
+**Depending on the final primary dataset secured, this generalized swarm architecture will serve as the testing ground for one of the following domains:**
+
+1. Astrophysics & Cosmological Modeling: Analyzing emergent phenomena in star cluster formations, meteorite predictions, or coordinating satellite cluster telemetry utilizing primary NASA or NOAA datasets.
+2. Energy Grid Optimization: Simulating smart battery nodes to route power dynamically based on high-frequency renewable energy generation (e.g., historical NREL data).
+3. Autonomous Logistics & Military Applications: Decentralized routing algorithms for drone fleets, supply chains, or robotics operating in unpredictable physical environments.
+4. Biological & Natural Emergent Phenomena: Modeling the localized rules that generate macro-level biological structures, such as bird swarms or fish school formations, to understand how micro-changes trigger massive environmental shifts.
+5. Quantitative Finance: Modeling liquidity flows and independent algorithmic trading bots executing decentralized arbitrage strategies across volatile market data.
 
 ## 2. Research Questions
 * **Primary:** Can a decentralized, multi-agent reinforcement learning (MARL) swarm architecture successfully optimize resource allocation and balance supply/demand loads within a simulated energy grid using historical meteorological and generation data better than traditional, centralized static baseline models? 
