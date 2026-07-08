@@ -22,8 +22,24 @@ This project proposes an Agent-Based Swarm Modeling approach, where independent,
 5. Quantitative Finance: Modeling liquidity flows and independent algorithmic trading bots executing decentralized arbitrage strategies across volatile market data.
 
 ## 2. Research Questions
-* **Primary:** Can a decentralized, multi-agent reinforcement learning (MARL) swarm architecture successfully optimize resource allocation and balance supply/demand loads within a simulated energy grid using historical meteorological and generation data better than traditional, centralized static baseline models? 
-* **Secondary:** How effectively can Python-based generator functions simulate a live MLOps data streaming environment to test the swarm's real-time adaptability to sudden weather or demand anomalies? 
+
+### The Generalized Core Inquiries (Domain-Agnostic)
+To validate the efficacy of localized swarm intelligence over traditional macro-level predictive modeling, this project investigates the following primary and secondary questions:
+
+* **Primary Question 1 (Optimization & Routing):** Can a decentralized, multi-agent reinforcement learning (MARL) swarm architecture successfully optimize resource allocation, route entities, and balance systemic loads within a simulated dynamic network better than traditional, centralized static baseline models?
+* **Primary Question 2 (Emergent Stability):** To what extent do localized kinetic or reinforcement learning rules applied to independent nodes result in macro-level system stability when subjected to historical environmental or market constraints?
+* **Secondary Question (MLOps & Adaptability):** How effectively can Python-based generator functions simulate a live, high-frequency MLOps data streaming environment to test the swarm's real-time adaptability to sudden systemic shocks, volatility, or data anomalies?
+
+---
+
+### Domain-Specific Applications (Phase 1 Testing Grounds)
+Depending on the primary dataset secured, the generalized questions above will be focused into one of the following practical inquiries:
+
+* **Astrophysics & Cosmological Modeling:** Can a decentralized swarm algorithm successfully coordinate satellite cluster telemetry or model the emergent orbital stability of celestial bodies (e.g., star clusters, meteorites) during unpredictable spatial anomalies better than centralized predictive trajectories using NASA/NOAA data?
+* **Quantitative Finance:** Can independent algorithmic trading agents (the swarm) execute decentralized arbitrage and balance liquidity flows across a simulated financial network better than macro-economic baseline models during a sudden market flash crash?
+* **Autonomous Logistics & Military Applications:** Can a MARL architecture optimize the real-time routing of drone fleets or supply chains operating within unpredictable, high-volatility physical environments (e.g., sudden weather events or infrastructure failures)?
+* **Biological & Natural Emergent Phenomena:** Can localized logic models accurately simulate the macro-level emergent structures of biological swarms (e.g., flocking, schooling) to predict how micro-environmental changes trigger massive ecosystem shifts?
+* **Energy Grid Optimization:** Can decentralized "smart battery nodes" successfully optimize energy storage and route power dynamically based on high-frequency renewable energy generation constraints, outperforming traditional top-down grid models?
 
 ## 3. Hypothesis
 By modeling an energy network as a Markov Decision Process (MDP) and applying localized Q-Learning algorithms to independent agents , the emergent swarm behavior will autonomously route energy efficiently, mitigating simulated grid overloads and shortages.
