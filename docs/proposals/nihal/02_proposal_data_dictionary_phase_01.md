@@ -66,3 +66,42 @@ if __name__ == "__main__":
     
     print(f"MLOps Pipeline Success. Environment file saved as {output_filename}")
 ***
+## Secondary Dataset: ERCOT Human Demand (Load)
+This dataset provides the human consumption baseline against which our swarm of agents must balance the energy grid.
+
+* **Source Authority:** Electric Reliability Council of Texas (ERCOT).
+* **Geographic Node:** COAST Weather Zone (Houston/Texas City).
+* **Temporal Scope:** Multi-year historical data (Initial test slice: August 2020).
+
+## Integrated MLOps ETL Pipeline
+This pipeline performs the automated extraction, temporal cleaning, and merging of NREL weather data with ERCOT human load data to produce the final environment state (`phase_01_master_environment.csv`).
+
+```python
+import pandas as pd
+
+# 1. Ingest and Clean ERCOT Data
+ercot_raw = pd.read_excel('/kaggle/input/datasets/vsnihal/load-file/Native_Load_2020.xlsx')
+ercot_raw['HourEnding'] = ercot_raw['HourEnding'].astype(str)
+ercot_raw['HourEnding'] = ercot_raw['HourEnding'].str.replace(' DST', '', regex=False)
+
+# Correct ERCOT's "24:00" notation to "00:00" and shift forward one day
+is_2400 = ercot_raw['HourEnding'].str.endswith('24:00')
+ercot_raw.loc[is_2400, 'HourEnding'] = ercot_raw.loc[is_2400, 'HourEnding'].str.replace('24:00', '00:00')
+ercot_raw['HourEnding'] = pd.to_datetime(ercot_raw['HourEnding'])
+ercot_raw.loc[is_2400, 'HourEnding'] += pd.Timedelta(days=1)
+
+# 2. Slice and Rename
+ercot_august = ercot_raw[(ercot_raw['HourEnding'].dt.month == 8) & (ercot_raw['HourEnding'].dt.year == 2020)]
+ercot_segmented = ercot_august[['HourEnding', 'COAST']].copy()
+ercot_segmented.rename(columns={'HourEnding': 'timestamp', 'COAST': 'demand_mw'}, inplace=True)
+
+# 3. Aggregate NREL and Merge
+nrel_segmented = pd.read_csv('phase_01_segmented.csv') 
+nrel_segmented['timestamp'] = pd.to_datetime(nrel_segmented['timestamp']).dt.tz_localize(None)
+ercot_segmented['timestamp'] = ercot_segmented['timestamp'].dt.tz_localize(None)
+
+nrel_segmented['timestamp'] = nrel_segmented['timestamp'].dt.floor('h')
+nrel_aggregated = nrel_segmented.groupby('timestamp').mean().reset_index()
+
+final_dataset = pd.merge(nrel_aggregated, ercot_segmented, on='timestamp', how='inner')
+final_dataset.to_csv('phase_01_master_environment.csv', index=False)
