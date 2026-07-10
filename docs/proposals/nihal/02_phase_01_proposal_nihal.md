@@ -96,7 +96,7 @@ While the overarching goal is a Generalized Theory applicable to Quant Finance a
 ### Historical Documentation
 For archival purposes and tracking the evolution of the project scope, the initial overarching "Grand Theory" proposal encompassing all multi-sector dynamic environments can be viewed in the early repository commits here:
 
-* [Link to Initial 'Grand Theory' Proposal Commit](https://github.com/nihalunfc/unfc-captsone/commit/a81f0b7410650bebd76861f16a66764a3a755fdd) *
+* [Link to Initial 'Grand Theory' Proposal Commit](https://github.com/nihalunfc/unfc-captsone/commit/a81f0b7410650bebd76861f16a66764a3a755fdd)
 
 ### Appendix 2: Post-Capstone Extensibility & Publication Scope (Phases 2 & 3)
 
