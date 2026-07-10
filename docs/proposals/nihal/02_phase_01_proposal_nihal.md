@@ -1,7 +1,7 @@
 # Capstone Project Proposal: Decentralized Energy Grid Optimization via Agent-Based Swarm Modeling
 
-**Team Members:** Nihal, Kanishka, Swati, Priya
-**Course:** DAMO-699-1 (Summer 2026)
+**Team Members:** Nihal, Kanishka, Swati, Priya \
+**Course:** DAMO-699-1 (Summer 2026) \
 **Timeline:** 11 Weeks
 
 ---
