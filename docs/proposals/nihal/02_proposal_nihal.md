@@ -1,6 +1,6 @@
 # Capstone Project Proposal: Agent-Based Swarm Modeling for Dynamic Network Optimization
+## Proposal Number : 2
 
-**Student:** Nihal \
 **Course:** DAMO-699-1: Summer 2026 Capstone Project  \
 **Supervisor:** Professor Mehdi Mostofi  \
 **Methodology:** CRISP-DM Framework with MLOps Data Streaming  \
