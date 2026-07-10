@@ -66,6 +66,7 @@ if __name__ == "__main__":
     
     print(f"MLOps Pipeline Success. Environment file saved as {output_filename}")
 ***
+```
 ## Secondary Dataset: ERCOT Human Demand (Load)
 This dataset provides the human consumption baseline against which our swarm of agents must balance the energy grid.
 
@@ -105,3 +106,4 @@ nrel_aggregated = nrel_segmented.groupby('timestamp').mean().reset_index()
 
 final_dataset = pd.merge(nrel_aggregated, ercot_segmented, on='timestamp', how='inner')
 final_dataset.to_csv('phase_01_master_environment.csv', index=False)
+```
