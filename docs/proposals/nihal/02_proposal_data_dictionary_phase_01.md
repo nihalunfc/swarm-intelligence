@@ -1,109 +1,67 @@
-# Data Dictionary: Phase 1 Environment State
+# Phase 1: Energy Grid Optimization (Nihal)
 
-## Primary Dataset: NREL Solar & Meteorological Supply
-This dataset serves as the base thermodynamic environment for the Agent-Based Swarm simulation. It provides the highly volatile, stochastic renewable energy generation metrics required to train the agents' Markov Decision Process.
+## Project Overview
+This repository contains the architectural foundation, data engineering pipeline, and simulation framework for the "Energy Grid Optimization" capstone project. 
 
-* **Source Authority:** National Solar Radiation Database (NSRDB) via the National Renewable Energy Laboratory (NREL).
-* **Reference URL:** [https://nsrdb.nrel.gov/data-viewer](https://nsrdb.nrel.gov/data-viewer)
-* **Geographic Node:** Texas City, Texas (Latitude: 29.41, Longitude: -94.90) - ERCOT Grid
-* **Temporal Scope:** Raw data extracted for Year 2020; dynamically filtered via MLOps pipeline to **August 2020** (High-volatility summer month).
-* **Resolution:** Hourly
+This project utilizes an **Agent-Based Swarm Modeling** approach to solve the problem of decentralized grid balancing. By utilizing Multi-Agent Reinforcement Learning (MARL), independent nodes (Smart Battery Agents) learn to autonomously route energy to mitigate volatility in renewable generation.
 
-### Active Variables (Environment State Space)
-The raw dataset contains 30+ meteorological columns. To optimize the Reinforcement Learning pipeline, the state space has been mathematically reduced to the following core features:
+## Data Governance & Architecture
+The foundation of this project is a synchronized, multivariate time-series environment. We have integrated two primary sources to create a "Virtual Power Plant" sandbox.
 
-| Feature Name | Unit | Description | Mathematical Purpose in Simulation |
-| :--- | :--- | :--- | :--- |
-| **GHI** | $W/m^2$ | Global Horizontal Irradiance | The primary driver of solar generation. Represents the total thermodynamic energy available for the "Smart Battery Nodes" to absorb. |
-| **DNI** | $W/m^2$ | Direct Normal Irradiance | Secondary solar metric (direct beam radiation). |
-| **DHI** | $W/m^2$ | Diffuse Horizontal Irradiance | Tertiary solar metric (scattered light). |
-| **Temperature** | Celsius | Ambient Surface Temperature | Used as an environmental penalty variable. High temperatures increase battery degradation during charge/discharge cycles. |
-| **Wind Speed** | $m/s$ | Surface Wind Velocity | Acts as a proxy variable for decentralized wind turbine generation across the node. |
+### 1. Primary Data Source: NREL (Solar & Wind)
+* **Description:** High-resolution meteorological and irradiance data.
+* **Metrics:** GHI (Global Horizontal Irradiance), DNI, DHI, Temperature, and Surface Wind Speed.
+* **Source:** [National Solar Radiation Database (NSRDB)](https://nsrdb.nrel.gov/)
+
+### 2. Secondary Data Source: ERCOT (Human Demand)
+* **Description:** Historical electricity load (demand) data for the Texas Coast (COAST) weather zone.
+* **Metrics:** Native Load (MW) at hourly intervals.
+* **Source:** [ERCOT Hourly Load Data Archives](https://www.ercot.com/gridinfo/load/load_hist)
 
 ---
 
-## Data Preprocessing & MLOps Pipeline
-**Data Governance Note:** Initial NREL metadata rows must be programmatically stripped, and temporal features (`Year`, `Month`, `Day`, `Hour`, `Minute`) must be merged into a single `timestamp` index. This ensures strict chronological alignment with the secondary ERCOT Human Demand dataset.
+## Data Dictionary
+| Variable | Unit | Description |
+| :--- | :--- | :--- |
+| `timestamp` | YYYY-MM-DD HH:MM | Standardized hourly index |
+| `GHI` | $W/m^2$ | Global Horizontal Irradiance |
+| `DNI` | $W/m^2$ | Direct Normal Irradiance |
+| `DHI` | $W/m^2$ | Diffuse Horizontal Irradiance |
+| `Temperature` | °C | Ambient surface temperature |
+| `Wind Speed` | m/s | Surface wind velocity |
+| `demand_mw` | MW | Human load requirement in COAST zone |
 
-The following Python/Pandas script serves as the Phase 1 ingestion pipeline. It ingests the raw NREL 2020 data, isolates the August testing sandbox, ruthlessly drops redundant meteorological features, and outputs the clean Environment State. I used kaggle notebook for the purpsoe of easeness to clean the data I downloaded
+---
 
-```python
-import pandas as pd
+## Pipeline Execution Status
+| Milestone | Status | Artifact |
+| :--- | :--- | :--- |
+| NREL Ingestion | Complete | `phase_01_rawdata.csv` |
+| ERCOT Ingestion | Complete | `Native_Load_2020.csv` |
+| Temporal Alignment | Complete | `phase_01_master_environment.csv` |
+| Swarm Environment | Pending | `Agent_Simulation_v1` |
 
-def process_nrel_environment(file_path):
-    """
-    Ingests and cleans raw NREL NSRDB data for the Swarm Environment.
-    """
-    # 1. Load the raw 2020 dataset 
-    # (skiprows=2 bypasses the NREL metadata rows to grab actual column headers)
-    df = pd.read_csv(file_path, skiprows=2)
-
-    # 2. Filter strictly for August (Month == 8) to create our Phase 1 Sandbox
-    august_df = df[df['Month'] == 8].copy()
-
-    # 3. Ruthlessly cut unwanted columns. Keep only thermodynamic and temporal data.
-    columns_to_keep = ['Year', 'Month', 'Day', 'Hour', 'Minute', 
-                       'GHI', 'DNI', 'DHI', 'Temperature', 'Wind Speed']
-    clean_env_df = august_df[columns_to_keep]
-
-    # 4. Create a unified DateTime index for MLOps alignment
-    clean_env_df['timestamp'] = pd.to_datetime(clean_env_df[['Year', 'Month', 'Day', 'Hour', 'Minute']])
-    clean_env_df.set_index('timestamp', inplace=True)
-
-    # Drop the raw time columns as they are now mathematically redundant
-    clean_env_df.drop(columns=['Year', 'Month', 'Day', 'Hour', 'Minute'], inplace=True)
-
-    return clean_env_df
-
-# Execute the pipeline
-if __name__ == "__main__":
-    raw_file = '744683_29.41_-94.90_2020.csv'
-    environment_df = process_nrel_environment(raw_file)
-    
-    # Export the clean, localized Environment State
-    output_filename = 'TexasCity_August2020_Environment.csv'
-    environment_df.to_csv(output_filename)
-    
-    print(f"MLOps Pipeline Success. Environment file saved as {output_filename}")
-***
-```
-## Secondary Dataset: ERCOT Human Demand (Load)
-This dataset provides the human consumption baseline against which our swarm of agents must balance the energy grid.
-
-* **Source Authority:** Electric Reliability Council of Texas (ERCOT).
-* **Geographic Node:** COAST Weather Zone (Houston/Texas City).
-* **Temporal Scope:** Multi-year historical data (Initial test slice: August 2020).
-
-## Integrated MLOps ETL Pipeline
-This pipeline performs the automated extraction, temporal cleaning, and merging of NREL weather data with ERCOT human load data to produce the final environment state (`phase_01_master_environment.csv`).
+## MLOps Data Pipeline (ETL Logic)
+The following Python logic is used to synchronize the disparate datasets into a mathematically aligned environment:
 
 ```python
+# MLOps Pipeline: Syncing NREL (Weather) and ERCOT (Demand)
 import pandas as pd
 
-# 1. Ingest and Clean ERCOT Data
-ercot_raw = pd.read_excel('/kaggle/input/datasets/vsnihal/load-file/Native_Load_2020.xlsx')
-ercot_raw['HourEnding'] = ercot_raw['HourEnding'].astype(str)
-ercot_raw['HourEnding'] = ercot_raw['HourEnding'].str.replace(' DST', '', regex=False)
+# 1. Load Datasets
+weather_df = pd.read_csv('nrel_data.csv', skiprows=2)
+load_df = pd.read_csv('Native_Load_2020.csv')
 
-# Correct ERCOT's "24:00" notation to "00:00" and shift forward one day
-is_2400 = ercot_raw['HourEnding'].str.endswith('24:00')
-ercot_raw.loc[is_2400, 'HourEnding'] = ercot_raw.loc[is_2400, 'HourEnding'].str.replace('24:00', '00:00')
-ercot_raw['HourEnding'] = pd.to_datetime(ercot_raw['HourEnding'])
-ercot_raw.loc[is_2400, 'HourEnding'] += pd.Timedelta(days=1)
+# 2. Sanitize and Align
+# Convert timestamps, strip 'DST' anomalies, and round to nearest hour
+weather_df['timestamp'] = pd.to_datetime(weather_df['Time'])
+load_df['HourEnding'] = pd.to_datetime(load_df['HourEnding'].str.replace(' DST', ''))
 
-# 2. Slice and Rename
-ercot_august = ercot_raw[(ercot_raw['HourEnding'].dt.month == 8) & (ercot_raw['HourEnding'].dt.year == 2020)]
-ercot_segmented = ercot_august[['HourEnding', 'COAST']].copy()
-ercot_segmented.rename(columns={'HourEnding': 'timestamp', 'COAST': 'demand_mw'}, inplace=True)
+# 3. Temporal Aggregation & Merge
+# Mean-aggregation to ensure 1-to-1 relationship per hour
+master_df = weather_df.groupby('timestamp').mean().merge(
+    load_df, left_on='timestamp', right_on='HourEnding'
+)
 
-# 3. Aggregate NREL and Merge
-nrel_segmented = pd.read_csv('phase_01_segmented.csv') 
-nrel_segmented['timestamp'] = pd.to_datetime(nrel_segmented['timestamp']).dt.tz_localize(None)
-ercot_segmented['timestamp'] = ercot_segmented['timestamp'].dt.tz_localize(None)
-
-nrel_segmented['timestamp'] = nrel_segmented['timestamp'].dt.floor('h')
-nrel_aggregated = nrel_segmented.groupby('timestamp').mean().reset_index()
-
-final_dataset = pd.merge(nrel_aggregated, ercot_segmented, on='timestamp', how='inner')
-final_dataset.to_csv('phase_01_master_environment.csv', index=False)
-```
+# 4. Export
+master_df.to_csv('phase_01_master_environment.csv', index=False)
