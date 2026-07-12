@@ -6,16 +6,14 @@ This repository contains the architectural foundation, data engineering pipeline
 This project utilizes an **Agent-Based Swarm Modeling** approach to solve the problem of decentralized grid balancing. By utilizing Multi-Agent Reinforcement Learning (MARL), independent nodes (Smart Battery Agents) learn to autonomously route energy to mitigate volatility in renewable generation.
 
 ## Data Governance & Architecture
-The foundation of this project is a synchronized, multivariate time-series environment. We have integrated two primary sources to create a "Virtual Power Plant" sandbox.
+The foundation of this project is a synchronized, multivariate time-series environment.
 
 ### 1. Primary Data Source: NREL (Weather/Generation)
 * **Description:** High-resolution meteorological and irradiance data.
-* **Metrics:** GHI, DNI, DHI, Temperature, and Wind Speed.
 * **Source:** [National Solar Radiation Database (NSRDB)](https://nsrdb.nrel.gov/)
 
 ### 2. Secondary Data Source: ERCOT (Human Demand)
 * **Description:** Historical electricity load (demand) data for the Texas Coast (COAST) weather zone.
-* **Metrics:** Native Load (MW) at hourly intervals.
 * **Source:** [ERCOT Hourly Load Data Archives](https://www.ercot.com/gridinfo/load/load_hist)
 
 ---
@@ -33,28 +31,42 @@ The foundation of this project is a synchronized, multivariate time-series envir
 
 ---
 
-## MLOps Data Pipeline (ETL Logic)
-This pipeline synchronizes the disparate NREL and ERCOT datasets into a mathematically aligned environment.
+## Data Management Pipeline (`data_ingestion.py`)
+Use this script to transform raw CSV/XLSX exports into the `phase_01_master_environment.csv` file required for model training.
 
 ```python
 import pandas as pd
+import os
 
-# 1. Load Datasets
-weather_df = pd.read_csv('phase_01_rawdata.csv')
-ercot_raw = pd.read_excel('Native_Load_2020.xlsx')
+def ingest_data():
+    # 1. Load Raw NREL Data
+    # Assumes file is in raw_data/ directory
+    weather_df = pd.read_csv('raw_data/nrel_2020.csv', skiprows=2)
+    weather_df['timestamp'] = pd.to_datetime(weather_df['Time'])
+    
+    # 2. Load Raw ERCOT Data
+    # Assumes file is in raw_data/ directory
+    ercot_df = pd.read_excel('raw_data/native_load_2020.xlsx')
+    
+    # Clean ERCOT data: Remove 'DST' tags and convert to datetime
+    ercot_df['HourEnding'] = ercot_df['HourEnding'].astype(str).str.replace(' DST', '')
+    ercot_df['HourEnding'] = pd.to_datetime(ercot_df['HourEnding'])
+    
+    # 3. Synchronize Datasets
+    # Aggregate NREL to hourly, then merge on timestamp
+    weather_agg = weather_df.groupby('timestamp').mean()
+    
+    master_df = weather_agg.merge(
+        ercot_df[['HourEnding', 'COAST']], 
+        left_on='timestamp', 
+        right_on='HourEnding'
+    ).rename(columns={'COAST': 'demand_mw'})
+    
+    # 4. Save Master Environment
+    if not os.path.exists('processed'):
+        os.makedirs('processed')
+    master_df.to_csv('processed/phase_01_master_environment.csv', index=False)
+    print("ETL Process Complete: master_environment.csv generated.")
 
-# 2. Scrub & Normalize
-# Handle ERCOT quirks (DST tags and 24:00 time formats)
-ercot_raw['HourEnding'] = ercot_raw['HourEnding'].astype(str).str.replace(' DST', '')
-ercot_raw['HourEnding'] = pd.to_datetime(ercot_raw['HourEnding'])
-
-# 3. Aggregate & Merge
-# Grouping NREL data by hour to ensure 1-to-1 temporal alignment
-weather_agg = weather_df.groupby('timestamp').mean()
-master_df = weather_agg.merge(
-    ercot_raw[['HourEnding', 'COAST']], 
-    left_on='timestamp', right_on='HourEnding'
-).rename(columns={'COAST': 'demand_mw'})
-
-# 4. Final Output
-master_df.to_csv('phase_01_master_environment.csv', index=False)
+if __name__ == "__main__":
+    ingest_data()
