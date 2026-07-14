@@ -1,72 +1,60 @@
-# Phase 1: Energy Grid Optimization (Nihal)
+# Phase 1: Energy Grid Optimization (Nihal) - Data Dictionary
 
-## Project Overview
-This repository contains the architectural foundation, data engineering pipeline, and simulation framework for the "Energy Grid Optimization" capstone project. 
+## 1. Project Overview & Data Architecture
+This document outlines the data governance and mapping for the "Energy Grid Optimization" capstone project. By utilizing Multi-Agent Reinforcement Learning (MARL), independent nodes (Smart Battery Agents) learn to autonomously route energy to mitigate volatility in renewable generation. 
 
-This project utilizes an **Agent-Based Swarm Modeling** approach to solve the problem of decentralized grid balancing. By utilizing Multi-Agent Reinforcement Learning (MARL), independent nodes (Smart Battery Agents) learn to autonomously route energy to mitigate volatility in renewable generation.
+The data architecture is strictly reproducible, relying entirely on the provided scripts (`data_ingestion_nrel.py`, `data_ingestion_ercot.py`, `data_merge.py`) within the repository to transform the raw files into the final state-space matrix.
 
-## Data Governance & Architecture
-The foundation of this project is a synchronized, multivariate time-series environment.
+## 2. Primary Data Sources & Authenticity
+To ensure academic rigor and pristine data governance, we use 100% original, primary-source datasets:
 
-### 1. Primary Data Source: NREL (Weather/Generation)
-* **Description:** High-resolution meteorological and irradiance data.
-* **Source:** [National Solar Radiation Database (NSRDB)](https://nsrdb.nrel.gov/)
-
-### 2. Secondary Data Source: ERCOT (Human Demand)
-* **Description:** Historical electricity load (demand) data for the Texas Coast (COAST) weather zone.
-* **Source:** [ERCOT Hourly Load Data Archives](https://www.ercot.com/gridinfo/load/load_hist)
+* **Weather & Solar Irradiance:** National Renewable Energy Laboratory (NREL) National Solar Radiation Database.
+    * **Source Link:** [NSRDB Viewer](https://nsrdb.nrel.gov/)
+    * **Raw File:** `nrel_rawdata.csv`
+    * **Processing Script:** `data_ingestion_nrel.py`
+    * **Cleaned Output:** `nrel_cleaned.csv`
+* **Human Energy Demand:** Electric Reliability Council of Texas (ERCOT) Hourly Native Load.
+    * **Source Link:** [ERCOT Hourly Load Archives](https://www.ercot.com/gridinfo/load/load_hist)
+    * **Raw File:** `ercot_rawdata.xlsx`
+    * **Processing Script:** `data_ingestion_ercot.py`
+    * **Cleaned Output:** `ercot_cleaned.csv`
 
 ---
 
-## Data Dictionary
-| Variable | Unit | Source | Description |
+## 3. Dataset Mapping & Taxonomy
+
+The synthesis engine (`data_merge.py`) fuses the cleaned datasets using a strict inner merge on a synthesized **Connecting Label**. The three tables below illustrate the lineage of each data point from its raw state to the final merged matrix.
+
+### Table A: ERCOT Extraction Map
+*Extracted via `data_ingestion_ercot.py`*
+
+| Raw Label (`ercot_rawdata.xlsx`) | Intermediate Label (`ercot_cleaned.csv`) | Purpose / Transformation |
+| :--- | :--- | :--- |
+| `HourEnding` | **`Timestamp`** (Connecting Label) | Scrubbed "24:00" & DST anomalies; converted to unified standard datetime. |
+| `COAST` | `ERCOT_COAST_Load_MW` | Isolated target region; standardized naming. |
+| *(All other zones)* | *Dropped* | Filtered out to maintain strict COAST scope. |
+
+### Table B: NREL Extraction Map
+*Extracted via `data_ingestion_nrel.py`*
+
+| Raw Label (`nrel_rawdata.csv`) | Intermediate Label (`nrel_cleaned.csv`) | Purpose / Transformation |
+| :--- | :--- | :--- |
+| `Year`, `Month`, `Day`, `Hour`, `Minute` | **`Timestamp`** (Connecting Label) | Reconstructed into unified datetime; 30-min offset floored to top-of-hour. |
+| `GHI` | `NREL_GHI_W_m2` | Standardized Global Horizontal Irradiance metric. |
+| `DNI` | `NREL_DNI_W_m2` | Standardized Direct Normal Irradiance metric. |
+| `DHI` | `NREL_DHI_W_m2` | Standardized Diffuse Horizontal Irradiance metric. |
+| `Temperature` | `NREL_Temperature_C` | Standardized ambient surface temperature. |
+| `Wind Speed` | `NREL_Wind_Speed_m_s` | Standardized surface wind velocity. |
+
+### Table C: Master Merged Data Dictionary
+*Fused via `data_merge.py` into `sample_merged_dataset.csv`*
+
+| Final Matrix Label | Unit | Source Origin | Description |
 | :--- | :--- | :--- | :--- |
-| `timestamp` | YYYY-MM-DD HH:MM | Sync | Standardized hourly index |
-| `GHI` | $W/m^2$ | NREL | Global Horizontal Irradiance |
-| `DNI` | $W/m^2$ | NREL | Direct Normal Irradiance |
-| `DHI` | $W/m^2$ | NREL | Diffuse Horizontal Irradiance |
-| `Temperature` | °C | NREL | Ambient surface temperature |
-| `Wind Speed` | m/s | NREL | Surface wind velocity |
-| `demand_mw` | MW | ERCOT | Human load requirement (COAST zone) |
-
----
-
-## Data Management Pipeline (`data_ingestion.py`)
-Use this script to transform raw CSV/XLSX exports into the `phase_01_master_environment.csv` file required for model training.
-
-```python
-import pandas as pd
-import os
-
-def ingest_data():
-    # 1. Load Raw NREL Data
-    # Assumes file is in raw_data/ directory
-    weather_df = pd.read_csv('raw_data/nrel_2020.csv', skiprows=2)
-    weather_df['timestamp'] = pd.to_datetime(weather_df['Time'])
-    
-    # 2. Load Raw ERCOT Data
-    # Assumes file is in raw_data/ directory
-    ercot_df = pd.read_excel('raw_data/native_load_2020.xlsx')
-    
-    # Clean ERCOT data: Remove 'DST' tags and convert to datetime
-    ercot_df['HourEnding'] = ercot_df['HourEnding'].astype(str).str.replace(' DST', '')
-    ercot_df['HourEnding'] = pd.to_datetime(ercot_df['HourEnding'])
-    
-    # 3. Synchronize Datasets
-    # Aggregate NREL to hourly, then merge on timestamp
-    weather_agg = weather_df.groupby('timestamp').mean()
-    
-    master_df = weather_agg.merge(
-        ercot_df[['HourEnding', 'COAST']], 
-        left_on='timestamp', 
-        right_on='HourEnding'
-    ).rename(columns={'COAST': 'demand_mw'})
-    
-    # 4. Save Master Environment
-    if not os.path.exists('processed'):
-        os.makedirs('processed')
-    master_df.to_csv('processed/phase_01_master_environment.csv', index=False)
-    print("ETL Process Complete: master_environment.csv generated.")
-
-if __name__ == "__main__":
-    ingest_data()
+| **`Timestamp`** | YYYY-MM-DD HH:MM | **Connecting Label** | Perfect hourly temporal alignment matching both subsets. |
+| `NREL_GHI_W_m2` | $W/m^2$ | NREL | Global Horizontal Irradiance |
+| `NREL_DNI_W_m2` | $W/m^2$ | NREL | Direct Normal Irradiance |
+| `NREL_DHI_W_m2` | $W/m^2$ | NREL | Diffuse Horizontal Irradiance |
+| `NREL_Temperature_C` | **°C** | NREL | Ambient surface temperature |
+| `NREL_Wind_Speed_m_s` | **m/s** | NREL | Surface wind velocity |
+| `ERCOT_COAST_Load_MW` | **MW** | ERCOT | Human load requirement (COAST zone) |
