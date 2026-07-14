@@ -9,7 +9,7 @@ The data architecture is strictly reproducible, relying entirely on the provided
 To ensure academic rigor and pristine data governance, we use 100% original, primary-source datasets:
 
 * **Weather & Solar Irradiance:** National Renewable Energy Laboratory (NREL) National Solar Radiation Database.
-    * **Source Link:** [NSRDB Viewer](https://nsrdb.nrel.gov/)
+    * **Source Link:** [NSRDB Viewer]([https://nsrdb.nrel.gov/](https://nsrdb.nlr.gov/data-viewer))
     * **Raw File:** `nrel_rawdata.csv`
     * **Processing Script:** `data_ingestion_nrel.py`
     * **Cleaned Output:** `nrel_cleaned.csv`
