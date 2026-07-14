@@ -1,17 +1,48 @@
-# Nihal's Capstone Proposal: Agent-Based Swarm Modeling
+# Capstone Proposal: Agent-Based Swarm Modeling
 
-This directory contains the draft proposal, data dictionaries, and initial raw data extractions for **Phase 1: Energy Grid Optimization**. 
+This directory contains the architectural foundation, draft proposal, data dictionaries, codebase, and data artifacts for **Phase 1: Energy Grid Optimization**[cite: 3]. 
+
+## Project Scope
+This proposal is strictly scoped for the roughly 11-week capstone timeline[cite: 3]. It relies entirely on original, primary time-series data to build a multi-agent reinforcement learning simulation of decentralized energy routing[cite: 3].
+
+---
+
+## Data Provenance & Authorities
+
+To ensure pristine data governance and academic rigor, this project utilizes datasets from highly regulated, government-backed authorities in the United States.
+
+### 1. National Renewable Energy Laboratory (NREL)
+* **Organization Type:** Federal Research Laboratory
+* **Jurisdiction:** United States Department of Energy (DOE)
+* **Description:** NREL is the United States' primary national laboratory dedicated to the research, development, commercialization, and deployment of renewable energy and energy efficiency technologies. 
+* **Data Utilization:** The project utilizes the National Solar Radiation Database (NSRDB) maintained by NREL to extract highly accurate, high-resolution historical meteorological and solar irradiance data (Global Horizontal Irradiance, Wind Velocity, Temperature) that strictly govern the simulation's thermodynamic constraints.
+
+### 2. Electric Reliability Council of Texas (ERCOT)
+* **Organization Type:** Independent System Operator (ISO)
+* **Jurisdiction:** Public Utility Commission of Texas (PUCT) / Texas Legislature
+* **Description:** ERCOT manages the flow of electric power to more than 26 million Texas customers, representing about 90 percent of the state's electric load. It is one of the most comprehensive and transparent grid operators in North America.
+* **Data Utilization:** The project utilizes ERCOT's strictly audited historical Native Load archives to represent the chaotic element of human energy demand within the targeted COAST weather zone.
+
+---
 
 ## Directory Index
 
+The following table outlines the complete taxonomy of this repository branch. Click on any file name to view its contents directly in the repository.
+
 | File Name | Description | Status |
 | :--- | :--- | :--- |
-| `02_phase_01_proposal_nihal.md` | [MAIN] The comprehensive, CRISP-DM compliant capstone project proposal. | Draft Complete |
-| `02_phase_01_proposal_laymans.md` | The Layman's guide of proposal - a simpler version to understand the core of the proposal | Draft Complete |
-| `02_proposal_data_dictionary_phase_01.md` | Data dictionary detailing the NREL environmental variables and the Pandas extraction code. | Complete |
-| `phase_01_sample_rawdata.csv` | The raw historical solar/wind dataset extracted from the NREL database (Texas City, 2020). | Complete |
-| `phase_01_sample_segmented.csv` | The lightweight, segmented dataset (August 2020) processed via Pandas for the MLOps pipeline. | Complete |
-| `phase_01_sample_master_environment.csv` | The finalized, merged dataset containing continuous hourly NREL weather and ERCOT human demand for August 2020 (744 rows). | **Complete** |
-
-## Project Scope
-This proposal is strictly scoped for the roughly 11-week capstone timeline. It relies entirely on original, primary time-series data from the National Renewable Energy Laboratory (NREL) to build a multi-agent reinforcement learning simulation of decentralized energy routing.
+| **Documentation & Proposals** | | |
+| [`proposal.md`](https://github.com/nihalunfc/unfc-captsone/blob/main/docs/proposals/nihal/proposal.md) | [MAIN] The comprehensive, CRISP-DM compliant capstone project proposal. | Complete |
+| [`proposal_laymans.md`](https://github.com/nihalunfc/unfc-captsone/blob/main/docs/proposals/nihal/proposal_laymans.md) | A simplified narrative guide outlining the core concepts of the proposal architecture[cite: 3]. | Complete |
+| [`proposal_datadictionary.md`](https://github.com/nihalunfc/unfc-captsone/blob/main/docs/proposals/nihal/proposal_datadictionary.md) | Comprehensive data dictionary detailing NREL/ERCOT variables, taxonomy, and extraction mapping. | Complete |
+| **MLOps Pipeline Codebase** | | |
+| [`data_ingestion_ercot.py`](https://github.com/nihalunfc/unfc-captsone/blob/main/docs/proposals/nihal/data_ingestion_ercot.py) | Python script to parse, clean, and standardize the raw ERCOT human demand dataset. | Complete |
+| [`data_ingestion_nrel.py`](https://github.com/nihalunfc/unfc-captsone/blob/main/docs/proposals/nihal/data_ingestion_nrel.py) | Python script to extract, clean, and temporally standardize the raw NREL weather dataset. | Complete |
+| [`data_merge.py`](https://github.com/nihalunfc/unfc-captsone/blob/main/docs/proposals/nihal/data_merge.py) | Synthesis engine script that executes an inner merge on the cleaned artifacts to generate the state matrix. | Complete |
+| **Raw Data Archives** | | |
+| [`ercot_rawdata.xlsx`](https://github.com/nihalunfc/unfc-captsone/blob/main/docs/proposals/nihal/ercot_rawdata.xlsx) | The raw historical energy load dataset extracted directly from ERCOT archives. | Complete |
+| [`nrel_rawdata.csv`](https://github.com/nihalunfc/unfc-captsone/blob/main/docs/proposals/nihal/nrel_rawdata.csv) | The raw historical solar/wind dataset extracted from the NREL database. | Complete |
+| **Processed Pipeline Artifacts** | | |
+| [`ercot_cleaned.csv`](https://github.com/nihalunfc/unfc-captsone/blob/main/docs/proposals/nihal/ercot_cleaned.csv) | The intermediate cleaned ERCOT dataset generated by the ingestion script. | Complete |
+| [`nrel_cleaned.csv`](https://github.com/nihalunfc/unfc-captsone/blob/main/docs/proposals/nihal/nrel_cleaned.csv) | The intermediate cleaned NREL dataset generated by the ingestion script. | Complete |
+| [`sample_merged_dataset.csv`](https://github.com/nihalunfc/unfc-captsone/blob/main/docs/proposals/nihal/sample_merged_dataset.csv) | The finalized, merged state-space matrix dataset containing continuous aligned weather and demand variables. | **Ready for Phase 2** |
