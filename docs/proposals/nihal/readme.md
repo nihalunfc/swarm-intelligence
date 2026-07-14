@@ -1,9 +1,9 @@
 # Capstone Proposal: Agent-Based Swarm Modeling
 
-This directory contains the architectural foundation, draft proposal, data dictionaries, codebase, and data artifacts for **Phase 1: Energy Grid Optimization**[cite: 3]. 
+This directory contains the architectural foundation, draft proposal, data dictionaries, codebase, and data artifacts for **Phase 1: Energy Grid Optimization**. 
 
 ## Project Scope
-This proposal is strictly scoped for the roughly 11-week capstone timeline[cite: 3]. It relies entirely on original, primary time-series data to build a multi-agent reinforcement learning simulation of decentralized energy routing[cite: 3].
+This proposal is strictly scoped for the roughly 11-week capstone timeline. It relies entirely on original, primary time-series data to build a multi-agent reinforcement learning simulation of decentralized energy routing.
 
 ---
 
