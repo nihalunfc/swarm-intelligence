@@ -1,4 +1,4 @@
-# Phase 1: Energy Grid Optimization (Nihal) - Data Dictionary
+# Phase 1: Energy Grid Optimization - Data Dictionary
 
 ## 1. Project Overview & Data Architecture
 This document outlines the data governance and mapping for the "Energy Grid Optimization" capstone project. By utilizing Multi-Agent Reinforcement Learning (MARL), independent nodes (Smart Battery Agents) learn to autonomously route energy to mitigate volatility in renewable generation. 
