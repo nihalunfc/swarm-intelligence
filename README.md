@@ -25,13 +25,13 @@ Phase 1 focuses exclusively on establishing a mathematically locked environment.
 
 | Variable | Unit | Source | Description |
 | :--- | :--- | :--- | :--- |
-| timestamp | YYYY-MM-DD HH | Sync | [cite_start]Hourly temporal index  |
-| GHI | W/m² | NREL | [cite_start]Global Horizontal Irradiance  |
-| DNI | W/m² | NREL | [cite_start]Direct Normal Irradiance |
-| DHI | W/m² | NREL | [cite_start]Diffuse Horizontal Irradiance  |
-| Temperature | °C | NREL | [cite_start]Ambient surface temperature  |
+| timestamp | YYYY-MM-DD HH | Sync | Hourly temporal index  |
+| GHI | W/m² | NREL | Global Horizontal Irradiance  |
+| DNI | W/m² | NREL | Direct Normal Irradiance |
+| DHI | W/m² | NREL | Diffuse Horizontal Irradiance  |
+| Temperature | °C | NREL | Ambient surface temperature  |
 | Wind Speed | m/s | NREL | Local wind velocity |
-| demand_mw | MW | ERCOT | [cite_start]Native load (COAST zone)  |
+| demand_mw | MW | ERCOT | Native load (COAST zone)  |
 
 ### Technical Architecture
 
