@@ -1,0 +1,12 @@
+# Ignore raw and clean data files
+data/raw_data/*.csv
+data/raw_data/*.xlsx
+data/raw_data/*.zip
+data/clean_data/*.csv
+
+# Ignore checkpoint models
+checkpoints/
+
+# Ignore Python caches
+__pycache__/
+*.pyc

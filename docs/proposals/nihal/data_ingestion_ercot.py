@@ -7,7 +7,10 @@ def clean_ercot_data(input_filepath, output_filepath, start_date, end_date):
     print(f"Loading raw ERCOT data from '{input_filepath}'...")
     
     try:
-        df = pd.read_excel(input_filepath)
+        if str(input_filepath).lower().endswith('.csv'):
+            df = pd.read_csv(input_filepath)
+        else:
+            df = pd.read_excel(input_filepath)
     except FileNotFoundError:
         print(f"Error: Could not find '{input_filepath}'.")
         sys.exit(1)
@@ -17,7 +20,7 @@ def clean_ercot_data(input_filepath, output_filepath, start_date, end_date):
     print(f"Detected columns in file: {list(df.columns)}")
 
     # 2. Map the combined Date/Time column
-    hour_col = next((col for col in ['HourEnding', 'Hour_Ending', 'Hour Ending'] if col in df.columns), None)
+    hour_col = next((col for col in ['HourEnding', 'Hour_Ending', 'Hour Ending', 'TIME'] if col in df.columns), None)
 
     if not hour_col:
         print("\nError: Could not identify the 'HourEnding' column.")
@@ -34,7 +37,7 @@ def clean_ercot_data(input_filepath, output_filepath, start_date, end_date):
     is_midnight = df[hour_col].str.contains('24:00')
     df.loc[is_midnight, hour_col] = df.loc[is_midnight, hour_col].str.replace('24:00', '00:00')
     
-    df['Timestamp'] = pd.to_datetime(df[hour_col])
+    df['Timestamp'] = pd.to_datetime(df[hour_col], format='mixed')
     df.loc[is_midnight, 'Timestamp'] = df.loc[is_midnight, 'Timestamp'] + timedelta(days=1)
     
     df = df.sort_values('Timestamp').reset_index(drop=True)
