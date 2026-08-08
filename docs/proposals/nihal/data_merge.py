@@ -1,4 +1,6 @@
+import argparse
 import pandas as pd
+import sys
 
 def merge_datasets(ercot_path, nrel_path, output_path):
     print("Initializing Synthesis Engine...")
@@ -13,14 +15,13 @@ def merge_datasets(ercot_path, nrel_path, output_path):
     except FileNotFoundError as e:
         print(f"Error: {e}")
         print("Ensure both data ingestion scripts have been run successfully.")
-        return
+        sys.exit(1)
 
     # 1. Re-cast Timestamps to datetime objects
     df_ercot['Timestamp'] = pd.to_datetime(df_ercot['Timestamp'])
     df_nrel['Timestamp'] = pd.to_datetime(df_nrel['Timestamp'])
 
     # 2. Fix Temporal Misalignment
-    # Floor the NREL 30-minute offset to the top of the hour to match ERCOT
     print("Executing temporal alignment: Flooring NREL 30-minute offsets to the top of the hour...")
     df_nrel['Timestamp'] = df_nrel['Timestamp'].dt.floor('h')
 
@@ -40,7 +41,7 @@ def merge_datasets(ercot_path, nrel_path, output_path):
     
     if len(df_merged) == 0:
         print("Error: Merged output is still 0. Alignment failed.")
-        return
+        sys.exit(1)
         
     missing_vals = df_merged.isnull().sum().sum()
     if missing_vals > 0:
@@ -55,9 +56,10 @@ def merge_datasets(ercot_path, nrel_path, output_path):
     print("Success! Dataset is securely fused and ready for Phase 2.")
 
 if __name__ == "__main__":
-    # Updated to match the paths from your diagnostic output
-    ERCOT_FILE = "ercot_cleaned.csv"
-    NREL_FILE = "nrel_cleaned.csv"
-    OUTPUT_FILE = "sample_merged_dataset.csv"
+    parser = argparse.ArgumentParser(description="Merge Cleaned ERCOT and NREL Datasets")
+    parser.add_argument("--ercot_input", required=True, help="Path to cleaned ERCOT CSV")
+    parser.add_argument("--nrel_input", required=True, help="Path to cleaned NREL CSV")
+    parser.add_argument("--output", required=True, help="Path to output master merged CSV")
     
-    merge_datasets(ERCOT_FILE, NREL_FILE, OUTPUT_FILE)
+    args = parser.parse_args()
+    merge_datasets(args.ercot_input, args.nrel_input, args.output)

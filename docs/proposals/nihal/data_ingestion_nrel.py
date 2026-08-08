@@ -1,18 +1,19 @@
+import argparse
 import pandas as pd
+import sys
 
-def clean_nrel_data(input_filepath, output_filepath):
+def clean_nrel_data(input_filepath, output_filepath, start_date, end_date):
     print(f"Loading raw NREL data from '{input_filepath}'...")
     
     try:
         # NREL NSRDB files typically have 2 rows of metadata before the actual headers.
-        # We try reading normally first. If it fails to find standard columns, we skip the metadata.
         df = pd.read_csv(input_filepath)
         if 'Year' not in df.columns and 'GHI' not in df.columns:
             print("Detected NREL metadata headers. Skipping first 2 rows to access column names...")
             df = pd.read_csv(input_filepath, skiprows=2)
     except FileNotFoundError:
         print(f"Error: Could not find '{input_filepath}'.")
-        return
+        sys.exit(1)
 
     # 1. Clean column headers
     df.columns = df.columns.str.strip()
@@ -20,7 +21,6 @@ def clean_nrel_data(input_filepath, output_filepath):
     print("Constructing unified Timestamp from NREL date components...")
     
     # 2. Synthesize the Timestamp column
-    # We combine the split date/time columns into a single string, then parse it.
     try:
         datetime_str = (
             df['Year'].astype(str) + '-' +
@@ -33,23 +33,20 @@ def clean_nrel_data(input_filepath, output_filepath):
     except KeyError as e:
         print(f"\nError: Missing expected NREL time column: {e}")
         print(f"Detected columns: {list(df.columns)}")
-        return
+        sys.exit(1)
 
-    # Sort chronologically to maintain structural integrity
+    # Sort chronologically
     df = df.sort_values('Timestamp').reset_index(drop=True)
 
-    print("Slicing timeframe for Phase 1 (August 2020)...")
+    print(f"Slicing timeframe for {start_date} to {end_date}...")
     
-    # 3. Slice exactly for August 2020 to match the ERCOT sample
-    start_date = '2020-08-01'
-    end_date = '2020-08-31 23:59:59'
+    # 3. Slice exactly for the target date range
     mask = (df['Timestamp'] >= start_date) & (df['Timestamp'] <= end_date)
     df_filtered = df.loc[mask].copy()
 
     print("Isolating essential environmental features...")
     
     # 4. Dynamically locate the targeted weather columns
-    # We use upper() to ignore case sensitivity in case NREL changes their capitalization
     ghi_col = next((c for c in df.columns if 'GHI' in c.upper()), None)
     dni_col = next((c for c in df.columns if 'DNI' in c.upper()), None)
     dhi_col = next((c for c in df.columns if 'DHI' in c.upper()), None)
@@ -65,7 +62,6 @@ def clean_nrel_data(input_filepath, output_filepath):
     if temp_col: features_to_keep[temp_col] = 'NREL_Temperature_C'
     if wind_col: features_to_keep[wind_col] = 'NREL_Wind_Speed_m_s'
 
-    # Check if we captured the necessary features
     if len(features_to_keep) < 6:
         print("Warning: Could not find all 5 target environmental features (GHI, DNI, DHI, Temp, Wind).")
         print(f"Found: {list(features_to_keep.keys())}")
@@ -80,8 +76,11 @@ def clean_nrel_data(input_filepath, output_filepath):
     print(f"Success! Pipeline generated '{output_filepath}' with {len(df_final)} rows.")
 
 if __name__ == "__main__":
-
-    INPUT_FILE = "/kaggle/input/datasets/vsnihal/test-sample/744683_29.41_-94.90_2020.csv" 
-    OUTPUT_FILE = "/kaggle/working/nrel_sample.csv"
+    parser = argparse.ArgumentParser(description="NREL Data Ingestion & Cleaning")
+    parser.add_argument("--input", required=True, help="Path to raw NREL CSV file")
+    parser.add_argument("--output", required=True, help="Path to output cleaned CSV file")
+    parser.add_argument("--start_date", required=True, help="Start date (YYYY-MM-DD)")
+    parser.add_argument("--end_date", required=True, help="End date (YYYY-MM-DD HH:MM:SS)")
     
-    clean_nrel_data(INPUT_FILE, OUTPUT_FILE)
+    args = parser.parse_args()
+    clean_nrel_data(args.input, args.output, args.start_date, args.end_date)
