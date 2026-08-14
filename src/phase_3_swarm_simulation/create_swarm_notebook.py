@@ -26,7 +26,7 @@ cell_2 = """class GridSwarmEnv(gym.Env):
     \"\"\"
     Custom Environment for Agent-Based Swarm Simulation on the ERCOT Grid.
     \"\"\"
-    def __init__(self, data_path, num_agents=10, battery_capacity_mw=500.0, max_charge_rate_mw=200.0):
+    def __init__(self, data_path, num_agents=5, battery_capacity_mw=1000.0, max_charge_rate_mw=400.0):
         super(GridSwarmEnv, self).__init__()
         
         self.num_agents = num_agents
@@ -77,7 +77,7 @@ cell_2 = """class GridSwarmEnv(gym.Env):
                     current_energy_mwh += (charge_amount * self.efficiency)
                     net_battery_action_mw += charge_amount
                 else:
-                    penalties -= 5.0
+                    penalties -= 10.0
                     
             elif action == 2:  # DISCHARGE
                 energy_available = current_energy_mwh
@@ -86,7 +86,7 @@ cell_2 = """class GridSwarmEnv(gym.Env):
                     current_energy_mwh -= discharge_amount
                     net_battery_action_mw -= (discharge_amount * self.efficiency)
                 else:
-                    penalties -= 5.0
+                    penalties -= 10.0
             
             self.agent_socs[i] = current_energy_mwh / self.battery_capacity_mw
             
@@ -113,11 +113,11 @@ cell_3 = """class QNetwork(nn.Module):
         self.num_actions = 3 ** num_agents
         
         self.fc = nn.Sequential(
-            nn.Linear(obs_dim, 128),
+            nn.Linear(obs_dim, 256),
             nn.ReLU(),
-            nn.Linear(128, 128),
+            nn.Linear(256, 256),
             nn.ReLU(),
-            nn.Linear(128, self.num_actions)
+            nn.Linear(256, self.num_actions)
         )
         
     def forward(self, x):
@@ -161,7 +161,7 @@ cell_5 = """def train_dqn(env, episodes=50, batch_size=128, gamma=0.99, lr=1e-3)
     buffer = ReplayBuffer(50000)
     
     epsilon = 1.0
-    epsilon_decay = 0.92
+    epsilon_decay = 0.90
     epsilon_min = 0.05
     
     rewards_history = []
@@ -234,8 +234,8 @@ import os
 if not os.path.exists(DATA_PATH):
     DATA_PATH = "data/clean_data/phase_01_master_environment_full_2018_2022.csv"
 
-print("Initializing 10-Agent Swarm Environment (500MW Battery Each, 200MW/h Rate)...")
-env = GridSwarmEnv(data_path=DATA_PATH, num_agents=10, battery_capacity_mw=500.0, max_charge_rate_mw=200.0)
+print("Initializing 5-Agent Swarm Environment (1000MWh Battery Each, 400MW/h Rate)...")
+env = GridSwarmEnv(data_path=DATA_PATH, num_agents=5, battery_capacity_mw=1000.0, max_charge_rate_mw=400.0)
 
 print("Training Deep Q-Network for 50 Episodes...")
 trained_model = train_dqn(env, episodes=50)
