@@ -101,7 +101,7 @@ cell_2 = """class GridSwarmEnv(gym.Env):
         self.current_step += 1
         terminated = self.current_step >= len(self.df) - 1
         
-        info = {'original_load': current_load, 'net_load': net_grid_load}
+        info = {'original_load': current_load, 'net_load': net_grid_load, 'net_battery_action': net_battery_action_mw, 'avg_soc': np.mean(self.agent_socs)}
         return self._get_obs(), reward, terminated, False, info"""
 
 # Cell 3: Neural Network & Replay Buffer
@@ -225,7 +225,7 @@ cell_5 = """def train_dqn(env, episodes=50, batch_size=128, gamma=0.99, lr=1e-3)
         rewards_history.append(total_reward)
         print(f"Episode {episode+1}/{episodes} | Reward: {total_reward:.2f} | Epsilon: {epsilon:.2f}")
         
-    return q_network"""
+    return q_network, rewards_history"""
 
 # Cell 6: Run Execution & Plotting
 cell_6 = """DATA_PATH = "/kaggle/input/ercot-nrel-merged/phase_01_master_environment_full_2018_2022.csv"
@@ -238,7 +238,7 @@ print("Initializing 5-Agent Swarm Environment (1000MWh Battery Each, 400MW/h Rat
 env = GridSwarmEnv(data_path=DATA_PATH, num_agents=5, battery_capacity_mw=1000.0, max_charge_rate_mw=400.0)
 
 print("Training Deep Q-Network for 50 Episodes...")
-trained_model = train_dqn(env, episodes=50)
+trained_model, rewards_history = train_dqn(env, episodes=50)
 
 # --- Evaluate and Plot ---
 print("Evaluating Flattened Curve (Summer Peak Season)...")
@@ -249,6 +249,8 @@ done = False
 
 original_loads = []
 net_loads = []
+net_battery_actions = []
+avg_socs = []
 
 with torch.no_grad():
     for _ in range(500): # Sample 500 hours
@@ -261,16 +263,38 @@ with torch.no_grad():
         
         original_loads.append(info['original_load'])
         net_loads.append(info['net_load'])
+        net_battery_actions.append(info['net_battery_action'])
+        avg_socs.append(info['avg_soc'] * 100) # Convert to percentage
         state = next_state
 
-plt.figure(figsize=(15, 6))
-plt.plot(original_loads, label='Original ERCOT Load (No Battery)', color='black', alpha=0.5)
-plt.plot(net_loads, label='Flattened Net Load (Swarm AI)', color='green', linewidth=2)
-plt.title('Agent-Based Swarm Simulation: Peak-to-Average Ratio Flattening')
-plt.xlabel('Hours')
-plt.ylabel('Load (MW)')
-plt.legend()
-plt.grid(True, alpha=0.3)
+# --- PLOTTING ---
+fig, axs = plt.subplots(3, 1, figsize=(15, 12), gridspec_kw={'height_ratios': [1, 2, 1]})
+
+# Plot 1: Learning Curve
+axs[0].plot(rewards_history, color='purple', marker='o')
+axs[0].set_title('DQN Learning Curve (Total Reward per Episode)')
+axs[0].set_ylabel('Reward')
+axs[0].grid(True, alpha=0.3)
+
+# Plot 2: Load Flattening
+axs[1].plot(original_loads, label='Original ERCOT Load (No Battery)', color='black', alpha=0.5)
+axs[1].plot(net_loads, label='Flattened Net Load (Swarm AI)', color='green', linewidth=2)
+axs[1].set_title('Agent-Based Swarm Simulation: Peak-to-Average Ratio Flattening')
+axs[1].set_ylabel('Load (MW)')
+axs[1].legend()
+axs[1].grid(True, alpha=0.3)
+
+# Plot 3: Battery Behavior (Under the Hood)
+ax3 = axs[2].twinx()
+axs[2].bar(range(500), net_battery_actions, color='blue', alpha=0.5, label='Net Battery Action (MW)')
+ax3.plot(avg_socs, color='red', linewidth=2, label='Average Swarm SoC (%)')
+axs[2].set_title('Under the Hood: Swarm Charging/Discharging Behavior')
+axs[2].set_xlabel('Hours (Evaluation Window)')
+axs[2].set_ylabel('Net Action (MW)', color='blue')
+ax3.set_ylabel('Average SoC (%)', color='red')
+axs[2].grid(True, alpha=0.3)
+
+plt.tight_layout()
 plt.show()"""
 
 nb['cells'] = [
