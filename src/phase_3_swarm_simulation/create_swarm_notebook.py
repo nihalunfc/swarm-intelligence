@@ -26,7 +26,7 @@ cell_2 = """class GridSwarmEnv(gym.Env):
     \"\"\"
     Custom Environment for Agent-Based Swarm Simulation on the ERCOT Grid.
     \"\"\"
-    def __init__(self, data_path, num_agents=5, battery_capacity_mw=200.0, max_charge_rate_mw=50.0):
+    def __init__(self, data_path, num_agents=10, battery_capacity_mw=500.0, max_charge_rate_mw=200.0):
         super(GridSwarmEnv, self).__init__()
         
         self.num_agents = num_agents
@@ -148,7 +148,7 @@ cell_4 = """def index_to_actions(index, num_agents):
     return actions"""
 
 # Cell 5: Training Loop
-cell_5 = """def train_dqn(env, episodes=5, batch_size=64, gamma=0.99, lr=1e-3):
+cell_5 = """def train_dqn(env, episodes=50, batch_size=128, gamma=0.99, lr=1e-3):
     obs_dim = env.observation_space.shape[0]
     num_agents = env.num_agents
     num_actions = 3 ** num_agents
@@ -158,10 +158,10 @@ cell_5 = """def train_dqn(env, episodes=5, batch_size=64, gamma=0.99, lr=1e-3):
     target_network.load_state_dict(q_network.state_dict())
     
     optimizer = optim.Adam(q_network.parameters(), lr=lr)
-    buffer = ReplayBuffer(10000)
+    buffer = ReplayBuffer(50000)
     
     epsilon = 1.0
-    epsilon_decay = 0.995
+    epsilon_decay = 0.92
     epsilon_min = 0.05
     
     rewards_history = []
@@ -171,9 +171,9 @@ cell_5 = """def train_dqn(env, episodes=5, batch_size=64, gamma=0.99, lr=1e-3):
         total_reward = 0
         done = False
         
-        # Limit episode steps for faster training demo
+        # Let episode steps run longer for better learning
         step_count = 0
-        max_steps = 2000 
+        max_steps = 8760 # Train on a full year of hours per episode
         
         while not done and step_count < max_steps:
             # Epsilon-Greedy Action Selection
@@ -234,11 +234,11 @@ import os
 if not os.path.exists(DATA_PATH):
     DATA_PATH = "data/clean_data/phase_01_master_environment_full_2018_2022.csv"
 
-print("Initializing 5-Agent Swarm Environment (200MW Battery Each)...")
-env = GridSwarmEnv(data_path=DATA_PATH, num_agents=5, battery_capacity_mw=200.0, max_charge_rate_mw=50.0)
+print("Initializing 10-Agent Swarm Environment (500MW Battery Each, 200MW/h Rate)...")
+env = GridSwarmEnv(data_path=DATA_PATH, num_agents=10, battery_capacity_mw=500.0, max_charge_rate_mw=200.0)
 
-print("Training Deep Q-Network...")
-trained_model = train_dqn(env, episodes=5)
+print("Training Deep Q-Network for 50 Episodes...")
+trained_model = train_dqn(env, episodes=50)
 
 # --- Evaluate and Plot ---
 print("Evaluating Flattened Curve...")
