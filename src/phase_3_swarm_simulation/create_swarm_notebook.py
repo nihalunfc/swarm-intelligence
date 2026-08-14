@@ -241,8 +241,10 @@ print("Training Deep Q-Network for 50 Episodes...")
 trained_model = train_dqn(env, episodes=50)
 
 # --- Evaluate and Plot ---
-print("Evaluating Flattened Curve...")
+print("Evaluating Flattened Curve (Summer Peak Season)...")
 state, _ = env.reset()
+env.current_step = 4500 # Fast forward to mid-July
+state = env._get_obs()
 done = False
 
 original_loads = []
