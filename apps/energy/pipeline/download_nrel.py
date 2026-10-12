@@ -2,6 +2,7 @@ import pvlib
 import pandas as pd
 import time
 import os
+import sys
 
 def download_nrel_multi_year(api_key, email, lat, lon, years, output_file):
     dfs = []
@@ -47,11 +48,17 @@ def download_nrel_multi_year(api_key, email, lat, lon, years, output_file):
         print(f"Saved multi-year NREL data to {output_file} ({len(final_df)} rows).")
 
 if __name__ == "__main__":
+    # The API key and email come from the environment so they are never committed.
+    # Get a free key at https://developer.nrel.gov/signup/
+    api_key = os.environ.get("NREL_API_KEY")
+    email = os.environ.get("NREL_EMAIL")
+    if not api_key or not email:
+        sys.exit("Set NREL_API_KEY and NREL_EMAIL before running this script.")
     download_nrel_multi_year(
-        api_key="1gXQfG4l9u3UeMYJMbTUUybsF5nhwWkuAMt68Mpr",
-        email="nihal.vellaramka9085@Myunfc.ca",
+        api_key=api_key,
+        email=email,
         lat=29.41,
         lon=-94.90,
         years=[2018, 2019, 2020, 2021, 2022],
-        output_file="data/raw_data/nrel_2018_2022.csv"
+        output_file="data/raw/nrel_2018_2022.csv"
     )

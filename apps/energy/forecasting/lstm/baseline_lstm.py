@@ -191,9 +191,9 @@ def plot_predictions(test_df, predictions, sequence_length, output_path="predict
     print(f"Plot saved to {output_path}")
 
 if __name__ == "__main__":
-    data_path = "../../../data/clean_data/phase_01_master_environment_full_2018_2022.csv"
+    data_path = "../../../../data/clean/ercot_nrel_2018_2022.csv"
     if not os.path.exists(data_path):
-        data_path = "data/clean_data/phase_01_master_environment_full_2018_2022.csv"
+        data_path = "data/clean/ercot_nrel_2018_2022.csv"
         
     df = load_and_preprocess_data(data_path)
     
@@ -211,8 +211,8 @@ if __name__ == "__main__":
     predictions, actuals = evaluate_model(model, test_loader, target_scaler, device=device)
     
     # Save Model Weights
-    os.makedirs("src/phase_2_baseline_modeling/lstm", exist_ok=True)
-    torch.save(model.state_dict(), "src/phase_2_baseline_modeling/lstm/lstm_baseline.pth")
-    print("Model saved to src/phase_2_baseline_modeling/lstm/lstm_baseline.pth")
+    os.makedirs("apps/energy/forecasting/lstm", exist_ok=True)
+    torch.save(model.state_dict(), "apps/energy/forecasting/lstm/lstm_baseline.pth")
+    print("Model saved to apps/energy/forecasting/lstm/lstm_baseline.pth")
     
-    plot_predictions(test_df, predictions, SEQUENCE_LENGTH, output_path="src/phase_2_baseline_modeling/lstm/predictions_vs_actuals_lstm.png")
+    plot_predictions(test_df, predictions, SEQUENCE_LENGTH, output_path="apps/energy/forecasting/lstm/predictions_vs_actuals_lstm.png")

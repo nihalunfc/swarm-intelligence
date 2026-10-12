@@ -116,11 +116,11 @@ def plot_predictions(test_df, y_test, y_pred_linear, y_pred_xgb, output_path="pr
 
 if __name__ == "__main__":
     # Define paths
-    data_path = "../../../data/clean_data/phase_01_master_environment_full_2018_2022.csv"
+    data_path = "../../../../data/clean/ercot_nrel_2018_2022.csv"
     
     if not os.path.exists(data_path):
         # Handle execution from repo root
-        data_path = "data/clean_data/phase_01_master_environment_full_2018_2022.csv"
+        data_path = "data/clean/ercot_nrel_2018_2022.csv"
         if not os.path.exists(data_path):
             raise FileNotFoundError(f"Could not find dataset at {data_path}")
             
@@ -163,6 +163,6 @@ if __name__ == "__main__":
         print(f" - {feature_names[i]}: {v:.4f}")
         
     # 7. Visual Evaluation
-    plot_predictions(test, y_test, y_pred_linear, y_pred_xgb, output_path="src/phase_2_baseline_modeling/xgboost/predictions_vs_actuals.png")
+    plot_predictions(test, y_test, y_pred_linear, y_pred_xgb, output_path="apps/energy/forecasting/xgboost/predictions_vs_actuals.png")
     
     print("\nPhase 2 Baseline Modeling Complete.")

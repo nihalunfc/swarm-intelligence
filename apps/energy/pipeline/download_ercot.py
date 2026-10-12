@@ -45,5 +45,5 @@ def download_ercot_multi_year(years, output_file):
 if __name__ == "__main__":
     download_ercot_multi_year(
         years=[2018, 2019, 2020, 2021, 2022],
-        output_file="data/raw_data/ercot_2018_2022.xlsx"
+        output_file="data/raw/ercot_2018_2022.xlsx"
     )
