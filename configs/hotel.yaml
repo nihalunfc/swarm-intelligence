@@ -1,0 +1,4 @@
+# Hotel has no swarm environment yet (planned for batch 2). The benchmark
+# reports the existing schedule optimizer against the fixed weekly pattern.
+app: hotel
+schedule_json: docs/data/schedule.json
