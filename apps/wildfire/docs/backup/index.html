@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WARL Swarm Command Center</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Chart.js for Live Telemetry -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>WARL: Wildfire Autonomous Reinforcement Learning</h1>
+            <p>Decentralized Drone Swarm Command Center // Live Telemetry Feed</p>
+        </div>
+    </header>
+
+    <main class="dashboard">
+        <!-- Left Panel: Live Simulation & Charts -->
+        <section class="simulation-panel">
+            <div class="controls">
+                <button id="btn-start" class="btn primary">Deploy Swarm</button>
+                <button id="btn-reset" class="btn secondary">Reset Environment</button>
+                <div class="metrics-mini">
+                    <span class="metric">Fire Cells: <strong id="metric-fire">0</strong></span>
+                    <span class="metric">Status: <strong id="metric-status" class="safe">CONTAINED</strong></span>
+                </div>
+            </div>
+            
+            <div class="map-container" id="map-container">
+                <div id="radar-background"></div>
+                <div id="google-map-placeholder">Awaiting Satellite Feed Integration...</div>
+                <canvas id="simulation-canvas"></canvas>
+            </div>
+            
+            <!-- Live Telemetry Graph -->
+            <div class="chart-container">
+                <canvas id="telemetry-chart"></canvas>
+            </div>
+        </section>
+
+        <!-- Right Panel: Gemini Chatbot -->
+        <section class="commander-panel">
+            <h2>Gemini Swarm Commander</h2>
+            <div class="chat-window" id="chat-window">
+                <div class="message system">
+                    <strong>System:</strong> WARL AI initialized.
+                </div>
+                <div class="message gemini">
+                    <strong>Commander:</strong> I am the Gemini Swarm Commander. I monitor the RL agents in real-time. Ask me why the swarm is making its decisions. *(Note: API Integration pending in Phase 4)*.
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chat-input-field" placeholder="Ask the Commander a question...">
+                <button id="btn-send" class="btn primary">Send</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
