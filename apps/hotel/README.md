@@ -1,5 +1,7 @@
 # Hospitality Data Architecture and Business Intelligence
 
+> **Copy inside swarm-intelligence.** This folder mirrors the public [`hotel-business`](https://github.com/nihalunfc/hotel-business) repository (history kept). The public repo and its live demos at nihalunfc.github.io/hotel-business are unchanged; links below that point at the live demos refer to that public site.
+
 A portfolio of proposals and working tools for multi-property resort hotels. The aim is to turn data hotels already collect into decisions that protect revenue, remove avoidable cost and make daily operations run more smoothly. Every proposal states what the problem is, why it matters, with linked sources, and how it would be solved and measured.
 
 ## Live Demos
