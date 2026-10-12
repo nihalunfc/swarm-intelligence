@@ -23,7 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctx = canvas.getContext('2d');
     
     // Use the classic, highly-reliable rendering from V1
-    const gridSize = 24; 
+    const LIVE_GRID_SIZE = 24;
+    let gridSize = LIVE_GRID_SIZE;
     let cellSize = canvas.width / gridSize;
     
     let isRunning = false;
@@ -63,7 +64,76 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let timeStep = 0;
 
+    // Replay mode plays episodes recorded from the trained swarm and the baseline
+    // rules (data/replay.json, written by `swarm replay`). Live mode is the original
+    // in-browser simulation with the nearest-fire rule.
+    const modeSelect = document.getElementById('mode-select');
+    let mode = 'live';
+    let replayData = null;
+    let replayEpisode = null;
+    let replayFrame = 0;
+    let replayIndex = 0;
+
+    fetch('data/replay.json')
+        .then(r => (r.ok ? r.json() : null))
+        .then(data => {
+            if (!data) return;
+            replayData = data;
+            Object.keys(data.policies).forEach(name => {
+                const opt = document.createElement('option');
+                opt.value = name;
+                opt.textContent = `Replay: ${name}`;
+                modeSelect.appendChild(opt);
+            });
+        })
+        .catch(() => {});
+
+    function applyFrame(frame) {
+        grid = [];
+        for (let y = 0; y < gridSize; y++) {
+            grid.push(Array.from(frame.grid.slice(y * gridSize, (y + 1) * gridSize), Number));
+        }
+        drones = frame.drones.map(([y, x]) => ({ x, y }));
+    }
+
+    function resetTelemetry() {
+        timeStep = 0;
+        telemetryChart.data.labels = [];
+        telemetryChart.data.datasets[0].data = [];
+        telemetryChart.update();
+    }
+
+    function pushTelemetry(value) {
+        timeStep++;
+        telemetryChart.data.labels.push(timeStep);
+        telemetryChart.data.datasets[0].data.push(value);
+        if (telemetryChart.data.labels.length > 50) {
+            telemetryChart.data.labels.shift();
+            telemetryChart.data.datasets[0].data.shift();
+        }
+        telemetryChart.update();
+    }
+
+    function initReplay() {
+        const episodes = replayData.policies[mode];
+        replayEpisode = episodes[replayIndex % episodes.length];
+        replayIndex++;
+        replayFrame = 0;
+        gridSize = replayData.grid_size;
+        cellSize = canvas.width / gridSize;
+        applyFrame(replayEpisode.frames[0]);
+        document.getElementById('metric-drones').innerText = drones.length;
+        resetTelemetry();
+        drawGrid();
+    }
+
     function initGrid() {
+        if (mode !== 'live' && replayData) {
+            initReplay();
+            return;
+        }
+        gridSize = LIVE_GRID_SIZE;
+        cellSize = canvas.width / gridSize;
         grid = Array(gridSize).fill().map(() => Array(gridSize).fill(0));
         // Ignite a larger central cluster to guarantee aggressive spread
         grid[gridSize/2][gridSize/2] = 1;
@@ -79,10 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         document.getElementById('metric-drones').innerText = drones.length;
         
-        timeStep = 0;
-        telemetryChart.data.labels = [];
-        telemetryChart.data.datasets[0].data = [];
-        telemetryChart.update();
+        resetTelemetry();
         
         drawGrid();
     }
@@ -98,8 +165,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     ctx.fillStyle = 'rgba(239, 68, 68, 0.8)'; 
                     ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
                     fireCount++;
-                } else if (grid[y][x] === 2) { // EXTINGUISHED
+                } else if (grid[y][x] === 2) { // EXTINGUISHED (live) or BURNED OUT (replay)
                     ctx.fillStyle = 'rgba(51, 65, 85, 0.6)'; 
+                    ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+                } else if (grid[y][x] === 3) { // RETARDANT (replay)
+                    ctx.fillStyle = 'rgba(56, 189, 248, 0.45)';
                     ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
                 }
             }
@@ -141,6 +211,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function simulationLoop() {
         if (!isRunning) return;
+
+        if (mode !== 'live' && replayEpisode) {
+            replayFrame++;
+            if (replayFrame >= replayEpisode.frames.length) {
+                isRunning = false;
+                btnStart.innerText = "Deploy Swarm";
+                return;
+            }
+            applyFrame(replayEpisode.frames[replayFrame]);
+            pushTelemetry(drawGrid());
+            setTimeout(simulationLoop, 250);
+            return;
+        }
         
         // 1. Organic Fire Spread (Aggressive)
         let newGrid = JSON.parse(JSON.stringify(grid));
@@ -204,14 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let currentFire = drawGrid();
         
         // Update Chart
-        timeStep++;
-        telemetryChart.data.labels.push(timeStep);
-        telemetryChart.data.datasets[0].data.push(currentFire);
-        if(telemetryChart.data.labels.length > 50) {
-            telemetryChart.data.labels.shift();
-            telemetryChart.data.datasets[0].data.shift();
-        }
-        telemetryChart.update();
+        pushTelemetry(currentFire);
 
         setTimeout(simulationLoop, 400); // Slower tick rate (400ms) for better viewing
     }
@@ -227,12 +303,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    modeSelect.addEventListener('change', () => {
+        mode = modeSelect.value;
+        isRunning = false;
+        btnStart.innerText = "Deploy Swarm";
+        initGrid();
+    });
+
     btnReset.addEventListener('click', () => {
         isRunning = false;
         btnStart.innerText = "Deploy Swarm";
         initGrid();
     });
     
+    function modeContext() {
+        if (mode === 'live' || !replayEpisode) {
+            return "This is the live simulation using a nearest-fire rule. The wind is currently blowing aggressively South-East.";
+        }
+        const [wy, wx] = replayEpisode.wind;
+        const m = replayEpisode.metrics;
+        return `This is a replay of the policy "${mode}" (a trained reinforcement learning swarm or a baseline rule). ` +
+            `Wind vector (dy, dx) is (${wy}, ${wx}). In this episode ${m.burned_cells} cells burned and ${m.forest_saved_pct.toFixed(1)}% of the forest was saved.`;
+    }
+
     // Phase 4: Gemini API Integration
     const btnSend = document.getElementById('btn-send');
     const inputField = document.getElementById('chat-input-field');
@@ -270,7 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Prepare Live Context for Gemini (Explainable AI)
         const currentFireCount = document.getElementById('metric-fire').innerText;
-        const systemPrompt = `You are the WARL Swarm Commander AI. You oversee a decentralized swarm of autonomous drones fighting a wildfire. Current live status: ${currentFireCount} active fire cells. There are 3 Drones active. The wind is currently blowing aggressively South-East. Answer the user's question briefly (1-2 short paragraphs) and act in character as a highly advanced, analytical AI commander explaining the swarm's tactical Reinforcement Learning decisions. User says: ${text}`;
+        const systemPrompt = `You are the WARL Swarm Commander AI. You oversee a decentralized swarm of autonomous drones fighting a wildfire. Current live status: ${currentFireCount} active fire cells. There are ${drones.length} drones active. ${modeContext()} Answer the user's question briefly (1-2 short paragraphs) and act in character as a highly advanced, analytical AI commander explaining the swarm's tactical Reinforcement Learning decisions. User says: ${text}`;
 
         try {
             // 1. Dynamically discover available models for this specific API key (Bypasses region/project naming differences)

@@ -13,7 +13,24 @@ Please refer to our interactive notebooks for a complete breakdown of the projec
 1. [01_Problem_Statement_and_Methodology.ipynb](./notebooks/01_Problem_Statement_and_Methodology.ipynb) - Project theory, MDP architecture, and technology stack.
 2. [02_DQN_Wildfire_Training.ipynb](./notebooks/02_DQN_Wildfire_Training.ipynb) - The live generative environment (physics engine) and AI training logic.
 
-## Repository Structure
+## Inside swarm-intelligence
+
+This folder is a copy of the public `GDGCHackathon2026` repository (history kept), now running on the shared engine:
+
+| File | What it is |
+| :-- | :-- |
+| `env.py` | Forest and drone environment. Fires burn out on their own, spread is vectorized with NumPy, retardant can extinguish a fire or wet unburned fuel as a firebreak, drones refill at base. Each drone only sees a local window plus navigation cues. |
+| `baselines.py` | No drones, random, and the dashboard's original nearest-fire rule. |
+| `replay.py` | Records episodes to `docs/data/replay.json`, which the dashboard plays back. |
+
+```bash
+swarm train --config configs/wildfire.yaml
+swarm replay --run runs/wildfire/<run id> --output apps/wildfire/docs/data/replay.json
+```
+
+The dashboard has a mode menu: the original live simulation, or a replay of the trained swarm and each baseline. The notebooks below are the original hackathon versions and still define their own environment.
+
+## Repository Structure (original hackathon layout)
 ```
 GDGCHackathon2026/
 ├── src/                # Core Python source code for the Swarm RL Environment
