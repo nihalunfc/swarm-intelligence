@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hospitality BI Portfolio</title>
+<meta name="description" content="Working examples of hotel business intelligence: revenue planning, staff scheduling and cost control, built on a shared sample dataset.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">Hospitality <span>BI</span> Portfolio</a>
+    <nav class="nav">
+      <a class="active" href="index.html">Home</a>
+      <a href="revenue.html">Revenue Command Centre</a>
+      <a href="schedule.html">Staff Schedule Builder</a>
+      <a href="#proposals">Proposals</a>
+      <a href="https://github.com/nihalunfc/hotel-business">Code</a>
+    </nav>
+  </div>
+</header>
+
+<div class="intro">
+  <div class="wrap">
+    <h1>Hotel data, turned into decisions</h1>
+    <p class="lead">Working examples of how a multi-property hotel group can use the data it already has to sell more rooms at the right price, schedule staff fairly, and remove avoidable cost. Everything here runs on one shared sample dataset of five fictional hotels.</p>
+    <div class="badge-row">
+      <span class="badge info">By Nihal</span>
+      <span class="badge">Python, SQL, optimization, HTML dashboards</span>
+      <span class="badge">All hotels, guests and staff are fictional</span>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="block">
+    <div class="block-head"><div><span class="step">Start here</span><h2>Working demos</h2>
+    <p>Open either page. No login or installation is needed.</p></div></div>
+    <div class="grid g2">
+      <div class="card demo-card">
+        <h3>Revenue Command Centre</h3>
+        <p>Three years of booking history turned into a plan for every night of the next twelve months: which nights will sell out, which need help, and what to do about each.</p>
+        <div class="stats" id="rev-stats"></div>
+        <div><a class="btn primary" href="revenue.html">Open the Revenue Command Centre</a></div>
+      </div>
+      <div class="card demo-card">
+        <h3>Staff Schedule Builder</h3>
+        <p>Builds next week's housekeeping schedule from the rooms that will need cleaning, checks every labour rule, and outputs it to Excel, print and the staff app.</p>
+        <div class="stats" id="sch-stats"></div>
+        <div><a class="btn primary" href="schedule.html">Open the Staff Schedule Builder</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="proposals">
+    <div class="block-head"><div><span class="step">The ideas</span><h2>Proposals</h2>
+    <p>Each proposal explains what the idea is, why it matters with linked sources, and how it would be solved and measured. Project HARLTON covers revenue, profit and expense; Project H2 covers operations such as staffing, guest flow and facilities.</p></div></div>
+    <h3 style="margin:8px 0 12px">Project HARLTON: revenue, profit and expense</h3>
+    <div class="grid g3" id="p-harlton"></div>
+    <h3 style="margin:24px 0 12px">Project H2: operations</h3>
+    <div class="grid g3" id="p-h2"></div>
+    <h3 style="margin:24px 0 12px">Shared foundation</h3>
+    <div class="grid g3" id="p-shared"></div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><div><span class="step">For technical reviewers</span><h2>How it is built</h2>
+    <p>One pipeline produces every number on this site. It can be rebuilt from scratch with one command: <code>python analytics/build.py</code></p></div></div>
+    <div class="pipeline" id="pipeline">
+      <div><b>Sample data</b>Booking requests replayed against room inventory, so sell-outs, denials and cancellations behave realistically.</div>
+      <div><b>SQL warehouse</b>Star schema: hotel, date, segment and channel dimensions; booking, stay-night and denied-night facts.</div>
+      <div><b>Quality checks</b>Ten checks, including revenue tie-out between grains, must pass before anything is published.</div>
+      <div><b>Analytics</b>Booking pace, pickup forecast with back-test, unconstrained demand, demand tiers, schedule optimization.</div>
+      <div><b>This site</b>Static pages reading exported JSON, plus Excel downloads with live formulas.</div>
+    </div>
+    <div class="grid g4" id="build-stats" style="margin-top:16px"></div>
+    <p style="margin-top:14px">Code: <a href="https://github.com/nihalunfc/hotel-business/tree/main/analytics">analytics package</a> · <a href="https://github.com/nihalunfc/hotel-business/tree/main/analytics/hbi/sql">SQL scripts</a> · <a href="https://github.com/nihalunfc/hotel-business/tree/main/analytics/tests">tests</a> · <a href="https://github.com/nihalunfc/hotel-business/tree/main/data/sample">sample data extract</a></p>
+  </section>
+
+  <section class="block">
+    <div class="card">
+      <h3>About this portfolio</h3>
+      <p>I built this to show how I would approach business intelligence in hospitality: start from the decisions people make every day, use the data the hotel already collects, check that every number ties back to its source, and present it so anyone can act on it.</p>
+      <p class="muted" style="margin:0">The proposals, analysis approach and direction are my own. AI tools were used for research, drafting and coding support; they are credited in the <a href="https://github.com/nihalunfc/hotel-business#credits-and-tools">repository README</a>. No employer data is used anywhere.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer"><div class="wrap">Nihal · <a href="https://github.com/nihalunfc">github.com/nihalunfc</a> · Sample data only; all hotels, guests and staff are fictional.</div></footer>
+
+<script src="assets/common.js"></script>
+<script>
+(async function () {
+  const [R, S, P, M] = await Promise.all(["data/revenue.json", "data/schedule.json", "data/proposals.json", "data/meta.json"].map(loadJSON));
+  const comp = R.calendar.filter(d => d.tier === "Compression").length;
+  const bt30 = R.forecast_backtest.find(b => b.lead_days === 30);
+  document.getElementById("rev-stats").innerHTML = `
+    <div><b>${fmt.pct(R.ltm.occupancy)}</b><span>Occupancy, last 12 months</span></div>
+    <div><b>${comp}</b><span>Nights expected to sell out</span></div>
+    <div><b>${fmt.pct(bt30.pickup_mape)}</b><span>Forecast error 30 days out</span></div>`;
+  const c = S.scenarios[0], o = c.optimized.evaluation, m = c.manual.evaluation;
+  document.getElementById("sch-stats").innerHTML = `
+    <div><b>${c.optimized.rules.filter(r => r.passed).length} of ${c.optimized.rules.length}</b><span>Labour rules passed</span></div>
+    <div><b>${fmt.money(m.total_cost - o.total_cost)}</b><span>Lower weekly cost than a fixed pattern</span></div>
+    <div><b>${o.requests_honoured} of ${o.requests_total}</b><span>Day-off requests honoured</span></div>`;
+
+  const card = p => `<a class="prop" href="${p.url}"><h3>${p.title}</h3><p>${p.summary}</p></a>`;
+  document.getElementById("p-harlton").innerHTML = P.filter(p => p.group === "Revenue, profit and expense").map(card).join("");
+  document.getElementById("p-h2").innerHTML = P.filter(p => p.group === "Operations").map(card).join("");
+  document.getElementById("p-shared").innerHTML = P.filter(p => p.group === "Shared").map(card).join("");
+
+  const passed = M.quality_checks.filter(q => q.passed).length;
+  document.getElementById("build-stats").innerHTML = [
+    ["Bookings in the sample", fmt.num(M.profile.bookings)],
+    ["Stay-night rows in the warehouse", fmt.num(M.profile.stay_nights)],
+    ["Quality checks passed", `${passed} of ${M.quality_checks.length}`],
+    ["Missing revenue rows rebuilt and flagged", fmt.num(M.profile.revenue_imputed_rows)],
+  ].map(k => `<div class="kpi"><div class="label">${k[0]}</div><div class="value" style="font-size:24px">${k[1]}</div></div>`).join("");
+})();
+</script>
+</body>
+</html>
