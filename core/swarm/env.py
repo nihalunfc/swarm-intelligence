@@ -25,6 +25,10 @@ class SwarmEnv(ABC):
 
         ``terminated`` means the episode really ended (no future value);
         ``truncated`` means it was cut off by a time limit.
+
+        ``info["agent_rewards"]`` (optional, shape (n_agents,)) carries
+        per-agent shaping used only during training, e.g. credit to the drone
+        that extinguished a cell. Reported returns use the team reward only.
         """
 
     def action_mask(self) -> np.ndarray:

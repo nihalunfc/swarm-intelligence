@@ -1,6 +1,7 @@
 """Training and evaluation loops shared by every swarm application."""
 
 import time
+from collections import deque
 
 import numpy as np
 
@@ -12,6 +13,39 @@ def _epsilon(step: int, total: int, cfg: dict) -> float:
     start, end = float(cfg.get("eps_start", 1.0)), float(cfg.get("eps_end", 0.05))
     frac = min(1.0, step / max(1.0, float(cfg.get("eps_fraction", 0.5)) * total))
     return start + frac * (end - start)
+
+
+class NStep:
+    """Turns one environment's 1-step transitions into n-step ones.
+
+    Rewards are summed over up to ``n`` steps before bootstrapping, which
+    carries credit back much faster when the effect of an action shows up
+    several steps later (a drone flying toward a fire, a battery saving
+    charge for the evening peak).
+    """
+
+    def __init__(self, n: int, gamma: float):
+        self.n, self.gamma = n, gamma
+        self.q: deque = deque()
+
+    def add(self, obs, act, r, ar, next_obs, next_mask, terminated: bool, ended: bool) -> list[tuple]:
+        self.q.append((obs, act, r, ar))
+        out = []
+        if len(self.q) == self.n:
+            out.append(self._pop(next_obs, next_mask, terminated))
+        if ended:
+            while self.q:
+                out.append(self._pop(next_obs, next_mask, terminated))
+        return out
+
+    def _pop(self, next_obs, next_mask, terminated):
+        R, AR = 0.0, 0.0
+        for k, (_, _, r, ar) in enumerate(self.q):
+            R += self.gamma ** k * r
+            AR = AR + self.gamma ** k * ar
+        obs, act, _, _ = self.q.popleft()
+        discount = 0.0 if terminated else self.gamma ** (len(self.q) + 1)
+        return obs, act, R, next_obs, discount, next_mask, AR
 
 
 def train(app, cfg: dict, log=print):
@@ -27,12 +61,14 @@ def train(app, cfg: dict, log=print):
     learning_starts = int(tcfg.get("learning_starts", 1_000))
     gradient_steps = int(tcfg.get("gradient_steps", 1))
     log_every = int(tcfg.get("log_every", 10_000))
+    n_step = int(tcfg.get("n_step", 3))
 
     envs = [app.make_env(cfg.get("env", {}), "train", seed + i) for i in range(n_envs)]
     e0 = envs[0]
     agent = SwarmAgent(e0.obs_dim, e0.n_actions, e0.n_agents, cfg.get("agent", {}), device=cfg.get("device", "cpu"))
     buf = ReplayBuffer(int(tcfg.get("buffer_size", 100_000)), e0.n_agents, e0.obs_dim, e0.n_actions, seed)
     rng = np.random.default_rng(seed)
+    nsteps = [NStep(n_step, agent.gamma) for _ in envs]
 
     obs = np.stack([e.reset(seed=seed + i) for i, e in enumerate(envs)])
     returns = np.zeros(n_envs)
@@ -44,8 +80,10 @@ def train(app, cfg: dict, log=print):
         mask = np.stack([e.action_mask() for e in envs])
         actions = agent.act(obs, mask, eps, rng)
         for i, env in enumerate(envs):
-            nxt, r, term, trunc, _ = env.step(actions[i])
-            buf.push(obs[i], actions[i], r, nxt, term, env.action_mask())
+            nxt, r, term, trunc, info = env.step(actions[i])
+            ar = info.get("agent_rewards", np.zeros(env.n_agents))
+            for tr in nsteps[i].add(obs[i].copy(), actions[i], r, ar, nxt, env.action_mask(), term, term or trunc):
+                buf.push(*tr)
             returns[i] += r
             if term or trunc:
                 history.append({"step": steps, "return": float(returns[i]), **env.episode_metrics()})

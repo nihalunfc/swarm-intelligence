@@ -32,7 +32,7 @@ def nearest_fire(env, obs, mask):
     actions = np.full(env.n_agents, HOLD)
     for i, (y, x) in enumerate(env.pos):
         if env.payload[i] == 0:
-            actions[i] = _toward(y, x, *env.base)
+            actions[i] = HOLD if env._at_base(y, x) else _toward(y, x, *env.base)
         elif env.grid[y, x] == BURNING and mask[i, DROP]:
             actions[i] = DROP
         elif len(fy):

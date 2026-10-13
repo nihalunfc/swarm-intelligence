@@ -6,8 +6,8 @@ fire also ends on its own once it runs out of fuel; the drones' job is to keep
 the burned area small.
 
 Each drone sees only a local window around itself plus a few navigation cues,
-and chooses to move, drop retardant on its cell, or hold (holding at base
-refills). Fire spread is vectorized with NumPy shifts.
+and chooses to move, drop retardant on its cell, or hold (holding on the
+launch pad refills). Fire spread is vectorized with NumPy shifts.
 """
 
 import numpy as np
@@ -25,7 +25,7 @@ class WildfireSwarmEnv(SwarmEnv):
 
     def __init__(self, grid_size=16, n_drones=6, max_payload=6, view_radius=3, max_steps=150,
                  p_spread=0.12, p_wind=0.30, burn_time=(3, 6), n_ignitions=2, wind=None,
-                 reward_extinguish=0.5, seed=0):
+                 reward_extinguish=1.0, drop_near_fire_only=True, shaping=0.1, shaping_gamma=0.97, fire_every=1, seed=0):
         self.G = int(grid_size)
         self.n_agents = int(n_drones)
         self.max_payload = int(max_payload)
@@ -36,10 +36,14 @@ class WildfireSwarmEnv(SwarmEnv):
         self.n_ignitions = int(n_ignitions)
         self.fixed_wind = tuple(wind) if wind else None
         self.reward_extinguish = float(reward_extinguish)
+        self.drop_near_fire_only = bool(drop_near_fire_only)
+        self.shaping, self.shaping_gamma = float(shaping), float(shaping_gamma)
+        self.fire_every = int(fire_every)  # drones move this many cells per fire-spread tick
         self.rng = np.random.default_rng(seed)
         w = 2 * self.r + 1
         self.obs_dim = 3 * w * w + 3 + 3 + 2 + 2 + 1
         self.base = (0, 0)
+        self.base_size = 3  # drones launch from and refill anywhere in the top-left 3x3 pad
 
     # --- SwarmEnv API -------------------------------------------------
     def reset(self, seed=None):
@@ -54,7 +58,8 @@ class WildfireSwarmEnv(SwarmEnv):
             y, x = self.rng.integers(lo, hi, size=2)
             self._ignite(np.array([[y]]), np.array([[x]]))
         self.wind = self.fixed_wind or WINDS[self.rng.integers(len(WINDS))]
-        self.pos = np.zeros((self.n_agents, 2), dtype=np.int64)
+        # Random launch cells on the pad, so identical drones do not start (and stay) stacked.
+        self.pos = self.rng.integers(0, self.base_size, size=(self.n_agents, 2))
         self.payload = np.full(self.n_agents, self.max_payload)
         self.steps = 0
         self.drops = 0
@@ -70,12 +75,20 @@ class WildfireSwarmEnv(SwarmEnv):
         m[:, LEFT] = x > 0
         m[:, RIGHT] = x < self.G - 1
         cell = self.grid[y, x]
-        m[:, DROP] = (self.payload > 0) & ((cell == FUEL) | (cell == BURNING))
+        droppable = (cell == BURNING) | (cell == FUEL)
+        if self.drop_near_fire_only:
+            # Firebreaks only make sense next to the fire; this stops payload being wasted far away.
+            near = np.pad(self.grid == BURNING, 1)
+            near = near[:-2, 1:-1] | near[2:, 1:-1] | near[1:-1, :-2] | near[1:-1, 2:]
+            droppable = (cell == BURNING) | ((cell == FUEL) & near[y, x])
+        m[:, DROP] = (self.payload > 0) & droppable
         return m
 
     def step(self, actions):
         a = np.asarray(actions)
         reward = 0.0
+        agent_rewards = np.zeros(self.n_agents)
+        phi_before = self._potential()
         # 1. Drones act (in order; two drones on one cell share it).
         for i, act in enumerate(a):
             y, x = self.pos[i]
@@ -85,21 +98,25 @@ class WildfireSwarmEnv(SwarmEnv):
             elif act == DROP and self.payload[i] > 0 and self.grid[y, x] in (FUEL, BURNING):
                 if self.grid[y, x] == BURNING:
                     self.extinguished += 1
-                    reward += self.reward_extinguish
+                    agent_rewards[i] += self.reward_extinguish
                 self.grid[y, x] = WET
                 self.payload[i] -= 1
                 self.drops += 1
-            elif act == HOLD and (y, x) == self.base:
+            elif act == HOLD and self._at_base(y, x):
                 self.payload[i] = self.max_payload
-        # 2. Fire spreads and burns out.
-        new = self._spread()
-        reward -= float(new)
+        # 2. Fire spreads and burns out (every ``fire_every`` drone steps).
         self.steps += 1
+        new = self._spread() if self.steps % self.fire_every == 0 else 0
+        reward -= float(new)
         burning = int((self.grid == BURNING).sum())
         self.fire_trace.append(burning)
         terminated = burning == 0
         truncated = not terminated and self.steps >= self.max_steps
-        return self._obs(), reward * 0.1, terminated, truncated, {"burning": burning, "new_ignitions": new}
+        # Training-only credit for each drone: its own extinguishes, plus potential-based
+        # shaping for closing in on the fire (or on base when empty).
+        agent_rewards += self.shaping * (self.shaping_gamma * self._potential() - phi_before) * 10
+        info = {"burning": burning, "new_ignitions": new, "agent_rewards": agent_rewards * 0.1}
+        return self._obs(), reward * 0.1, terminated, truncated, info
 
     def episode_metrics(self):
         lost = int(self.ignited.sum())
@@ -139,6 +156,22 @@ class WildfireSwarmEnv(SwarmEnv):
         if len(ys):
             self._ignite(ys, xs)
         return len(ys)
+
+    def _at_base(self, y, x) -> bool:
+        return y < self.base_size and x < self.base_size
+
+    def _potential(self) -> np.ndarray:
+        """Minus each drone's distance (in grids) to where it should head next."""
+        fy, fx = np.nonzero(self.grid == BURNING)
+        y, x = self.pos[:, 0:1], self.pos[:, 1:2]
+        b = self.base_size - 1
+        to_base = (np.maximum(y[:, 0] - b, 0) + np.maximum(x[:, 0] - b, 0)).astype(float)
+        if len(fy):
+            to_fire = (np.abs(fy[None] - y) + np.abs(fx[None] - x)).min(1).astype(float)
+        else:
+            to_fire = np.zeros(self.n_agents)
+        dist = np.where(self.payload > 0, to_fire, to_base)
+        return -dist / self.G
 
     # --- observations -------------------------------------------------
     def _obs(self):

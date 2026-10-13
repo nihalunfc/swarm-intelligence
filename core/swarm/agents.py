@@ -6,7 +6,7 @@ copies) are evaluated together in one batched forward pass. The network's
 size does not depend on the number of agents, unlike a joint-action network
 whose output layer needs one unit per combination (n_actions ** n_agents).
 
-Training uses one of two value schemes for the shared team reward:
+Training uses n-step returns and one of two value schemes for the shared team reward:
 
 * ``vdn`` (default): Value Decomposition Networks. The team value is the sum
   of each agent's chosen Q-value, so agents learn credit for the team result.
@@ -89,8 +89,9 @@ class SwarmAgent:
         obs = torch.as_tensor(batch["obs"], device=dev)
         actions = torch.as_tensor(batch["actions"], device=dev)
         rewards = torch.as_tensor(batch["rewards"], device=dev)
+        agent_rewards = torch.as_tensor(batch["agent_rewards"], device=dev)
         next_obs = torch.as_tensor(batch["next_obs"], device=dev)
-        term = torch.as_tensor(batch["terminated"], device=dev)
+        discount = torch.as_tensor(batch["discount"], device=dev)
         next_mask = torch.as_tensor(batch["next_mask"], device=dev)
 
         q_taken = self.q(obs).gather(-1, actions.unsqueeze(-1)).squeeze(-1)  # (B, N)
@@ -101,10 +102,10 @@ class SwarmAgent:
 
         if self.mixer == "vdn":
             pred = q_taken.sum(-1)
-            target = rewards + self.gamma * (1 - term) * next_q.sum(-1)
+            target = rewards + agent_rewards.sum(-1) + discount * next_q.sum(-1)
         else:
             pred = q_taken
-            target = rewards.unsqueeze(-1) + self.gamma * (1 - term).unsqueeze(-1) * next_q
+            target = rewards.unsqueeze(-1) + agent_rewards + discount.unsqueeze(-1) * next_q
 
         loss = F.smooth_l1_loss(pred, target)
         self.opt.zero_grad()

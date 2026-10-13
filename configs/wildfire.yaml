@@ -6,11 +6,13 @@ env:
   n_drones: 6
   max_payload: 6
   view_radius: 3
-  max_steps: 150
+  max_steps: 300
   p_spread: 0.12
   p_wind: 0.30
   burn_time: [3, 6]
   n_ignitions: 2
+  fire_every: 3              # drones move 3 cells per fire-spread tick (real drones are far faster than fire)
+  shaping: 0.1               # per-drone training credit for closing in on the fire
 agent:
   mixer: vdn
   hidden: [256, 256]

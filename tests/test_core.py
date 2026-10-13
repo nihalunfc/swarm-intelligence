@@ -35,6 +35,20 @@ def test_update_runs(mixer):
     agent = SwarmAgent(obs_dim=4, n_actions=3, n_agents=5, cfg={"hidden": [8], "mixer": mixer})
     buf = ReplayBuffer(100, 5, 4, 3)
     for _ in range(40):
-        buf.push(np.random.rand(5, 4), np.random.randint(0, 3, 5), 1.0, np.random.rand(5, 4), False, np.ones((5, 3), bool))
+        buf.push(np.random.rand(5, 4), np.random.randint(0, 3, 5), 1.0, np.random.rand(5, 4), 0.99, np.ones((5, 3), bool))
     loss = agent.update(buf.sample(16))
     assert np.isfinite(loss)
+
+
+def test_nstep_sums_rewards_and_stops_at_episode_end():
+    from swarm.trainer import NStep
+
+    ns = NStep(3, 0.5)
+    z = np.zeros(2)
+    assert ns.add("o0", 0, 1.0, z, "o1", None, False, False) == []
+    assert ns.add("o1", 0, 1.0, z, "o2", None, False, False) == []
+    (obs, _, R, nxt, disc, _, _), = ns.add("o2", 0, 1.0, z, "o3", None, False, False)
+    assert obs == "o0" and R == 1.75 and nxt == "o3" and disc == 0.125
+    out = ns.add("o3", 0, 4.0, z, "o4", None, True, True)
+    assert [o[0] for o in out] == ["o1", "o2", "o3"]
+    assert out[-1][2] == 4.0 and all(o[4] == 0.0 for o in out)
