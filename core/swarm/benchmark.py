@@ -70,6 +70,6 @@ def format_table(rows: list[dict], metrics: list[str]) -> str:
         vals = []
         for m in metrics:
             v = r.get(m, "")
-            vals.append(f"{v:,.3f}" if isinstance(v, float) else str(v))
+            vals.append(f"{v + 0.0:,.3f}" if isinstance(v, float) else str(v))
         lines.append(f"| {r['app']} | {r['policy']} | " + " | ".join(vals) + " |")
     return "\n".join(lines) + "\n"

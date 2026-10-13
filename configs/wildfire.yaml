@@ -19,7 +19,7 @@ agent:
   lr: 0.0005
   gamma: 0.98
   tau: 0.01
-  agent_id: false
+  agent_id: true             # breaks symmetry between identical drones (77% vs 62% saved)
 train:
   total_steps: 600000
   n_step: 5

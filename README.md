@@ -50,7 +50,30 @@ A new application implements one interface, [`swarm.env.SwarmEnv`](core/swarm/en
 
 ## Results
 
-RESULTS_PLACEHOLDER
+Trained with the configs in `configs/` on one 4-core CPU (energy about 2 minutes, wildfire about 40 minutes) and evaluated on data the swarm never trained on. Full tables are in [`results/`](results/).
+
+**Energy** (10 batteries, 1 GW / 4 GWh fleet; trained Jan-Sep 2020, tested Oct-Dec 2020):
+
+| Policy | Peak reduction | Load spread (std) reduced | Peak-to-average after (1.579 before) |
+| :-- | --: | --: | --: |
+| Swarm (trained) | **949 MW** | **9.9%** | **1.496** |
+| Proportional rule | 0 MW | 9.1% | 1.577 |
+| Threshold rule | 0 MW | 5.0% | 1.577 |
+
+The rules empty the batteries in the hours before the evening peak; the swarm learns to keep charge for the peak hour itself. Peak reduction varies between training settings (one 3-step run reached 0 MW peak but the best std reduction, 11.0%); the config uses the 1-step setting, chosen by looking at these held-out months, so treat this as a validation result until it is confirmed on 2022 with `configs/energy-full.yaml`.
+
+**Wildfire** (6 drones, 16x16 forest, 50 unseen fires with random ignition and wind):
+
+| Policy | Forest saved | Peak burning cells |
+| :-- | --: | --: |
+| Nearest-fire rule | **90.1%** | **10.4** |
+| Swarm (trained) | 77.3% | 15.5 |
+| Random | 36.8% | 34.7 |
+| No drones | 33.2% | 37.9 |
+
+The learned swarm is far better than no action, but the hand-written nearest-fire rule still wins. Closing that gap (longer training, learning from the rule first, richer observations) is open work.
+
+**Hotel** (from the existing analytics, no swarm yet): the PuLP schedule costs $39.4k vs $50.0k for the fixed weekly pattern in the coming-week forecast, with 75 vs 344 shortfall hours.
 
 ## Research objectives
 
