@@ -14,14 +14,15 @@ env:
   fire_every: 3              # drones move 3 cells per fire-spread tick (real drones are far faster than fire)
   shaping: 0.1               # per-drone training credit for closing in on the fire
 agent:
-  mixer: vdn
+  mixer: independent        # beat vdn here (66% vs 52% forest saved at 200k steps)
   hidden: [256, 256]
   lr: 0.0005
-  gamma: 0.97
+  gamma: 0.98
   tau: 0.01
   agent_id: false
 train:
-  total_steps: 150000
+  total_steps: 600000
+  n_step: 5
   num_envs: 8
   batch_size: 256
   buffer_size: 100000

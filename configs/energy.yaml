@@ -20,6 +20,7 @@ agent:
   agent_id: false            # batteries are identical, so no per-agent id
 train:
   total_steps: 60000
+  n_step: 1                  # 1-step kept the peak-hour reserve better than 3-step here
   num_envs: 8                # parallel environment copies
   batch_size: 256
   buffer_size: 100000
