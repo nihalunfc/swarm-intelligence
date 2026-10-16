@@ -22,13 +22,18 @@ apps = "apps"
 "apps.energy" = "apps/energy"
 "apps.wildfire" = "apps/wildfire"
 "apps.hotel" = "apps/hotel"
+"apps.hotel.energy" = "apps/hotel/energy"
+"apps.hotel.housekeeping" = "apps/hotel/housekeeping"
+"apps.hotel.relocation" = "apps/hotel/relocation"
+"apps.hotel.shifts" = "apps/hotel/shifts"
 
 [tool.setuptools]
-packages = ["swarm", "apps", "apps.energy", "apps.wildfire", "apps.hotel"]
+packages = ["swarm", "apps", "apps.energy", "apps.wildfire", "apps.hotel", "apps.hotel.energy",
+            "apps.hotel.housekeeping", "apps.hotel.relocation", "apps.hotel.shifts"]
 
 [tool.setuptools.package-data]
 "apps.energy" = ["data/sample/*.csv"]
-"apps.hotel" = ["docs/data/*.json"]
+"apps.hotel" = ["docs/data/*.json", "data/sample/*.csv"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

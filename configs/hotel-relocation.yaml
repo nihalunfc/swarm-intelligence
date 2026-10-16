@@ -1,0 +1,8 @@
+# HARLTON-02: walked guests placed inside the group by an auction. Generated oversold nights
+# for the 5 sample hotels; the dollar figures are assumptions (apps/hotel/relocation DEFAULTS).
+app: hotel-relocation
+env:
+  scenarios: 50
+  seed: 0
+  oversell_share: 0.08
+  open_share: 0.02

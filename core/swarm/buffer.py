@@ -13,11 +13,12 @@ class ReplayBuffer:
         self.agent_rewards = np.zeros((capacity, n_agents), dtype=np.float32)
         self.discount = np.zeros(capacity, dtype=np.float32)  # gamma**n, or 0 at a true episode end
         self.next_mask = np.ones((capacity, n_agents, n_actions), dtype=bool)
+        self.mask = np.ones((capacity, n_agents, n_actions), dtype=bool)  # valid actions at obs
         self.pos = 0
         self.size = 0
         self.rng = np.random.default_rng(seed)
 
-    def push(self, obs, actions, reward, next_obs, discount, next_mask, agent_rewards=None):
+    def push(self, obs, actions, reward, next_obs, discount, next_mask, agent_rewards=None, mask=None):
         i = self.pos
         self.obs[i] = obs
         self.actions[i] = actions
@@ -26,6 +27,7 @@ class ReplayBuffer:
         self.next_obs[i] = next_obs
         self.discount[i] = discount
         self.next_mask[i] = next_mask
+        self.mask[i] = True if mask is None else mask
         self.pos = (self.pos + 1) % self.capacity
         self.size = min(self.size + 1, self.capacity)
 
@@ -39,6 +41,7 @@ class ReplayBuffer:
             "next_obs": self.next_obs[idx],
             "discount": self.discount[idx],
             "next_mask": self.next_mask[idx],
+            "mask": self.mask[idx],
         }
 
     def __len__(self) -> int:

@@ -29,12 +29,12 @@ def run_app(name: str, cfg: dict, run_dir: Path | None = None, model_path: str |
 
     import torch
 
-    from .agents import SwarmAgent
+    from .agents import make_agent
 
     if model_path:
         state = torch.load(model_path, map_location="cpu", weights_only=False)
         probe = app.make_env(cfg.get("env", {}), "train", 0)
-        agent = SwarmAgent(probe.obs_dim, probe.n_actions, probe.n_agents, state["cfg"])
+        agent = make_agent(probe, state["cfg"])
         agent.load_state_dict(state)
         history = []
     else:

@@ -1,0 +1,36 @@
+# H2-03 + HARLTON-03: 8 room attendants sequence a 300-room hotel's departures so rooms are
+# ready when guests arrive. Every episode is a new generated day (check-outs, arrivals,
+# paid early check-ins), 08:00-17:00 in 10-minute steps.
+app: hotel-housekeeping
+seed: 0
+env:
+  rooms: 300
+  floors: 10
+  attendants: 8
+  departure_rate: 0.35       # share of rooms checking out today
+  arrival_rate: 0.85         # share of those rooms with a guest arriving tonight
+  early_share: 0.15          # share of arriving guests who paid for an early check-in
+  early_weight: 3.0          # an early check-in guest's wait counts three times
+  candidates: 6              # rooms each attendant chooses between
+agent:
+  mixer: vdn
+  hidden: [128, 128]
+  lr: 0.0005
+  gamma: 0.97
+  tau: 0.01
+  agent_id: false
+train:
+  total_steps: 150000
+  n_step: 3
+  num_envs: 8
+  batch_size: 256
+  buffer_size: 100000
+  learning_starts: 2000
+  gradient_steps: 1
+  eps_start: 1.0
+  eps_end: 0.02
+  eps_fraction: 0.5
+  log_every: 10000
+eval:
+  episodes: 50
+  seed: 10000

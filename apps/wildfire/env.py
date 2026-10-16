@@ -25,7 +25,8 @@ class WildfireSwarmEnv(SwarmEnv):
 
     def __init__(self, grid_size=16, n_drones=6, max_payload=6, view_radius=3, max_steps=150,
                  p_spread=0.12, p_wind=0.30, burn_time=(3, 6), n_ignitions=2, wind=None,
-                 reward_extinguish=1.0, drop_near_fire_only=True, shaping=0.1, shaping_gamma=0.97, fire_every=1, seed=0):
+                 reward_extinguish=1.0, drop_near_fire_only=True, shaping=0.1, shaping_gamma=0.97, fire_every=1,
+                 base_size=3, comm_radius=4, seed=0):
         self.G = int(grid_size)
         self.n_agents = int(n_drones)
         self.max_payload = int(max_payload)
@@ -43,7 +44,8 @@ class WildfireSwarmEnv(SwarmEnv):
         w = 2 * self.r + 1
         self.obs_dim = 3 * w * w + 3 + 3 + 2 + 2 + 1
         self.base = (0, 0)
-        self.base_size = 3  # drones launch from and refill anywhere in the top-left 3x3 pad
+        self.comm_radius = int(comm_radius)  # drones within this many cells hear each other
+        self.base_size = int(base_size)  # drones launch from and refill anywhere in the top-left pad
 
     # --- SwarmEnv API -------------------------------------------------
     def reset(self, seed=None):
@@ -129,6 +131,11 @@ class WildfireSwarmEnv(SwarmEnv):
             "contained": float(self.fire_trace[-1] == 0),
         }
 
+    def comm_spec(self):
+        """Position columns of the observation (y/G, x/G) and the radio range in those units."""
+        w = 2 * self.r + 1
+        return (3 * w * w, 3 * w * w + 1), self.comm_radius / self.G
+
     # --- physics ------------------------------------------------------
     def _ignite(self, ys, xs):
         self.grid[ys, xs] = BURNING
@@ -175,36 +182,34 @@ class WildfireSwarmEnv(SwarmEnv):
 
     # --- observations -------------------------------------------------
     def _obs(self):
+        """Local windows for every drone at once (one strided view, no per-drone loop)."""
         G, r = self.G, self.r
         w = 2 * r + 1
+        win = np.lib.stride_tricks.sliding_window_view
         pad = lambda arr: np.pad(arr, r, constant_values=0)
-        fire = pad((self.grid == BURNING).astype(np.float32))
-        fuel = pad((self.grid == FUEL).astype(np.float32))
+        y, x = self.pos[:, 0], self.pos[:, 1]
+        fire = win(pad((self.grid == BURNING).astype(np.float32)), (w, w))[y, x]
+        fuel = win(pad((self.grid == FUEL).astype(np.float32)), (w, w))[y, x]
         drones = np.zeros((G, G), dtype=np.float32)
-        np.add.at(drones, (self.pos[:, 0], self.pos[:, 1]), 1.0)
-        drones = pad(drones)
+        np.add.at(drones, (y, x), 1.0)
+        others = win(pad(drones), (w, w))[y, x].copy()
+        others[:, r, r] -= 1
         fy, fx = np.nonzero(self.grid == BURNING)
-        out = np.zeros((self.n_agents, self.obs_dim), dtype=np.float32)
-        frac_burning = len(fy) / G ** 2
-        for i, (y, x) in enumerate(self.pos):
-            win = (slice(y, y + w), slice(x, x + w))
-            others = drones[win].copy()
-            others[r, r] -= 1
-            if len(fy):
-                d = np.abs(fy - y) + np.abs(fx - x)
-                j = d.argmin()
-                near = ((fy[j] - y) / G, (fx[j] - x) / G, d[j] / (2 * G))
-            else:
-                near = (0.0, 0.0, 0.0)
-            out[i] = np.concatenate([
-                fire[win].ravel(), fuel[win].ravel(), others.ravel(),
-                [y / G, x / G, self.payload[i] / self.max_payload],
-                near,
-                [-y / G, -x / G],
-                self.wind,
-                [frac_burning],
-            ])
-        return out
+        if len(fy):
+            d = np.abs(fy[None] - y[:, None]) + np.abs(fx[None] - x[:, None])
+            j = d.argmin(1)
+            near = np.stack([(fy[j] - y) / G, (fx[j] - x) / G, d[np.arange(len(y)), j] / (2 * G)], 1)
+        else:
+            near = np.zeros((self.n_agents, 3))
+        n = self.n_agents
+        return np.concatenate([
+            fire.reshape(n, -1), fuel.reshape(n, -1), others.reshape(n, -1),
+            np.stack([y / G, x / G, self.payload / self.max_payload], 1),
+            near,
+            np.stack([-y / G, -x / G], 1),
+            np.broadcast_to(np.asarray(self.wind, dtype=np.float32), (n, 2)),
+            np.full((n, 1), len(fy) / G ** 2),
+        ], axis=1).astype(np.float32)
 
 
 def make_env(env_cfg: dict, split: str, seed: int) -> WildfireSwarmEnv:
