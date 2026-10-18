@@ -71,7 +71,7 @@ The rules empty the batteries in the hours before the evening peak; the swarm le
 | Random | 36.8% | 34.7 |
 | No drones | 33.2% | 37.9 |
 
-The learned swarm is far better than no action, but the hand-written nearest-fire rule still wins. **Learning from the rule first** (`configs/wildfire-imitate.yaml`: pre-train on the rule's moves, then reinforcement learning) raises the swarm to **87.2%** forest saved (copying the rule alone gives 83.2%), closing most of the gap to the rule's 90.1% ([`results/wildfire-imitate.md`](results/wildfire-imitate.md)).
+The learned swarm is far better than no action, but the hand-written nearest-fire rule still wins. **Learning from the rule first** (`configs/wildfire-imitate.yaml`: pre-train on the rule's moves, then reinforcement learning) raises the swarm to **87.2%** forest saved (copying the rule alone gives 83.2%), closing most of the gap to the rule's 90.1% ([`results/wildfire-imitate.md`](results/wildfire-imitate.md)). Fine-tuning twice as long (84.9%) or adding neighbour messages (80.1%) did worse at this budget ([`results/wildfire-imitate-800k.md`](results/wildfire-imitate-800k.md), [`results/wildfire-imitate-messages.md`](results/wildfire-imitate-messages.md)).
 
 **Hotel swarms** (five sample hotels; held-out days or generated scenarios; dollar figures rest on the assumptions in each config):
 
