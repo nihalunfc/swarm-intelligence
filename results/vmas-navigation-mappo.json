@@ -1,0 +1,176 @@
+{
+  "vmas-navigation-mappo": {
+    "app": "vmas",
+    "split": "test",
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "episodes": 50,
+    "metrics": [
+      "success",
+      "return",
+      "collisions"
+    ],
+    "policies": {
+      "swarm (trained)": {
+        "success": [
+          0.9333333333333333,
+          0.8266666666666667,
+          1.0
+        ],
+        "return": [
+          12.542783215530216,
+          11.398009204318127,
+          13.640590939723886
+        ],
+        "collisions": [
+          2.6866666666666665,
+          1.5866666666666667,
+          3.953333333333333
+        ]
+      },
+      "no-op": {
+        "success": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "return": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "collisions": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "random": {
+        "success": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "return": [
+          -4.476982594802975,
+          -6.516478651158511,
+          -2.683646081095564
+        ],
+        "collisions": [
+          3.52,
+          1.92,
+          5.4
+        ]
+      },
+      "go to goal": {
+        "success": [
+          0.98,
+          0.94,
+          1.0
+        ],
+        "return": [
+          -0.8279975209012628,
+          -10.531345353435723,
+          7.197931347593663
+        ],
+        "collisions": [
+          16.04,
+          8.0,
+          25.640999999999988
+        ]
+      }
+    },
+    "comparisons": {
+      "no-op": {
+        "success": {
+          "diff": 0.9333333333333333,
+          "diff_lo": 0.8266666666666667,
+          "diff_hi": 1.0,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "return": {
+          "diff": 12.542783215530216,
+          "diff_lo": 11.398009204318127,
+          "diff_hi": 13.640590939723886,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "collisions": {
+          "diff": 2.6866666666666665,
+          "diff_lo": 1.5866666666666667,
+          "diff_hi": 3.953333333333333,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        }
+      },
+      "random": {
+        "success": {
+          "diff": 0.9333333333333333,
+          "diff_lo": 0.8266666666666667,
+          "diff_hi": 1.0,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "return": {
+          "diff": 17.019765810333194,
+          "diff_lo": 15.055933632529651,
+          "diff_hi": 19.12306164058298,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "collisions": {
+          "diff": -0.8333333333333334,
+          "diff_lo": -2.76,
+          "diff_hi": 0.8933333333333333,
+          "p_value": 0.3784,
+          "p_value_episodes": 0.37775,
+          "n_seeds": 3,
+          "n_episodes": 50
+        }
+      },
+      "go to goal": {
+        "success": {
+          "diff": -0.04666666666666667,
+          "diff_lo": -0.16,
+          "diff_hi": 0.04,
+          "p_value": 0.4068,
+          "p_value_episodes": 0.1956,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "return": {
+          "diff": 13.37078073643148,
+          "diff_lo": 5.296484678820396,
+          "diff_hi": 23.12822670448385,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0003,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "collisions": {
+          "diff": -13.353333333333333,
+          "diff_lo": -22.849333333333334,
+          "diff_hi": -5.526333333333338,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0001,
+          "n_seeds": 3,
+          "n_episodes": 50
+        }
+      }
+    }
+  }
+}

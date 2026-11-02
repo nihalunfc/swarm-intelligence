@@ -1,0 +1,38 @@
+[
+  {
+    "app": "vmas",
+    "policy": "swarm (trained)",
+    "return": 15.195441513322294,
+    "success": 0.94,
+    "collisions": 0.16,
+    "steps": 51.46,
+    "episodes": 50
+  },
+  {
+    "app": "vmas",
+    "policy": "no-op",
+    "return": 0.0,
+    "success": 0.0,
+    "collisions": 0.0,
+    "steps": 100.0,
+    "episodes": 50
+  },
+  {
+    "app": "vmas",
+    "policy": "random",
+    "return": -4.476982594802975,
+    "success": 0.0,
+    "collisions": 3.52,
+    "steps": 100.0,
+    "episodes": 50
+  },
+  {
+    "app": "vmas",
+    "policy": "go to goal",
+    "return": -0.8279975209012628,
+    "success": 0.98,
+    "collisions": 16.04,
+    "steps": 44.4,
+    "episodes": 50
+  }
+]

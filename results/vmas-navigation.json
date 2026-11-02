@@ -1,0 +1,176 @@
+{
+  "vmas-navigation": {
+    "app": "vmas",
+    "split": "test",
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "episodes": 50,
+    "metrics": [
+      "success",
+      "return",
+      "collisions"
+    ],
+    "policies": {
+      "swarm (trained)": {
+        "success": [
+          0.9133333333333333,
+          0.8266666666666667,
+          0.98
+        ],
+        "return": [
+          15.272190431480606,
+          14.295690083862594,
+          16.223664347299685
+        ],
+        "collisions": [
+          0.06666666666666667,
+          0.0,
+          0.24
+        ]
+      },
+      "no-op": {
+        "success": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "return": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "collisions": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "random": {
+        "success": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "return": [
+          -4.476982594802975,
+          -6.516478651158511,
+          -2.683646081095564
+        ],
+        "collisions": [
+          3.52,
+          1.92,
+          5.4
+        ]
+      },
+      "go to goal": {
+        "success": [
+          0.98,
+          0.94,
+          1.0
+        ],
+        "return": [
+          -0.8279975209012628,
+          -10.531345353435723,
+          7.197931347593663
+        ],
+        "collisions": [
+          16.04,
+          8.0,
+          25.640999999999988
+        ]
+      }
+    },
+    "comparisons": {
+      "no-op": {
+        "success": {
+          "diff": 0.9133333333333333,
+          "diff_lo": 0.8266666666666667,
+          "diff_hi": 0.98,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "return": {
+          "diff": 15.272190431480606,
+          "diff_lo": 14.295690083862594,
+          "diff_hi": 16.223664347299685,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "collisions": {
+          "diff": 0.06666666666666667,
+          "diff_lo": 0.0,
+          "diff_hi": 0.24,
+          "p_value": 0.4796,
+          "p_value_episodes": 0.4953,
+          "n_seeds": 3,
+          "n_episodes": 50
+        }
+      },
+      "random": {
+        "success": {
+          "diff": 0.9133333333333333,
+          "diff_lo": 0.8266666666666667,
+          "diff_hi": 0.98,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "return": {
+          "diff": 19.749173026283582,
+          "diff_lo": 17.549095905480286,
+          "diff_hi": 22.125087820035713,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "collisions": {
+          "diff": -3.453333333333333,
+          "diff_lo": -5.333333333333333,
+          "diff_hi": -1.84,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        }
+      },
+      "go to goal": {
+        "success": {
+          "diff": -0.06666666666666667,
+          "diff_lo": -0.16,
+          "diff_hi": 0.02,
+          "p_value": 0.1452,
+          "p_value_episodes": 0.08665,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "return": {
+          "diff": 16.10018795238187,
+          "diff_lo": 7.973686933707446,
+          "diff_hi": 26.009336775224636,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "collisions": {
+          "diff": -15.973333333333333,
+          "diff_lo": -25.686833333333333,
+          "diff_hi": -8.01283333333334,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        }
+      }
+    }
+  }
+}
