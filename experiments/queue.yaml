@@ -7,10 +7,12 @@
 # rules) and commits them, with each run's config, manifest and per-episode
 # metrics under results/runs/<label>/, back to the same branch.
 #
-# Fields: config (required), label (default: config file name), seeds
+# `branch`: the queue runs only when pushed to this branch (merging it elsewhere does
+# not re-run it). Fields of each experiment: config (required), label (default: config file name), seeds
 # (default 0-4), set (extra KEY=VALUE overrides, as for `swarm train --set`),
 # extras (optional dependency groups from pyproject.toml, e.g. [citylearn]), scale (swarm
 # sizes for a `swarm scale` study after training) and scale_set (overrides for it).
+branch: claude/project-thread-xchy7b
 experiments:
   # Earlier runs (wildfire methods, neighbour messages, CityLearn, VMAS) are in results/;
   # this file lists only what is still to run.
@@ -23,3 +25,9 @@ experiments:
   - {config: configs/wildfire-targets.yaml, label: wildfire-targets, seeds: [0, 1, 2]}
   # Hotel peak energy with seeds (item 1).
   - {config: configs/hotel-energy.yaml, label: hotel-energy, seeds: [0, 1, 2, 3, 4]}
+  # Ablations whose local runs were lost to a machine restart (item 5).
+  - {config: configs/energy.yaml, label: energy-no-val-selection, seeds: [0, 1, 2, 3, 4], set: [train.eval_every=0]}
+  - {config: configs/hotel-housekeeping.yaml, label: hotel-housekeeping-independent, seeds: [0, 1, 2, 3, 4],
+     set: [agent.mixer=independent]}
+  - {config: configs/hotel-housekeeping.yaml, label: hotel-housekeeping-qmix, seeds: [0, 1, 2, 3, 4],
+     set: [agent.mixer=qmix]}
