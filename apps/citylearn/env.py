@@ -22,6 +22,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import numpy as np
+
 from swarm.env import SwarmEnv
 
 LEVELS = np.array([-0.2, -0.1, -0.05, 0.0, 0.05, 0.1, 0.2])

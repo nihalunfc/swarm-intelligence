@@ -1,6 +1,7 @@
 import json
 
 import numpy as np
+
 from swarm.cli import main
 from swarm.stats import hierarchical_bootstrap, paired_test, permutation_pvalue
 
@@ -70,11 +71,10 @@ def test_mappo_baseline_trains_and_reloads(tmp_path):
 
 
 def test_reference_bounds_are_reported():
-    from swarm.trainer import evaluate
-
     import apps.energy as E
     import apps.hotel.housekeeping as H
     from apps.hotel.housekeeping.references import NAME, lower_bound_rows
+    from swarm.trainer import evaluate
 
     rows = lower_bound_rows(H, {"rooms": 60, "attendants": 3}, "test", 2, 10000)[NAME]
     rule = evaluate(H, {"rooms": 60, "attendants": 3}, H.BASELINES["soonest needed"], 2)
@@ -114,9 +114,8 @@ def test_robustness_scenarios(tmp_path):
 
 
 def test_failed_agents_take_the_null_action():
-    from swarm.robustness import PerturbedEnv
-
     from apps.wildfire.env import HOLD, WildfireSwarmEnv
+    from swarm.robustness import PerturbedEnv
 
     env = PerturbedEnv(WildfireSwarmEnv(grid_size=8, n_drones=4), fail=0.5, fail_at=0.0, horizon=10)
     env.reset(seed=3)

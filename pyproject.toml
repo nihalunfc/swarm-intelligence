@@ -52,3 +52,6 @@ extend-exclude = ["apps/hotel/docs", "apps/hotel/site", "apps/wildfire/docs", "*
 [tool.ruff.lint]
 # Pyflakes (real bugs) and import order; style rules are left to reviewers for now.
 select = ["F", "I", "B006", "B007", "B008"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["swarm", "apps"]

@@ -1,10 +1,10 @@
 import numpy as np
-from swarm.market import auction, contract_net
-from swarm.trainer import evaluate
 
 import apps.hotel.housekeeping as hk
 import apps.hotel.relocation as rel
 import apps.hotel.shifts as sh
+from swarm.market import auction, contract_net
+from swarm.trainer import evaluate
 
 
 def test_auction_matches_best_assignment_on_unit_sizes():

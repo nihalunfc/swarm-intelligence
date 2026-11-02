@@ -18,6 +18,7 @@ early check-in that was paid for.
 """
 
 import numpy as np
+
 from swarm.env import SwarmEnv
 
 STEP_MIN = 10

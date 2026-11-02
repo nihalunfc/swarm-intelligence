@@ -63,3 +63,21 @@ def test_several_pads_refill_and_scale():
     assert env.payload[0] == env.max_payload
     cfg = scaled_env_cfg({"n_drones": 6, "grid_size": 16, "scale_pads": True}, 600)
     assert cfg["pads_per_side"] == 10 and cfg["grid_size"] == 160 and "base_size" not in cfg
+
+
+def test_target_actions_follow_the_rule_logic():
+    import numpy as np
+
+    from apps.wildfire.targets import BASELINES, WildfireTargetsEnv
+
+    env = WildfireTargetsEnv(grid_size=12, n_drones=4, targets=3, seed=0)
+    obs = env.reset(seed=2)
+    assert obs.shape == (4, env.obs_dim) and env.n_actions == 5
+    for _ in range(20):
+        m = env.action_mask()
+        a = BASELINES["spread rule"](env, obs, m)
+        assert m[np.arange(4), a].all()
+        obs, r, term, trunc, _ = env.step(a)
+        if term or trunc:
+            break
+    assert 0 <= env.episode_metrics()["forest_saved_pct"] <= 100

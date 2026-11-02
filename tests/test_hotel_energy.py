@@ -1,9 +1,9 @@
 import numpy as np
-from swarm.trainer import evaluate
 
 import apps.hotel.energy as app
 from apps.hotel.energy import BASELINES, make_env
 from apps.hotel.energy.env import NORMAL, SHED
+from swarm.trainer import evaluate
 
 
 def test_splits_are_whole_summer_days_without_overlap():

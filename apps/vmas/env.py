@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import numpy as np
+
 from swarm.env import SwarmEnv
 
 KEY_METRICS = ["success", "return", "collisions"]

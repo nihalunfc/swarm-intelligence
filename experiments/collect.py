@@ -11,6 +11,7 @@ from collections import defaultdict
 from pathlib import Path
 
 import yaml
+
 from swarm import aggregate
 
 KEEP = ["config.yaml", "episodes.json", "manifest.json", "results.json", "results.md",
