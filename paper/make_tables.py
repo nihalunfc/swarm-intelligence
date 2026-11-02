@@ -81,6 +81,11 @@ def tex_escape(s: str) -> str:
 
 
 def fmt(cell: str) -> str:
+    """Format a number, or a multi-seed "mean [lo, hi]" cell, for LaTeX."""
+    m = re.fullmatch(r"\s*(-?[\d,.]+)\s*\[\s*(-?[\d,.]+)\s*,\s*(-?[\d,.]+)\s*\](.*)", cell)
+    if m:
+        mean, lo, hi, rest = m.groups()
+        return f"{fmt(mean)} {{\\scriptsize [{fmt(lo)}, {fmt(hi)}]}}" + tex_escape(rest)
     try:
         v = float(cell.replace(",", ""))
     except ValueError:

@@ -74,11 +74,11 @@ All agents use one network $Q_\theta(o_i, a)$, optionally with a one-hot agent i
 Let $\pi_{\text{rule}}$ be the domain's best rule. \todo{final formulation from the upgrade branch: e.g.\ agent $i$ chooses between \emph{follow} ($a_i = \pi_{\text{rule}}(o_i)$) and an \emph{override} action, with the rule's action as the default under an initial bias, so the untrained swarm equals the rule.} We compare this with (a) learning from scratch and (b) imitation pre-training with a large-margin loss followed by RL \citep{hester2018dqfd}.
 
 \subsection{Evaluation protocol}
-Each result is the mean over \todo{$k\ge5$} training seeds with a 95\% bootstrap confidence interval; methods are compared with paired tests on identical evaluation episodes. Settings are chosen on a validation split, and the test split is used once. Where an optimum $J^\star$ is available we report the share of the gap closed, $(J - J_{\text{rule}})/(J^\star - J_{\text{rule}})$.
+Each result is the mean over independent training seeds (10 for energy, 5 for the other domains) with a 95\% hierarchical bootstrap confidence interval over seeds and evaluation episodes. Each learned policy is compared with each rule by a paired sign-flip permutation test on identical evaluation episodes. Checkpoints and settings are chosen on a validation split, and the test split is used once. Generated domains use episode seeds from 0 for training, from 5000 for validation and from 10000 for test. Where an optimum $J^\star$ is available we report the share of the gap closed, $(J - J_{\text{rule}})/(J^\star - J_{\text{rule}})$.
 
 \section{Domains}
 
-\paragraph{Energy.} Ten batteries (100\,MW / 400\,MWh each, 90\% round-trip efficiency) shave the ERCOT COAST native load for 2020, combined with NREL NSRDB weather for Houston. Agents choose charge, hold or discharge each hour. Rules: a threshold rule and a load-proportional rule. Reference: a perfect-foresight linear program. \todo{train/val/test months.}
+\paragraph{Energy.} Ten batteries (100\,MW / 400\,MWh each, 90\% round-trip efficiency) shave the ERCOT COAST native load for 2020, combined with NREL NSRDB weather for Houston. Agents choose charge, hold or discharge each hour. Rules: a threshold rule and a load-proportional rule. References: a model-predictive controller with a 24-hour forecast, and perfect-foresight linear programs that minimise the peak or the deviation from mean load. Training uses January to August 2020, validation September and test October to December.
 
 \paragraph{Wildfire.} Six drones with a payload of 6 and a view radius of 3 cover a $16\times16$ forest. Two random ignitions spread with probability 0.12 (0.30 downwind) and burn out after 3 to 6 ticks; drones move three cells per fire tick, drop retardant or hold, and refill on a launch pad. Rule: fly to the nearest burning cell and drop. Baselines: QMIX, MAPPO.
 
@@ -99,7 +99,7 @@ All forests and hotel data are synthetic; the generators are released.
 \input{tables/shifts}
 \input{tables/relocation}
 
-\paragraph{Learning from scratch.} In energy the swarm keeps charge for the peak hour itself and cuts the peak where both rules cut none (Table~\ref{tab:energy}). In wildfire the nearest-fire rule beats the swarm trained from scratch (Table~\ref{tab:wildfire}); imitation pre-training closes most of the gap but not all of it (Table~\ref{tab:wildfire-imitate}). In housekeeping the swarm is close to but behind the soonest-needed rule (Table~\ref{tab:housekeeping}). Market-based hotel swarms come within a few percent of the optimum (Tables~\ref{tab:shifts} and~\ref{tab:relocation}).
+\paragraph{Learning from scratch.} In energy the swarm keeps charge for the peak hour itself and cuts the peak where both rules cut none (Table~\ref{tab:energy}). Its peak cut equals the perfect-foresight optimum, which here is the fleet's power limit after losses, so peak reduction alone saturates and the load-deviation metric carries the comparison. In wildfire the nearest-fire rule beats the swarm trained from scratch (Table~\ref{tab:wildfire}); imitation pre-training closes most of the gap but not all of it (Table~\ref{tab:wildfire-imitate}). In housekeeping the swarm is close to but behind the soonest-needed rule (Table~\ref{tab:housekeeping}). Market-based hotel swarms come within a few percent of the optimum (Tables~\ref{tab:shifts} and~\ref{tab:relocation}).
 
 \paragraph{Residual swarm.} \todo{table: scratch vs imitation vs residual vs rule vs QMIX vs MAPPO vs optimum, per domain, with gap closed.}
 
