@@ -8,7 +8,6 @@ so peaks are shaved and troughs are filled.
 """
 
 import numpy as np
-
 from swarm.env import SwarmEnv
 
 from . import data as D

@@ -1,6 +1,8 @@
 import argparse
-import pandas as pd
 import sys
+
+import pandas as pd
+
 
 def merge_datasets(ercot_path, nrel_path, output_path):
     print("Initializing Synthesis Engine...")

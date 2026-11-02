@@ -6,7 +6,7 @@ One swarm engine, several real-world applications. Many independent agents each 
 | :-- | :-- | :-- | :-- |
 | Energy grid | Smart battery nodes on the ERCOT COAST grid | Grid capacity at peak hours | [`apps/energy`](apps/energy/README.md) |
 | Wildfire | Retardant drones over a forest | Retardant and flight time | [`apps/wildfire`](apps/wildfire/README.md) |
-| Hotel | Rooms, staff and properties (swarm environments planned) | Staff hours, rooms, energy | [`apps/hotel`](apps/hotel/README.md) |
+| Hotel | Equipment, room attendants, staff and properties | Peak-hour grid capacity, attendant time, rooms, shifts | [`apps/hotel`](apps/hotel/README.md) |
 
 ## Repository layout
 
@@ -71,9 +71,20 @@ The rules empty the batteries in the hours before the evening peak; the swarm le
 | Random | 36.8% | 34.7 |
 | No drones | 33.2% | 37.9 |
 
-The learned swarm is far better than no action, but the hand-written nearest-fire rule still wins. Closing that gap (longer training, learning from the rule first, richer observations) is open work.
+The learned swarm is far better than no action, but the hand-written nearest-fire rule still wins. **Learning from the rule first** (`configs/wildfire-imitate.yaml`: pre-train on the rule's moves, then reinforcement learning) raises the swarm to **87.2%** forest saved (copying the rule alone gives 83.2%), closing most of the gap to the rule's 90.1% ([`results/wildfire-imitate.md`](results/wildfire-imitate.md)). Fine-tuning twice as long (84.9%) or adding neighbour messages (80.1%) did worse at this budget ([`results/wildfire-imitate-800k.md`](results/wildfire-imitate-800k.md), [`results/wildfire-imitate-messages.md`](results/wildfire-imitate-messages.md)).
 
-**Hotel** (from the existing analytics, no swarm yet): the PuLP schedule costs $39.4k vs $50.0k for the fixed weekly pattern in the coming-week forecast, with 75 vs 344 shortfall hours.
+**Hotel swarms** (five sample hotels; held-out days or generated scenarios; dollar figures rest on the assumptions in each config):
+
+| Swarm | Swarm result | Best simple rule | Exact optimum |
+| :-- | :-- | :-- | :-- |
+| Peak-hour energy, HARLTON-01 (16 equipment agents, RL) | $279k/yr net, 666 kW off the top 5 grid hours | Peak-alert rule $251k/yr, 561 kW | n/a |
+| Housekeeping, H2-03 (8 attendants, RL) | 23.3 guest wait hours/day | Soonest-needed 21.5 h; today's floor order 111 h | n/a |
+| Guest relocation, HARLTON-02 (auction) | +$4.6k net per oversold night | Nearest sister hotel +$3.6k; walking guests -$10.2k | +$4.9k |
+| Shift exchange, H2-01 (contract net, Ontario ESA rules) | $4.8k per week of open shifts | First to accept $5.2k; agency only $8.0k | $4.7k |
+
+The learned housekeeping swarm does not beat the soonest-needed rule yet; both cut guest waiting about five-fold against cleaning in floor order. The PuLP schedule from the existing analytics costs $39.4k vs $50.0k for the fixed weekly pattern in the coming-week forecast.
+
+**Scale** (research objective 2, `swarm scale`): one model trained with 10 batteries or 6 drones runs unchanged at 10, 100 and 1,000 agents with the same 18k / 110k parameters ([`results/scale-energy.md`](results/scale-energy.md), [`results/scale-wildfire.md`](results/scale-wildfire.md)). The battery swarm gives the same 949 MW peak cut at every size (the fleet stays 1 GW). The drones beat the rule at 10 (82.9% vs 79.4%) but fall behind at 100 and 1,000 (41% vs 47%, 26% vs 40%) on forests grown to match, where one corner launch pad means long refill trips: more pads are the next step. Choosing all 1,000 agents' actions takes 3.5 ms; a training update grows with agents (835 ms at 1,000 drones, batch 32).
 
 ## Research objectives
 

@@ -53,7 +53,7 @@ def cmd_benchmark(args):
 def cmd_replay(args):
     import torch
 
-    from .agents import SwarmAgent
+    from .agents import make_agent
 
     run = Path(args.run)
     cfg = load_config(run / "config.yaml", args.set)
@@ -62,11 +62,22 @@ def cmd_replay(args):
         raise SystemExit(f"App '{cfg['app']}' has no replay export")
     state = torch.load(run / "model.pt", map_location="cpu", weights_only=False)
     probe = app.make_env(cfg["env"], "train", 0)
-    agent = SwarmAgent(probe.obs_dim, probe.n_actions, probe.n_agents, state["cfg"])
+    agent = make_agent(probe, state["cfg"])
     agent.load_state_dict(state)
     policies = {"swarm (trained)": agent.policy(), **app.BASELINES}
     app.export_replay(eval_env_cfg(cfg), policies, args.output, episodes=args.episodes)
     print(f"Wrote {args.output}")
+
+
+def cmd_scale(args):
+    from .scale import scale_study, write
+
+    rows = scale_study(args.run, args.sizes, args.episodes)
+    cfg = load_config(Path(args.run) / "config.yaml", [])
+    metric = args.metric or get_app(cfg["app"]).KEY_METRICS[0]
+    out = Path(args.out) / f"scale-{cfg['app']}-{time.strftime('%Y%m%d-%H%M%S')}"
+    print(write(rows, metric, out))
+    print(f"Saved to {out}")
 
 
 def main(argv=None):
@@ -96,6 +107,14 @@ def main(argv=None):
     r.add_argument("--episodes", type=int, default=3)
     r.add_argument("--set", nargs="*", default=[], metavar="KEY=VALUE")
     r.set_defaults(fn=cmd_replay)
+
+    s = sub.add_parser("scale", help="run a trained model at other swarm sizes and time it")
+    s.add_argument("--run", required=True)
+    s.add_argument("--sizes", nargs="+", type=int, default=[10, 100, 1000])
+    s.add_argument("--episodes", type=int, default=5)
+    s.add_argument("--metric", default=None, help="results column to tabulate (default: the app's first)")
+    s.add_argument("--out", default=str(REPO / "runs"))
+    s.set_defaults(fn=cmd_scale)
 
     args = p.parse_args(argv)
     args.fn(args)

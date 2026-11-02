@@ -1,8 +1,10 @@
-import pvlib
-import pandas as pd
-import time
 import os
 import sys
+import time
+
+import pandas as pd
+import pvlib
+
 
 def download_nrel_multi_year(api_key, email, lat, lon, years, output_file):
     dfs = []

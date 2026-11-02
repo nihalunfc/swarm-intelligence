@@ -22,14 +22,28 @@ apps = "apps"
 "apps.energy" = "apps/energy"
 "apps.wildfire" = "apps/wildfire"
 "apps.hotel" = "apps/hotel"
+"apps.hotel.energy" = "apps/hotel/energy"
+"apps.hotel.housekeeping" = "apps/hotel/housekeeping"
+"apps.hotel.relocation" = "apps/hotel/relocation"
+"apps.hotel.shifts" = "apps/hotel/shifts"
 
 [tool.setuptools]
-packages = ["swarm", "apps", "apps.energy", "apps.wildfire", "apps.hotel"]
+packages = ["swarm", "apps", "apps.energy", "apps.wildfire", "apps.hotel", "apps.hotel.energy",
+            "apps.hotel.housekeeping", "apps.hotel.relocation", "apps.hotel.shifts"]
 
 [tool.setuptools.package-data]
 "apps.energy" = ["data/sample/*.csv"]
-"apps.hotel" = ["docs/data/*.json"]
+"apps.hotel" = ["docs/data/*.json", "data/sample/*.csv"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["core", "."]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+extend-exclude = ["apps/hotel/docs", "apps/hotel/site", "apps/wildfire/docs", "*.ipynb"]
+
+[tool.ruff.lint]
+# Pyflakes (real bugs) and import order; style rules are left to reviewers for now.
+select = ["F", "I", "B006", "B007", "B008"]
