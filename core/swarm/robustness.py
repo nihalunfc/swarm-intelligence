@@ -141,7 +141,7 @@ def run(run_dirs: list[Path], scenarios: list[dict], episodes: int | None = None
     return out
 
 
-def to_markdown(res: dict, metric: str) -> str:
+def to_markdown(res: dict, metric: str, digits: int = 2) -> str:
     names = [s["name"] for s in res["scenarios"]]
     policies = list(res["scenarios"][0]["policies"])
     base = res["scenarios"][0]
@@ -155,15 +155,21 @@ def to_markdown(res: dict, metric: str) -> str:
             x = np.array([[e[metric] for e in rows] for rows in s["policies"][p]])
             m, lo, hi = hierarchical_bootstrap(x)
             kept = f" ({100 * m / ref:.0f}%)" if ref else ""
-            cells.append(fmt_ci(m, lo, hi) + kept)
+            cells.append(fmt_ci(m, lo, hi, digits) + kept)
         lines.append(f"| {p} | " + " | ".join(cells) + " |")
     return "\n".join(lines) + "\n"
 
 
-def write(res: dict, metric: str, out: Path) -> str:
+def write(res: dict, metrics: str | list[str], out: Path) -> str:
     out.parent.mkdir(parents=True, exist_ok=True)
-    md = to_markdown(res, metric)
-    out.with_suffix(".md").write_text(f"# Robustness: {res['app']}\n\n" + md)
+    metrics = [metrics] if isinstance(metrics, str) else metrics
+    present = res["scenarios"][0]["policies"]
+    first = next(iter(present.values()))[0][0]
+    md = "\n".join(to_markdown(res, m) for m in metrics if m in first)
+    note = ("Failed agents take the app's null action from the failure time on, and the others are not told. "
+            "Sensor noise is added to the agents' observations only; rules and references that read the true "
+            "state are not affected by it.\n\n")
+    out.with_suffix(".md").write_text(f"# Robustness: {res['app']}\n\n" + note + md)
     slim = copy.deepcopy(res)
     out.with_suffix(".json").write_text(json.dumps(slim))
     return md

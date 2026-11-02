@@ -132,8 +132,8 @@ def cmd_robustness(args):
     app = yaml.safe_load((runs[0] / "config.yaml").read_text())["app"]
     scenarios = yaml.safe_load(Path(args.scenarios).read_text())[args.scenario_set or app]
     res = robustness.run(runs, scenarios, args.episodes)
-    metric = args.metric or get_app(app).KEY_METRICS[0]
-    print(robustness.write(res, metric, Path(args.output)))
+    metrics = [args.metric] if args.metric else list(get_app(app).KEY_METRICS)
+    print(robustness.write(res, metrics, Path(args.output)))
 
 
 def main(argv=None):
