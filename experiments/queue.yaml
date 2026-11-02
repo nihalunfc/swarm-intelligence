@@ -8,5 +8,20 @@
 # metrics under results/runs/<label>/, back to the same branch.
 #
 # Fields: config (required), label (default: config file name), seeds
-# (default 0-4), set (extra KEY=VALUE overrides, as for `swarm train --set`).
-experiments: []
+# (default 0-4), set (extra KEY=VALUE overrides, as for `swarm train --set`),
+# extras (optional dependency groups from pyproject.toml, e.g. [citylearn]).
+experiments:
+  # Wildfire methods (item 1 + 2): plain DQN, learning from the rule, QMIX, MAPPO.
+  - {config: configs/wildfire.yaml, label: wildfire, seeds: [0, 1, 2]}
+  - {config: configs/wildfire-imitate.yaml, label: wildfire-imitate, seeds: [0, 1, 2, 3, 4]}
+  - {config: configs/wildfire-imitate.yaml, label: wildfire-imitate-qmix, seeds: [0, 1, 2], set: [agent.mixer=qmix]}
+  - {config: configs/wildfire.yaml, label: wildfire-mappo, seeds: [0, 1, 2],
+     set: [algo=mappo, ppo.lr=0.0003, ppo.rollout=128, ppo.epochs=4, ppo.minibatches=4, ppo.entropy=0.01]}
+  # Neighbour messages, redone with seeds (item 5; other ablations run on the cheaper apps).
+  - {config: configs/wildfire-imitate.yaml, label: wildfire-imitate-messages, seeds: [0, 1, 2],
+     set: [agent.comm.enabled=true, agent.comm.dim=64]}
+  # External benchmarks (item 7).
+  - {config: configs/citylearn.yaml, label: citylearn, seeds: [0, 1, 2], extras: [citylearn]}
+  - {config: configs/vmas-navigation.yaml, label: vmas-navigation, seeds: [0, 1, 2], extras: [vmas]}
+  - {config: configs/vmas-navigation.yaml, label: vmas-navigation-mappo, seeds: [0, 1, 2], extras: [vmas],
+     set: [algo=mappo]}
