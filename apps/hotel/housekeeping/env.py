@@ -18,7 +18,6 @@ early check-in that was paid for.
 """
 
 import numpy as np
-
 from swarm.env import SwarmEnv
 
 STEP_MIN = 10
@@ -176,7 +175,7 @@ class HousekeepingSwarmEnv(SwarmEnv):
 
     # --- observations -------------------------------------------------
     def _obs(self):
-        n, K = self.n_agents, self.K
+        n = self.n_agents
         now = self.now
         free = self._dirty_free()
         out = np.zeros((n, self.obs_dim), dtype=np.float32)

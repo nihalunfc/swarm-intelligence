@@ -5,6 +5,7 @@ import numpy as np
 from . import loads as L
 from .env import EARLY, NORMAL, SHED
 
+
 def _plan(env, mask, active: bool):
     """Pre-cool and pre-heat for 3 hours before the grid's usual peak window,
     shed through it, then catch up deferred work.

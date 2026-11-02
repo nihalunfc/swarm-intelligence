@@ -15,7 +15,6 @@ laundry or EV charging left unfinished at the end of a day.
 
 import numpy as np
 import pandas as pd
-
 from swarm.env import SwarmEnv
 
 from . import loads as L

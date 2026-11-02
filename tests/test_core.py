@@ -1,6 +1,5 @@
 import numpy as np
 import pytest
-
 from swarm.agents import SwarmAgent
 from swarm.buffer import ReplayBuffer
 from swarm.config import apply_overrides
@@ -79,7 +78,6 @@ def test_pretrain_from_rule_runs_and_agent_copies_rule():
 def test_messages_only_reach_neighbours():
     """With a radius rule, changing a far-away agent does not change another agent's Q-values."""
     import torch
-
     from swarm.agents import radius_neighbours
 
     agent = SwarmAgent(obs_dim=4, n_actions=3, n_agents=3, cfg={"hidden": [8], "comm": {"enabled": True, "dim": 8}})

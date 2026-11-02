@@ -1,7 +1,9 @@
 import argparse
-import pandas as pd
-from datetime import timedelta
 import sys
+from datetime import timedelta
+
+import pandas as pd
+
 
 def clean_ercot_data(input_filepath, output_filepath, start_date, end_date):
     print(f"Loading raw ERCOT data from '{input_filepath}'...")

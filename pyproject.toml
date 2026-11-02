@@ -38,3 +38,12 @@ packages = ["swarm", "apps", "apps.energy", "apps.wildfire", "apps.hotel", "apps
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["core", "."]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+extend-exclude = ["apps/hotel/docs", "apps/hotel/site", "apps/wildfire/docs", "*.ipynb"]
+
+[tool.ruff.lint]
+# Pyflakes (real bugs) and import order; style rules are left to reviewers for now.
+select = ["F", "I", "B006", "B007", "B008"]

@@ -1,13 +1,15 @@
-import pandas as pd
-import numpy as np
 import os
+import warnings
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import torch
 import torch.nn as nn
-from torch.utils.data import Dataset, DataLoader
+from sklearn.metrics import mean_absolute_error, mean_absolute_percentage_error, mean_squared_error
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import mean_absolute_error, mean_squared_error, mean_absolute_percentage_error
-import warnings
+from torch.utils.data import DataLoader, Dataset
+
 warnings.filterwarnings('ignore')
 
 # --- 1. PyTorch Dataset Definition ---
@@ -163,7 +165,7 @@ def evaluate_model(model, test_loader, target_scaler, device='cpu'):
     rmse = np.sqrt(mean_squared_error(actuals, predictions))
     mape = mean_absolute_percentage_error(actuals, predictions) * 100
     
-    print(f"\n--- LSTM Baseline Results ---")
+    print("\n--- LSTM Baseline Results ---")
     print(f"MAE:  {mae:.2f} MW")
     print(f"RMSE: {rmse:.2f} MW")
     print(f"MAPE: {mape:.2f} %\n")
