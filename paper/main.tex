@@ -1,0 +1,135 @@
+\documentclass[11pt]{article}
+
+% arXiv-friendly preamble: standard packages only, compiles with pdflatex + bibtex.
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{natbib}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+
+% Drafting marks. Set \drafttrue to \draftfalse before submission: every \todo then
+% becomes a build error, so nothing unfinished reaches arXiv.
+\newif\ifdraft \drafttrue
+\ifdraft
+  \newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\else
+  \newcommand{\todo}[1]{\errmessage{Unresolved TODO: #1}}
+\fi
+
+\newcommand{\repo}{\url{https://github.com/nihalunfc/swarm-intelligence}}
+
+\title{When Does a Learned Swarm Beat the Rule?\\
+\large Residual Multi-Agent Reinforcement Learning for Grid Batteries, Wildfire Drones and Hotel Operations}
+\author{Nihal}
+\date{\todo{submission date}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Multi-agent reinforcement learning (MARL) is often reported against other learned methods, which leaves open whether it beats the hand-written rules that practitioners already use. We study this question with a single parameter-shared, value-decomposed swarm engine applied without per-domain algorithm changes to three unrelated allocation problems: battery peak shaving on real ERCOT load, drone wildfire suppression on a stochastic cellular forest, and hotel housekeeping and staff shifts. Every method is compared against the strongest simple rule we could write and, where tractable, the exact optimum from a linear or mixed-integer program. We find that learning from scratch beats the rules in energy but not in wildfire or housekeeping, and we propose a residual swarm in which each agent starts from the rule's action and learns only when to override it. \todo{one sentence with the residual swarm's headline result: share of the rule-to-optimum gap closed, with 95\% CI over seeds.} \todo{one sentence on robustness to agent failure and scale from 10 to 1{,}000 agents.} Code, configurations and every table are released under the MIT license.
+\end{abstract}
+
+\section{Introduction}
+
+Many operational problems are naturally decentralised: each battery, drone or staff member sees only its surroundings and must act without a central planner. MARL promises controllers that coordinate such agents, and parameter sharing lets one small network drive any number of them \citep{christianos2021selective}. Yet in deployed settings the alternative to MARL is rarely another MARL method. It is a simple rule that an operator wrote, such as ``discharge when load is high'' or ``fly to the nearest fire''. Benchmarks such as CityLearn \citep{vazquez2020citylearn} and recent multi-KPI studies \citep{khouja2026citylearnmarl} compare learned methods with each other, which leaves the practical question unanswered.
+
+We ask \emph{when a learned swarm beats the rule}, and we answer it with three choices:
+
+\begin{enumerate}
+  \item \textbf{One engine, three domains.} The same shared-weight agent with value decomposition \citep{sunehag2018vdn} runs grid batteries, wildfire drones and hotel operations through one environment interface, so differences in outcome come from the domains, not from per-domain engineering.
+  \item \textbf{Strong references.} Each domain reports the best simple rule we could find, standard MARL baselines (QMIX \citep{rashid2018qmix}, MAPPO \citep{yu2022mappo}) and, where tractable, the optimum, so results are stated as the share of the rule-to-optimum gap closed.
+  \item \textbf{A residual swarm.} Each agent starts from the rule's action and learns a correction \citep{silver2018residual,johannink2019residual}. This makes ``never worse than the rule'' the default and lets learning add value only where the rule is weak.
+\end{enumerate}
+
+All results use multiple training seeds with 95\% bootstrap confidence intervals and a held-out test split \citep{henderson2018matters,agarwal2021rliable}. We report negative results as they come.
+
+\paragraph{Contributions.} (i) An open, domain-agnostic swarm engine and five environments; (ii) an evaluation protocol with rule, MARL and optimum references; (iii) a residual swarm method and its comparison with learning from scratch and with imitation pre-training; (iv) robustness and scale studies from 10 to 1{,}000 agents. \todo{tighten once results are final.}
+
+\section{Related work}
+
+\paragraph{Cooperative MARL.} Value decomposition sums per-agent values into a team value (VDN, \citealp{sunehag2018vdn}) or mixes them monotonically (QMIX, \citealp{rashid2018qmix}); MAPPO shows that centralised-critic PPO is a strong baseline \citep{yu2022mappo}. Parameter sharing makes the network size independent of the number of agents \citep{christianos2021selective}. We use VDN with shared weights as the default and QMIX and MAPPO as baselines.
+
+\paragraph{Residual and rule-guided learning.} Residual policy learning adds a learned correction to a fixed controller \citep{silver2018residual,johannink2019residual}, and recent work applies residual learning to safety-critical multi-agent decisions \citep{residualsafe2025}. Learning from demonstrations pre-trains a Q-network on expert moves with a large-margin loss \citep{hester2018dqfd}. We compare both ideas for swarms, using the domain's rule as the base policy and as the demonstrator.
+
+\paragraph{Energy.} CityLearn standardises multi-agent demand response \citep{vazquez2020citylearn}. \citet{khouja2026citylearnmarl} benchmark six MARL variants on it with seeds, bootstrap intervals and agent-removal robustness, but without rule or optimum baselines. MPC-based RL has been applied to multi-agent battery storage \citep{mpcrlbattery2021}. We add a perfect-foresight linear-program bound and validate our engine on CityLearn.
+
+\paragraph{Wildfire.} HIVEX includes multi-agent wildfire resource and aerial suppression tasks \citep{siedler2025hivex}, and cellular-automaton models are used for autonomous wildfire response \citep{warpca2024}. Our forest is a stochastic cellular automaton with wind, burn-out and a refill pad, and we test the nearest-fire rule and scale to 1{,}000 drones.
+
+\paragraph{Hotel operations.} We found no MARL work on hotel housekeeping or shift exchange. The nearest work is general multi-agent scheduling with RL \citep{flexsched2022}. We provide exact MILP optima as references.
+
+\section{Method}
+
+\subsection{Swarm environment interface}
+Each domain implements one interface: \texttt{reset}, \texttt{step}, \texttt{action\_mask} and \texttt{episode\_metrics}. At each step agent $i$ receives a local observation $o_i$ and a mask of legal actions, and the environment returns a team reward $r$ (and optionally per-agent shaping terms).
+
+\subsection{Shared-weight agent with value decomposition}
+All agents use one network $Q_\theta(o_i, a)$, optionally with a one-hot agent id. Actions of all agents in all parallel environment copies are chosen in one batched forward pass. The team value is $Q_{\text{tot}} = \sum_i Q_\theta(o_i, a_i)$ (VDN), trained with $n$-step double-Q targets \citep{vanhasselt2016double}, a soft-updated target network and action masks. Independent Q-learning and a QMIX mixer are configuration switches.
+
+\subsection{Residual swarm}
+Let $\pi_{\text{rule}}$ be the domain's best rule. \todo{final formulation from the upgrade branch: e.g.\ agent $i$ chooses between \emph{follow} ($a_i = \pi_{\text{rule}}(o_i)$) and an \emph{override} action, with the rule's action as the default under an initial bias, so the untrained swarm equals the rule.} We compare this with (a) learning from scratch and (b) imitation pre-training with a large-margin loss followed by RL \citep{hester2018dqfd}.
+
+\subsection{Evaluation protocol}
+Each result is the mean over \todo{$k\ge5$} training seeds with a 95\% bootstrap confidence interval; methods are compared with paired tests on identical evaluation episodes. Settings are chosen on a validation split, and the test split is used once. Where an optimum $J^\star$ is available we report the share of the gap closed, $(J - J_{\text{rule}})/(J^\star - J_{\text{rule}})$.
+
+\section{Domains}
+
+\paragraph{Energy.} Ten batteries (100\,MW / 400\,MWh each, 90\% round-trip efficiency) shave the ERCOT COAST native load for 2020, combined with NREL NSRDB weather for Houston. Agents choose charge, hold or discharge each hour. Rules: a threshold rule and a load-proportional rule. Reference: a perfect-foresight linear program. \todo{train/val/test months.}
+
+\paragraph{Wildfire.} Six drones with a payload of 6 and a view radius of 3 cover a $16\times16$ forest. Two random ignitions spread with probability 0.12 (0.30 downwind) and burn out after 3 to 6 ticks; drones move three cells per fire tick, drop retardant or hold, and refill on a launch pad. Rule: fly to the nearest burning cell and drop. Baselines: QMIX, MAPPO.
+
+\paragraph{Hotel housekeeping.} Eight attendants clean the departures of a 300-room, 10-floor hotel from 08:00 to 17:00 in 10-minute steps; each chooses among six candidate rooms. The objective is guest waiting time, with paid early check-ins weighted three times. Rule: clean the room needed soonest. Reference: MILP optimum.
+
+\paragraph{Hotel shifts and relocation.} Open shifts across five properties are filled by a contract-net market under Ontario Employment Standards Act limits, and guests on oversold nights are relocated by an auction; both are compared with simple rules and an exact optimum.
+
+All forests and hotel data are synthetic; the generators are released.
+
+\section{Results}
+
+\todo{Preliminary single-seed numbers below come straight from results/ and will be replaced by multi-seed means with 95\% CIs when the upgrade experiments finish.}
+
+\input{tables/energy}
+\input{tables/wildfire}
+\input{tables/wildfire-imitate}
+\input{tables/housekeeping}
+\input{tables/shifts}
+\input{tables/relocation}
+
+\paragraph{Learning from scratch.} In energy the swarm keeps charge for the peak hour itself and cuts the peak where both rules cut none (Table~\ref{tab:energy}). In wildfire the nearest-fire rule beats the swarm trained from scratch (Table~\ref{tab:wildfire}); imitation pre-training closes most of the gap but not all of it (Table~\ref{tab:wildfire-imitate}). In housekeeping the swarm is close to but behind the soonest-needed rule (Table~\ref{tab:housekeeping}). Market-based hotel swarms come within a few percent of the optimum (Tables~\ref{tab:shifts} and~\ref{tab:relocation}).
+
+\paragraph{Residual swarm.} \todo{table: scratch vs imitation vs residual vs rule vs QMIX vs MAPPO vs optimum, per domain, with gap closed.}
+
+\paragraph{Ablations.} \todo{VDN vs QMIX vs independent; shared weights; agent ids; $n$-step; pre-training; neighbour messages.}
+
+\section{Robustness and scale}
+
+\todo{agent failure 10--50\%, dropped messages, sensor noise, unseen conditions (stronger wind, heat-wave week, 120\% occupancy).}
+
+\input{tables/scale-energy}
+\input{tables/scale-wildfire}
+
+One network trained with 10 batteries or 6 drones runs unchanged at 10, 100 and 1{,}000 agents with the same parameters. The energy fleet's total capacity is held at 1\,GW at every size, so a constant peak cut (Table~\ref{tab:scale-energy}) shows stable coordination, not extra benefit. Drones beat the rule at 10 agents but fall behind at 100 and 1{,}000 when a single corner pad forces long refill trips (Table~\ref{tab:scale-wildfire}). \todo{replace with the multi-pad, curriculum results.}
+
+\section{Engine validation}
+\todo{CityLearn and VMAS \citep{bettini2022vmas} scores next to published numbers.}
+
+\section{Limitations}
+Energy results use one year of one ERCOT zone; multi-year data are left for future work. Forests and hotels are synthetic, so absolute numbers (dollars, hours) depend on the generators' assumptions. The optimum references assume perfect foresight and are bounds, not deployable controllers. \todo{add any limitation surfaced by the final results.}
+
+\section{Conclusion}
+\todo{two to three sentences answering the title question.}
+
+\section*{Code and data availability}
+Code, configurations, results and the scripts that generate every table in this paper are available at \repo{} under the MIT license. \todo{switch to the public URL once the release is made.}
+
+\section*{Acknowledgements}
+The author used AI tools (Claude, Claude Code, Antigravity and Gemini) for software development and drafting; the author designed the study, checked all results and takes full responsibility for the content.
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\end{document}

@@ -36,3 +36,18 @@ jobs:
         run: pytest -q tests
       - name: Hotel analytics
         run: pytest -q apps/hotel/analytics/tests
+
+  paper:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install LaTeX
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q --no-install-recommends texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended
+      - name: Build the paper from results/
+        run: make -C paper
+      - uses: actions/upload-artifact@v4
+        with:
+          name: paper
+          path: paper/main.pdf
