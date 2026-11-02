@@ -9,19 +9,17 @@
 #
 # Fields: config (required), label (default: config file name), seeds
 # (default 0-4), set (extra KEY=VALUE overrides, as for `swarm train --set`),
-# extras (optional dependency groups from pyproject.toml, e.g. [citylearn]).
+# extras (optional dependency groups from pyproject.toml, e.g. [citylearn]), scale (swarm
+# sizes for a `swarm scale` study after training) and scale_set (overrides for it).
 experiments:
-  # Wildfire methods (item 1 + 2): plain DQN, learning from the rule, QMIX, MAPPO.
-  - {config: configs/wildfire.yaml, label: wildfire, seeds: [0, 1, 2]}
-  - {config: configs/wildfire-imitate.yaml, label: wildfire-imitate, seeds: [0, 1, 2, 3, 4]}
-  - {config: configs/wildfire-imitate.yaml, label: wildfire-imitate-qmix, seeds: [0, 1, 2], set: [agent.mixer=qmix]}
-  - {config: configs/wildfire.yaml, label: wildfire-mappo, seeds: [0, 1, 2],
-     set: [algo=mappo, ppo.lr=0.0003, ppo.rollout=128, ppo.epochs=4, ppo.minibatches=4, ppo.entropy=0.01]}
-  # Neighbour messages, redone with seeds (item 5; other ablations run on the cheaper apps).
-  - {config: configs/wildfire-imitate.yaml, label: wildfire-imitate-messages, seeds: [0, 1, 2],
-     set: [agent.comm.enabled=true, agent.comm.dim=64]}
-  # External benchmarks (item 7).
-  - {config: configs/citylearn.yaml, label: citylearn, seeds: [0, 1, 2], extras: [citylearn]}
-  - {config: configs/vmas-navigation.yaml, label: vmas-navigation, seeds: [0, 1, 2], extras: [vmas]}
-  - {config: configs/vmas-navigation.yaml, label: vmas-navigation-mappo, seeds: [0, 1, 2], extras: [vmas],
-     set: [algo=mappo]}
+  # Earlier runs (wildfire methods, neighbour messages, CityLearn, VMAS) are in results/;
+  # this file lists only what is still to run.
+  # Drone scale fix (item 4): pads that tile the forest, with and without a 6 -> 24 drone curriculum.
+  - {config: configs/wildfire-scale.yaml, label: wildfire-scale, seeds: [0, 1, 2], scale: [6, 24, 100, 1000]}
+  - {config: configs/wildfire-imitate.yaml, label: wildfire-imitate-pads, seeds: [0, 1, 2],
+     set: [env.scale_pads=true], scale: [6, 24, 100, 1000]}
+  # Beating the rule (item 3): residual swarm, and choosing which fire to fight.
+  - {config: configs/wildfire-residual.yaml, label: wildfire-residual, seeds: [0, 1, 2]}
+  - {config: configs/wildfire-targets.yaml, label: wildfire-targets, seeds: [0, 1, 2]}
+  # Hotel peak energy with seeds (item 1).
+  - {config: configs/hotel-energy.yaml, label: hotel-energy, seeds: [0, 1, 2, 3, 4]}

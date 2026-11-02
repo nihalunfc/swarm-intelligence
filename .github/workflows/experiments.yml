@@ -56,6 +56,12 @@ jobs:
         run: |
           swarm train --config "${{ matrix.config }}" --out out \
             --set seed=${{ matrix.seed }} label=${{ matrix.label }} ${{ matrix.set }}
+      - name: Scale study
+        if: matrix.scale != ''
+        run: |
+          run=$(dirname "$(ls out/*/*/model.pt | head -1)")
+          swarm scale --run "$run" --sizes ${{ matrix.scale }} --episodes 5 --out "$run" --exact-out \
+            --set ${{ matrix.scale_set }}
       - uses: actions/upload-artifact@v4
         with:
           name: run-${{ matrix.label }}-seed-${{ matrix.seed }}

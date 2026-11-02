@@ -10,7 +10,7 @@ import yaml
 
 from .manifest import track, write_manifest
 from .registry import get_app, is_trainable
-from .trainer import evaluate_episodes, mean_metrics, train
+from .trainer import evaluate_episodes, final_cfg, mean_metrics, train
 
 
 def eval_env_cfg(cfg: dict) -> dict:
@@ -51,13 +51,13 @@ def run_app(name: str, cfg: dict, run_dir: Path | None = None, model_path: str |
 
     if model_path:
         state = torch.load(model_path, map_location="cpu", weights_only=False)
-        agent = load_agent(app.make_env(cfg.get("env", {}), "train", 0), state)
+        agent = load_agent(app.make_env(final_cfg(cfg).get("env", {}), "train", 0), state)
         history = []
     else:
         log(f"[{name}] training swarm ...")
         agent, history = train(app, cfg, log=log)
 
-    ecfg = eval_env_cfg(cfg)
+    ecfg = eval_env_cfg(final_cfg(cfg))  # a curriculum is tested in its last stage
     episodes = int(cfg.get("eval", {}).get("episodes", 1))
     seed = int(cfg.get("eval", {}).get("seed", 10_000))
     split = str(cfg.get("eval", {}).get("split", "test"))

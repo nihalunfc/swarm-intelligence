@@ -14,7 +14,9 @@ def plan(path: str = "experiments/queue.yaml") -> list[dict]:
         label = exp.get("label") or Path(exp["config"]).stem
         for seed in exp.get("seeds", [0, 1, 2, 3, 4]):
             jobs.append({"config": exp["config"], "label": label, "seed": int(seed),
-                         "set": " ".join(exp.get("set", [])), "extras": ",".join(["hotel", *exp.get("extras", [])])})
+                         "set": " ".join(exp.get("set", [])), "extras": ",".join(["hotel", *exp.get("extras", [])]),
+                         "scale": " ".join(str(n) for n in exp.get("scale", [])),
+                         "scale_set": " ".join(exp.get("scale_set", []))})
     if len(jobs) > 256:
         sys.exit(f"{len(jobs)} jobs: GitHub allows at most 256 per matrix; split the queue")
     return jobs

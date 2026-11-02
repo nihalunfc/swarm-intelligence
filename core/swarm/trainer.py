@@ -143,6 +143,17 @@ def train(app, cfg: dict, log=print):
     return agent, history
 
 
+def final_cfg(cfg: dict) -> dict:
+    """The config of the last curriculum stage (the setting that is validated and
+    tested); ``cfg`` itself when there is no curriculum."""
+    stages = cfg.get("stages") or []
+    if not stages:
+        return cfg
+    from .config import apply_overrides
+
+    return apply_overrides({k: v for k, v in cfg.items() if k != "stages"}, list(stages[-1].get("set", [])))
+
+
 def _train_dqn(app, cfg: dict, log=print, agent=None):
     from .agents import make_agent  # torch is only needed for training
 

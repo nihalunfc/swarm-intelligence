@@ -70,10 +70,10 @@ def cmd_replay(args):
 def cmd_scale(args):
     from .scale import scale_study, write
 
-    rows = scale_study(args.run, args.sizes, args.episodes)
+    rows = scale_study(args.run, args.sizes, args.episodes, overrides=args.set)
     cfg = load_config(Path(args.run) / "config.yaml", [])
     metric = args.metric or get_app(cfg["app"]).KEY_METRICS[0]
-    out = Path(args.out) / f"scale-{cfg['app']}-{time.strftime('%Y%m%d-%H%M%S')}"
+    out = Path(args.out) if args.exact_out else Path(args.out) / f"scale-{cfg['app']}-{time.strftime('%Y%m%d-%H%M%S')}"
     print(write(rows, metric, out))
     print(f"Saved to {out}")
 
@@ -170,6 +170,9 @@ def main(argv=None):
     s.add_argument("--episodes", type=int, default=5)
     s.add_argument("--metric", default=None, help="results column to tabulate (default: the app's first)")
     s.add_argument("--out", default=str(REPO / "runs"))
+    s.add_argument("--exact-out", action="store_true", help="write into --out itself, not a new timestamped folder")
+    s.add_argument("--set", nargs="*", default=[], metavar="KEY=VALUE",
+                   help="override the run's config, e.g. env.scale_pads=true")
     s.set_defaults(fn=cmd_scale)
 
     sd = sub.add_parser("seeds", help="train one config with several seeds and report confidence intervals")

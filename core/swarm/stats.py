@@ -7,8 +7,8 @@ episodes as the rules. Two sources of variation are kept apart:
 * **seeds**: which swarm came out of training (the main source for RL);
 * **episodes**: which fires, days or weeks it was tested on.
 
-``hierarchical_bootstrap`` resamples seeds, then episodes within each seed,
-which is the usual way to get a confidence interval that covers both
+``hierarchical_bootstrap`` resamples seeds and, jointly for all seeds, the
+shared test episodes, which is the usual way to get an interval that covers both
 (Agarwal et al., 2021, "Deep RL at the Edge of the Statistical Precipice").
 A rule has no training seed, so its interval covers episodes only.
 
@@ -27,12 +27,16 @@ DEFAULT_RESAMPLES = 5_000
 
 
 def _boot_means(x: np.ndarray, resamples: int, seed: int) -> np.ndarray:
+    """Bootstrap means of ``x`` (seeds, episodes). Every seed plays the same test
+    episodes, so one resample of episodes is shared by all seeds (resampling them
+    per seed would treat repeated episodes as new ones and give too narrow an
+    interval)."""
     x = np.atleast_2d(np.asarray(x, dtype=float))
     S, E = x.shape
     rng = np.random.default_rng(seed)
     si = rng.integers(0, S, (resamples, S))
-    ei = rng.integers(0, E, (resamples, S, E))
-    return x[si[..., None], ei].mean(axis=(1, 2))
+    ei = rng.integers(0, E, (resamples, E))
+    return x[si[..., None], ei[:, None, :]].mean(axis=(1, 2))
 
 
 def bootstrap_pvalue(boot: np.ndarray) -> float:
