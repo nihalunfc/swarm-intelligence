@@ -1,6 +1,8 @@
 import argparse
-import pandas as pd
 import sys
+
+import pandas as pd
+
 
 def clean_nrel_data(input_filepath, output_filepath, start_date, end_date):
     print(f"Loading raw NREL data from '{input_filepath}'...")

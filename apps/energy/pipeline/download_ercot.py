@@ -1,7 +1,8 @@
+import os
+
 import gridstatus
 import pandas as pd
-import os
-import time
+
 
 def download_ercot_multi_year(years, output_file):
     ercot = gridstatus.Ercot()

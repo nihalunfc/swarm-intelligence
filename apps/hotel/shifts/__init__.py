@@ -15,7 +15,6 @@ assumptions in ``DEFAULTS``.
 
 import numpy as np
 import pandas as pd
-
 from swarm.market import contract_net
 
 from ..energy.loads import HOTELS_CSV
@@ -94,7 +93,7 @@ def _run(s, p, choose):
             agency += SHIFT_H
         else:
             cross += staff[a]["hotel"] != o["hotel"]
-    for e, h0 in zip(staff, base_hours):
+    for e in staff:
         if e.get("added_cost"):
             cost += e["added_cost"]
     over = sum(max(0.0, _hours(e) - p["overtime_after"]) - max(0.0, h0 - p["overtime_after"])

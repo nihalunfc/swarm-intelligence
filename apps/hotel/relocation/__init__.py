@@ -15,7 +15,6 @@ assumptions in ``DEFAULTS`` meant to be replaced with the group's own.
 
 import numpy as np
 import pandas as pd
-
 from swarm.market import auction
 
 from ..energy.loads import HOTELS_CSV

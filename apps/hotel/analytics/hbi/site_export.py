@@ -6,7 +6,9 @@ from datetime import datetime, timezone
 import numpy as np
 import pandas as pd
 
-from . import config, demand as D, schedule as S
+from . import config
+from . import demand as D
+from . import schedule as S
 from .excel import write_schedule
 
 SCENARIOS = [

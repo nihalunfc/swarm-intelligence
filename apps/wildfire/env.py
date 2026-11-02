@@ -11,7 +11,6 @@ launch pad refills). Fire spread is vectorized with NumPy shifts.
 """
 
 import numpy as np
-
 from swarm.env import SwarmEnv
 
 FUEL, BURNING, BURNED, WET = 0, 1, 2, 3
