@@ -1,0 +1,34 @@
+# Battery swarm on the 2020 ERCOT COAST + NREL sample (runs out of the box).
+# For the 2018-2022 dataset use configs/energy-full.yaml.
+app: energy
+seed: 0
+env:
+  data_path: null            # null = apps/energy/data/sample/ercot_nrel_2020.csv
+  test_start: "2020-10-01"   # Jan-Sep trains, Oct-Dec is held out for evaluation
+  n_agents: 10
+  capacity_mwh: 400          # per battery
+  max_rate_mw: 100           # per battery: 10 x 100 MW = 1 GW fleet, 4-hour batteries
+  round_trip_efficiency: 0.90
+  episode_hours: 168         # training episodes are random one-week windows
+  eval_episode_hours: null   # evaluation plays the whole held-out period
+agent:
+  mixer: vdn                 # vdn or independent
+  hidden: [128, 128]
+  lr: 0.0005
+  gamma: 0.97
+  tau: 0.01
+  agent_id: false            # batteries are identical, so no per-agent id
+train:
+  total_steps: 60000
+  n_step: 1                  # 1-step kept the peak-hour reserve better than 3-step here
+  num_envs: 8                # parallel environment copies
+  batch_size: 256
+  buffer_size: 100000
+  learning_starts: 2000
+  gradient_steps: 1
+  eps_start: 1.0
+  eps_end: 0.02
+  eps_fraction: 0.5
+  log_every: 10000
+eval:
+  episodes: 1

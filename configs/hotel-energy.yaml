@@ -1,0 +1,37 @@
+# HARLTON-01: flexible equipment in the 5 sample hotels shifts load out of the grid's peak hours.
+# Grid signal and weather: the ERCOT COAST + NREL 2020 sample (summer-peaking like Ontario)
+# until IESO hourly demand is added (apps/hotel/energy/README.md).
+app: hotel-energy
+seed: 0
+env:
+  data_path: null            # merged grid + weather CSV; null = the energy app's 2020 sample
+  months: [6, 7, 8, 9]       # the summer season, when the top-five hours fall
+  test_weeks: odd            # even ISO weeks train, odd weeks are held out
+  episode_days: 1            # training episodes are random single days
+  eval_episode_days: null    # evaluation plays every held-out day in a row
+  peak_hours: 40             # training credit: the split's top 40 grid hours (evaluation scores the top 5)
+  ga_cost_per_kw_year: 450   # assumed Global Adjustment value of 1 kW off the top-five hours, $/year
+  energy_price_kwh: 0.11     # all-in cost of an extra kWh (IESO 2025 total cost of power, ~10.96 c/kWh)
+  energy_weight: 0.02        # small charge per extra kWh used by shifting
+  miss_penalty: 2.0          # per kWh of laundry/EV work not finished by midnight
+agent:
+  mixer: vdn
+  hidden: [128, 128]
+  lr: 0.0005
+  gamma: 0.97
+  tau: 0.01
+  agent_id: false            # agents already see their equipment type and size
+train:
+  total_steps: 150000
+  n_step: 3
+  num_envs: 8
+  batch_size: 256
+  buffer_size: 100000
+  learning_starts: 2000
+  gradient_steps: 1
+  eps_start: 1.0
+  eps_end: 0.02
+  eps_fraction: 0.5
+  log_every: 10000
+eval:
+  episodes: 1

@@ -1,0 +1,7 @@
+channel,channel_name,acquisition_cost
+WEB,Direct web,0.03
+VOI,Voice and reservations,0.05
+OTA,Online travel agency,0.18
+GDS,Global distribution system,0.1
+WHS,Wholesaler,0.2
+SAL,Direct sales (groups),0.02

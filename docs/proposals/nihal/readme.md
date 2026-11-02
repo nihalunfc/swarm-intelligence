@@ -1,5 +1,7 @@
 # Capstone Proposal: Agent-Based Swarm Modeling
 
+> **Moved (Oct 2026):** the scripts referenced below now live in [`apps/energy/pipeline`](../../../apps/energy/pipeline/README.md) as `ingest_nrel.py`, `ingest_ercot.py` and `merge.py`. The raw and cleaned data files were removed from the tree to keep the repository small; they remain in git history before the restructure commit, and the 2020 master file is kept at `apps/energy/data/sample/ercot_nrel_2020.csv`.
+
 This directory contains the architectural foundation, draft proposal, data dictionaries, codebase, and data artifacts for **Phase 1: Energy Grid Optimization**. 
 
 ## Project Scope

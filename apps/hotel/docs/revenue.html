@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Revenue Command Centre</title>
+<meta name="description" content="Three years of booking history turned into a 12-month selling plan for a five-hotel sample portfolio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">Hospitality <span>BI</span> Portfolio</a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a class="active" href="revenue.html">Revenue Command Centre</a>
+      <a href="schedule.html">Staff Schedule Builder</a>
+      <a href="index.html#proposals">Proposals</a>
+      <a href="https://github.com/nihalunfc/hotel-business">Code</a>
+    </nav>
+  </div>
+</header>
+
+<div class="intro">
+  <div class="wrap">
+    <h1>Revenue Command Centre</h1>
+    <p class="lead">Three years of booking history, turned into a plan for selling every night of the next twelve months: which nights will sell out, which need help, and what to do about each.</p>
+    <div class="badge-row">
+      <span class="badge info">Sample data: five fictional hotels, 2,060 rooms</span>
+      <span class="badge" id="asof">Data as of</span>
+      <span class="badge">Related proposals: HARLTON-10 and HARLTON-11</span>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section class="block">
+    <div class="block-head">
+      <div><span class="step">Last 12 months</span><h2>How the portfolio performed</h2>
+      <p>Compared with the 12 months before. Each figure is explained in plain words underneath.</p></div>
+    </div>
+    <div class="grid g4" id="kpis"></div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <div><span class="step">Next 12 months</span><h2>Every night of the year, by expected demand</h2>
+      <p>Each square is one night across all five hotels. The colour is the expected demand compared with the rooms available, based on bookings already made plus the bookings that usually arrive later. Hover over any night for details.</p></div>
+    </div>
+    <div class="card">
+      <div class="cal-legend" id="cal-legend"></div>
+      <div class="cal-grid" id="calendar"></div>
+      <div class="takeaway" id="cal-takeaway"></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <div><span class="step">This week</span><h2>Selling brief for the next six weeks</h2>
+      <p>The nights that need a decision, why they stand out, and the recommended action. The revenue manager decides; this list makes the decision faster and consistent.</p></div>
+    </div>
+    <div class="card table-wrap">
+      <table>
+        <thead><tr><th>Night</th><th>Why it stands out</th><th>Demand level</th><th class="num">Booked now</th><th class="num">Same time last year</th><th>Recommended action</th></tr></thead>
+        <tbody id="brief"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block grid g2">
+    <div class="card">
+      <span class="step">Pace</span><h3>Are we ahead of or behind last year?</h3>
+      <p class="muted">Share of rooms already booked for each of the next 90 nights, compared with the same point last year.</p>
+      <div class="chart-box"><canvas id="pace"></canvas></div>
+      <div class="takeaway" id="pace-takeaway"></div>
+    </div>
+    <div class="card">
+      <span class="step">Booking window</span><h3>How far ahead guests book</h3>
+      <p class="muted">Share of a night's final bookings already made at each point before arrival.</p>
+      <div class="chart-box"><canvas id="curves"></canvas></div>
+      <div class="takeaway" id="curves-takeaway"></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <div><span class="step">Hidden demand</span><h2>Demand we turned away</h2>
+      <p>When a hotel is full, the guests who could not book are never recorded, so sold-out nights always look smaller than they really were. This estimate recovers that hidden demand, so next year's rates on those nights can be set higher.</p></div>
+    </div>
+    <div class="grid g4" id="unc-kpis"></div>
+    <div class="card" style="margin-top:16px">
+      <h3>Largest sold-out nights in the last 12 months</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Night</th><th>Hotel</th><th class="num">Rooms sold</th><th class="num">Estimated demand</th><th class="num">True demand (known in sample)</th><th class="num">Average rate</th></tr></thead>
+        <tbody id="unc-table"></tbody>
+      </table></div>
+      <div class="takeaway" id="unc-takeaway"></div>
+    </div>
+  </section>
+
+  <section class="block grid g2">
+    <div class="card">
+      <span class="step">Three years</span><h3>Occupancy by month, year over year</h3>
+      <p class="muted">Each line is one twelve-month period, October to September.</p>
+      <div class="chart-box"><canvas id="yoy"></canvas></div>
+    </div>
+    <div class="card">
+      <span class="step">Week shape</span><h3>Occupancy and rate by night of the week</h3>
+      <p class="muted">Last 12 months. Friday and Saturday nights carry the strongest demand and rates.</p>
+      <div class="chart-box" style="height:150px"><canvas id="weekday"></canvas></div>
+      <div class="chart-box" style="height:150px;margin-top:8px"><canvas id="weekday-adr"></canvas></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <div><span class="step">Channels</span><h2>What each booking channel really earns</h2>
+      <p>The rate a guest pays is not what the hotel keeps. After commissions and booking costs, the same room is worth different amounts depending on where it was sold.</p></div>
+    </div>
+    <div class="card table-wrap">
+      <table>
+        <thead><tr><th>Channel</th><th class="num">Share of room nights</th><th class="num">Average rate</th><th class="num">Cost to acquire</th><th class="num">Rate kept after cost</th><th class="num">Acquisition spend</th></tr></thead>
+        <tbody id="channels"></tbody>
+      </table>
+      <div class="takeaway" id="channel-takeaway"></div>
+    </div>
+  </section>
+
+  <section class="block grid g2">
+    <div class="card">
+      <span class="step">Cancellations</span><h3>The earlier the booking, the more likely it cancels</h3>
+      <p class="muted">Share of bookings cancelled, by how far ahead they were made (arrivals in the last 12 months).</p>
+      <div class="chart-box"><canvas id="cancel"></canvas></div>
+      <div class="takeaway" id="cancel-takeaway"></div>
+    </div>
+    <div class="card">
+      <span class="step">Events</span><h3>What local events are worth</h3>
+      <p class="muted">Average rate on event nights compared with similar nights (same month and weekday) without an event.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Event</th><th class="num">Rate on event nights</th><th class="num">Similar nights</th><th class="num">Rate uplift</th></tr></thead>
+        <tbody id="events"></tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><div><span class="step">By property</span><h2>Hotel by hotel</h2><p>Last 12 months, with the change in revenue per available room compared with the year before.</p></div></div>
+    <div class="card table-wrap">
+      <table>
+        <thead><tr><th>Hotel</th><th>Style</th><th class="num">Rooms</th><th class="num">Occupancy</th><th class="num">Average rate</th><th class="num">RevPAR</th><th class="num">RevPAR change</th><th class="num">Room revenue</th></tr></thead>
+        <tbody id="hotels"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><div><span class="step">Can we trust the forecast?</span><h2>Forecast accuracy check</h2>
+    <p>The forecast was tested on the last 12 months as if they had not happened yet. Lower error is better. "Copy last year" is the common spreadsheet method of using the same night last year.</p></div></div>
+    <div class="card table-wrap">
+      <table>
+        <thead><tr><th>Forecast made</th><th class="num">Average error: booking-pace forecast</th><th class="num">Average error: copy last year</th></tr></thead>
+        <tbody id="backtest"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <details class="tech">
+    <summary>For BI reviewers: how this page is built</summary>
+    <p>All figures on this page are produced by a Python and SQL pipeline in this repository and exported as JSON. Nothing is typed in by hand.</p>
+    <ul>
+      <li><b>Data:</b> about 640,000 sample bookings and 78,000 denied requests generated by <a href="https://github.com/nihalunfc/hotel-business/blob/main/analytics/hbi/generate.py">generate.py</a>. Requests are replayed against room inventory in booking order, so sell-outs, denials and cancellations behave as they do in a real reservation system.</li>
+      <li><b>Warehouse:</b> SQLite star schema built by <a href="https://github.com/nihalunfc/hotel-business/tree/main/analytics/hbi/sql">SQL scripts</a>: dimensions for hotel, date, segment and channel; facts at booking, stay-night and denied-night grain; a daily hotel mart. Ten data quality checks must pass before the site data refreshes.</li>
+      <li><b>Pace:</b> on-the-books at any lead time is rebuilt from booking and cancellation dates on the stay-night fact, which is equivalent to keeping a nightly reservation snapshot.</li>
+      <li><b>Forecast:</b> additive pickup by hotel, weekday and month, back-tested on the last 12 months against a same-day-last-year (364-day) baseline.</li>
+      <li><b>Unconstraining:</b> for each sold-out night, the last lead time at which it was under 90% full is found; similar nights that came close to selling out but stayed open supply the expected pickup ratio from that point. The sample's known denials are used only to measure accuracy, never in the estimate.</li>
+      <li><b>Demand levels:</b> expected unconstrained demand divided by capacity: 100% and above is Compression, 85% High, 60% Shoulder, below 60% Need.</li>
+      <li>Code: <a href="https://github.com/nihalunfc/hotel-business/blob/main/analytics/hbi/demand.py">demand.py</a>, <a href="https://github.com/nihalunfc/hotel-business/blob/main/analytics/hbi/site_export.py">site_export.py</a>, <a href="https://github.com/nihalunfc/hotel-business/blob/main/analytics/build.py">build.py</a>.</li>
+    </ul>
+  </details>
+</main>
+
+<footer class="site-footer"><div class="wrap">Built by Nihal as a portfolio demonstration. All hotels, guests and figures on this page are fictional.</div></footer>
+<div class="tooltip" id="tip"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="assets/common.js"></script>
+<script>
+const TIER_ORDER = ["Need", "Shoulder", "High", "Compression"];
+const TIER_TEXT = {
+  Need: "Need: demand well below rooms available",
+  Shoulder: "Shoulder: demand below rooms available, but responsive",
+  High: "High: demand close to rooms available",
+  Compression: "Compression: more demand than rooms",
+};
+
+(async function () {
+  chartDefaults();
+  const R = await loadJSON("data/revenue.json");
+  document.getElementById("asof").textContent = "Data as of " + fmt.date(R.as_of) + ", 2026";
+
+  // KPIs
+  const L = R.ltm, P = R.prior;
+  const kpis = [
+    ["Rooms filled (occupancy)", fmt.pct(L.occupancy), delta(L.occupancy, P.occupancy, "points"), "Share of available rooms that were sold."],
+    ["Average nightly rate (ADR)", fmt.money(L.adr, 2), delta(L.adr, P.adr), "Room revenue divided by rooms sold."],
+    ["Revenue per available room (RevPAR)", fmt.money(L.revpar, 2), delta(L.revpar, P.revpar), "Combines occupancy and rate in one number."],
+    ["Room revenue", fmt.compact(L.revenue), delta(L.revenue, P.revenue), fmt.num(L.room_nights) + " room nights sold."],
+  ];
+  document.getElementById("kpis").innerHTML = kpis.map(k =>
+    `<div class="kpi"><div class="label">${k[0]}</div><div class="value">${k[1]}</div><div class="sub">${k[2]} vs prior 12 months</div><div class="sub">${k[3]}</div></div>`).join("");
+
+  // Calendar
+  const legend = document.getElementById("cal-legend");
+  const colorVar = { Need: "--tier-need", Shoulder: "--tier-shoulder", High: "--tier-high", Compression: "--tier-compression" };
+  legend.innerHTML = TIER_ORDER.map(t => `<span><i style="background:var(${colorVar[t]})"></i>${TIER_TEXT[t]} (${R.tier_counts[t] || 0} nights)</span>`).join("")
+    + `<span><i style="background:#fff;border:1px solid #18212b"></i>Holiday or event</span>`;
+  const byMonth = {};
+  R.calendar.forEach(d => { (byMonth[d.date.slice(0, 7)] ||= []).push(d); });
+  const cal = document.getElementById("calendar");
+  const tip = document.getElementById("tip");
+  const names = Object.values(R.hotel_names);
+  Object.entries(byMonth).forEach(([ym, days]) => {
+    const first = new Date(ym + "-01T12:00:00");
+    const offset = (first.getDay() + 6) % 7;
+    const m = el(`<div class="month"><h4>${first.toLocaleDateString("en-CA", { month: "long", year: "numeric" })}</h4><div class="days"></div></div>`);
+    const g = m.querySelector(".days");
+    ["M", "T", "W", "T", "F", "S", "S"].forEach(x => g.appendChild(el(`<div class="dow">${x}</div>`)));
+    for (let i = 0; i < offset; i++) g.appendChild(el(`<div class="day blank"></div>`));
+    days.forEach(d => {
+      const c = el(`<div class="day ${d.tier}${d.note ? " flag" : ""}">${+d.date.slice(8)}</div>`);
+      c.addEventListener("mousemove", e => {
+        tip.innerHTML = `<b>${fmt.date(d.date)}</b><span class="pill ${d.tier}">${d.tier}</span>
+          ${d.note ? `<div style="margin-top:6px">${d.note}</div>` : ""}
+          <div style="margin-top:6px">Booked now: <b style="display:inline">${fmt.pct(d.on_books, 0)}</b></div>
+          <div>Same time last year: ${fmt.pct(d.last_year, 0)}</div>
+          <div>Expected final occupancy: ${fmt.pct(d.forecast, 0)}</div>
+          <div class="muted" style="margin-top:6px">${names.map((n, i) => `${n}: ${fmt.pct(d.hotels[i], 0)}`).join("<br>")}</div>`;
+        tip.style.display = "block";
+        const x = Math.min(e.clientX + 14, window.innerWidth - 260);
+        const y = Math.min(e.clientY + 14, window.innerHeight - 260);
+        tip.style.left = x + "px"; tip.style.top = y + "px";
+      });
+      c.addEventListener("mouseleave", () => (tip.style.display = "none"));
+      g.appendChild(c);
+    });
+    cal.appendChild(m);
+  });
+  const comp = R.calendar.filter(d => d.tier === "Compression").length;
+  const need = R.calendar.filter(d => d.tier === "Need").length;
+  document.getElementById("cal-takeaway").innerHTML =
+    `<strong>What this means:</strong> ${comp} nights are expected to have more demand than rooms; on those nights rates should be held or raised and discounts closed. ${need} nights are expected to run well below capacity; those are the nights to fill with groups, tournaments, packages and offers to past guests.`;
+
+  // Brief
+  document.getElementById("brief").innerHTML = R.brief.map(b => `<tr>
+    <td style="white-space:nowrap"><b>${b.date}</b></td><td>${b.why}</td><td><span class="pill ${b.tier}">${b.tier}</span></td>
+    <td class="num">${fmt.pct(b.on_books, 0)}</td><td class="num">${fmt.pct(b.last_year, 0)}<div class="muted" style="font-size:12px">${b.pace_text}</div></td>
+    <td>${b.action}</td></tr>`).join("");
+
+  // Pace chart
+  const next = R.calendar.slice(0, 90);
+  new Chart(document.getElementById("pace"), {
+    type: "line",
+    data: { labels: next.map(d => fmt.date(d.date)), datasets: [
+      { label: "Booked now", data: next.map(d => d.on_books * 100), borderColor: COLORS.s1, backgroundColor: COLORS.s1 },
+      { label: "Same time last year", data: next.map(d => d.last_year * 100), borderColor: COLORS.s2, backgroundColor: COLORS.s2, borderDash: [5, 4] },
+    ] },
+    options: { scales: { y: gridScale({ min: 0, max: 100, ticks: { callback: v => v + "%" } }), x: gridScale({ grid: { display: false }, ticks: { maxTicksLimit: 8, autoSkip: true } }) },
+      plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.parsed.y.toFixed(0)}%` } } } },
+  });
+  const ahead = next.reduce((s, d) => s + d.on_books, 0) / next.length - next.reduce((s, d) => s + d.last_year, 0) / next.length;
+  document.getElementById("pace-takeaway").innerHTML = `<strong>What this means:</strong> across the next 90 nights the portfolio is ${Math.abs(ahead * 100).toFixed(1)} points ${ahead >= 0 ? "ahead of" : "behind"} last year. Nights well ahead can hold rate; nights behind need attention early, while there is still time to act.`;
+
+  // Booking curves
+  const bc = R.booking_curves;
+  const idx = bc.leads.map((l, i) => i).filter(i => bc.leads[i] <= 120).reverse();
+  const curveColors = [COLORS.s1, COLORS.s2, COLORS.s3, COLORS.s4];
+  new Chart(document.getElementById("curves"), {
+    type: "line",
+    data: { labels: idx.map(i => bc.leads[i] === 0 ? "Arrival" : bc.leads[i] + " days"),
+      datasets: Object.entries(bc.curves).map(([k, v], j) => ({ label: k, data: idx.map(i => Math.min(v[i], 1) * 100), borderColor: curveColors[j], backgroundColor: curveColors[j] })) },
+    options: { scales: { y: gridScale({ min: 0, max: 100, ticks: { callback: v => v + "%" } }), x: gridScale({ grid: { display: false } }) },
+      plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.parsed.y.toFixed(0)}% booked` } } } },
+  });
+  const i30 = bc.leads.indexOf(30);
+  document.getElementById("curves-takeaway").innerHTML = `<strong>What this means:</strong> 30 days before arrival, summer Saturdays are already ${fmt.pct(bc.curves["Summer Saturdays"][i30], 0)} booked, but winter weekdays only ${fmt.pct(bc.curves["Winter weekdays"][i30], 0)}. A winter weekday that looks empty a month out is normal; a summer Saturday that looks empty is a warning.`;
+
+  // Unconstrained demand
+  const U = R.unconstrained;
+  document.getElementById("unc-kpis").innerHTML = [
+    ["Sold-out hotel nights", fmt.num(U.sold_out_nights), "Nights when a hotel had no rooms left."],
+    ["Extra rooms guests wanted", fmt.num(U.rooms_turned_away_estimated), "Estimated rooms that could have been sold with more space or a higher price."],
+    ["Value of that demand", fmt.compact(U.value_estimated), "At the average rate of those nights."],
+    ["Estimate is conservative", fmt.pct(U.recovery_share, 0), "Share of the true turned-away demand the method recovered in this sample."],
+  ].map(k => `<div class="kpi"><div class="label">${k[0]}</div><div class="value">${k[1]}</div><div class="sub">${k[2]}</div></div>`).join("");
+  document.getElementById("unc-table").innerHTML = U.top_nights.map(n => `<tr><td>${n.date}</td><td>${n.hotel}</td>
+    <td class="num">${fmt.num(n.rooms_sold)}</td><td class="num">${fmt.num(n.estimated_demand)}</td><td class="num">${fmt.num(n.true_demand)}</td><td class="num">${fmt.money(n.adr, 2)}</td></tr>`).join("");
+  document.getElementById("unc-takeaway").innerHTML = `<strong>What this means:</strong> a hotel that only studies what it sold will set next year's rates on these nights too low. In real data the true demand is never known; this sample includes it so the method can be checked honestly. The estimate is deliberately cautious and still finds ${fmt.num(U.rooms_turned_away_estimated)} room nights of unmet demand in a single year.`;
+
+  // YoY occupancy
+  const months = ["Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"];
+  const fy = {};
+  R.monthly.forEach(m => {
+    const [y, mo] = m.month.split("-").map(Number);
+    const start = mo >= 10 ? y : y - 1;
+    (fy[start] ||= Array(12).fill(null))[(mo + 2) % 12] = m.occupancy * 100;
+  });
+  const fyKeys = Object.keys(fy).sort();
+  const fyColors = [COLORS.muted, COLORS.s2, COLORS.s1];
+  new Chart(document.getElementById("yoy"), {
+    type: "line",
+    data: { labels: months, datasets: fyKeys.map((k, j) => ({ label: `Oct ${k} to Sep ${+k + 1}`, data: fy[k], borderColor: fyColors[j], backgroundColor: fyColors[j], borderWidth: j === fyKeys.length - 1 ? 2.5 : 2 })) },
+    options: { scales: { y: gridScale({ min: 30, max: 100, ticks: { callback: v => v + "%" } }), x: gridScale({ grid: { display: false } }) },
+      plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.parsed.y.toFixed(1)}%` } } } },
+  });
+
+  // Weekday (two charts rather than one chart with two scales)
+  new Chart(document.getElementById("weekday"), {
+    type: "bar",
+    data: { labels: R.weekday.map(d => d.day), datasets: [{ label: "Occupancy", data: R.weekday.map(d => d.occupancy * 100), backgroundColor: "#3987e5" }] },
+    options: { plugins: { legend: { display: false }, title: { display: true, text: "Occupancy", align: "start", color: COLORS.ink },
+      tooltip: { callbacks: { label: c => `Occupancy: ${c.parsed.y.toFixed(1)}%` } } },
+      scales: { y: gridScale({ min: 0, max: 100, ticks: { callback: v => v + "%", maxTicksLimit: 3 } }), x: gridScale({ grid: { display: false } }) } },
+  });
+  new Chart(document.getElementById("weekday-adr"), {
+    type: "bar",
+    data: { labels: R.weekday.map(d => d.day), datasets: [{ label: "Average rate", data: R.weekday.map(d => d.adr), backgroundColor: "#86b6ef" }] },
+    options: { plugins: { legend: { display: false }, title: { display: true, text: "Average nightly rate", align: "start", color: COLORS.ink },
+      tooltip: { callbacks: { label: c => `Average rate: ${fmt.money(c.parsed.y, 2)}` } } },
+      scales: { y: gridScale({ min: 0, ticks: { callback: v => "$" + v, maxTicksLimit: 3 } }), x: gridScale({ grid: { display: false } }) } },
+  });
+
+  // Channels
+  document.getElementById("channels").innerHTML = R.channels.map(c => `<tr><td>${c.channel_name}</td>
+    <td class="num">${fmt.pct(c.share)}</td><td class="num">${fmt.money(c.adr, 2)}</td><td class="num">${fmt.pct(c.acquisition_cost, 0)}</td>
+    <td class="num"><b>${fmt.money(c.net_adr, 2)}</b></td><td class="num">${fmt.compact(c.acquisition_spend)}</td></tr>`).join("");
+  const ota = R.channels.find(c => c.channel === "OTA"), web = R.channels.find(c => c.channel === "WEB");
+  const shift = ota.room_nights * 0.05 * (web.net_adr - ota.net_adr);
+  document.getElementById("channel-takeaway").innerHTML = `<strong>What this means:</strong> an online travel agency booking keeps ${fmt.money(ota.net_adr, 2)} of its rate, a direct web booking ${fmt.money(web.net_adr, 2)}. Moving just 5% of travel agency room nights to direct booking would keep about ${fmt.compact(shift)} more a year.`;
+
+  // Cancellations
+  const C = R.cancellations;
+  new Chart(document.getElementById("cancel"), {
+    type: "bar",
+    data: { labels: C.by_lead.map(b => b.bucket), datasets: [{ label: "Cancelled", data: C.by_lead.map(b => b.rate * 100), backgroundColor: "#3987e5" }] },
+    options: { plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `Cancelled: ${c.parsed.y.toFixed(1)}%` } } },
+      scales: { y: gridScale({ min: 0, ticks: { callback: v => v + "%" } }), x: gridScale({ grid: { display: false } }) } },
+  });
+  const otaC = C.by_channel.find(c => c.channel === "OTA");
+  document.getElementById("cancel-takeaway").innerHTML = `<strong>What this means:</strong> ${fmt.pct(C.overall)} of bookings cancel overall, and ${fmt.pct(otaC.rate, 0)} of travel agency bookings. Bookings made months ahead are the least certain, which is why overbooking levels and deposit policies should depend on lead time and channel.`;
+
+  // Events
+  document.getElementById("events").innerHTML = R.events.map(e => `<tr><td>${e.event}</td><td class="num">${fmt.money(e.adr, 2)}</td>
+    <td class="num">${fmt.money(e.adr_base, 2)}</td><td class="num"><span class="delta up">+${(e.adr_uplift * 100).toFixed(1)}%</span></td></tr>`).join("");
+
+  // Hotels
+  document.getElementById("hotels").innerHTML = R.hotels.map(h => `<tr><td><b>${h.hotel}</b></td><td>${h.style}</td><td class="num">${fmt.num(h.rooms)}</td>
+    <td class="num">${fmt.pct(h.occupancy)}</td><td class="num">${fmt.money(h.adr, 2)}</td><td class="num">${fmt.money(h.revpar, 2)}</td>
+    <td class="num">${delta(1 + h.revpar_change, 1)}</td><td class="num">${fmt.compact(h.revenue)}</td></tr>`).join("");
+
+  // Backtest
+  document.getElementById("backtest").innerHTML = R.forecast_backtest.map(b => `<tr><td>${b.lead_days} days before arrival</td>
+    <td class="num"><b>${fmt.pct(b.pickup_mape)}</b></td><td class="num">${fmt.pct(b.last_year_mape)}</td></tr>`).join("");
+})();
+</script>
+</body>
+</html>

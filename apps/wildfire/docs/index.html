@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WARL Swarm Command Center</title>
+    <link rel="stylesheet" href="style.css?v=2">
+    <!-- Chart.js for Live Telemetry -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Leaflet.js for Satellite Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>WARL: Wildfire Autonomous Reinforcement Learning</h1>
+            <p>Decentralized Drone Swarm Command Center // Live Telemetry Feed</p>
+        </div>
+    </header>
+
+    <main class="dashboard">
+        <!-- Left Panel: Live Simulation & Charts -->
+        <section class="simulation-panel">
+            <div class="controls">
+                <select id="mode-select" title="Choose what to show" style="padding: 0.5rem; background: #111827; color: white; border: 1px solid #374151; border-radius: 4px;">
+                    <option value="live">Live simulation (nearest-fire rule)</option>
+                </select>
+                <button id="btn-start" class="btn primary">Deploy Swarm</button>
+                <button id="btn-reset" class="btn secondary">Reset Environment</button>
+                <div class="metrics-mini">
+                    <span class="metric">Active Fire Area: <strong id="metric-fire">0</strong> ha</span>
+                    <span class="metric">Swarm AI Agents: <strong id="metric-drones">0</strong></span>
+                    <span class="metric" style="color: #cbd5e1;">Real-World Drones Required: <strong id="metric-real-drones">0</strong></span>
+                    <span class="metric">Status: <strong id="metric-status" class="safe">CONTAINED</strong></span>
+                </div>
+            </div>
+            
+            <div class="map-container" id="map-container">
+                <div id="satellite-map"></div>
+                <div id="radar-background"></div>
+                <canvas id="simulation-canvas" width="600" height="600"></canvas>
+            </div>
+            
+            <!-- Live Telemetry Graph -->
+            <div class="chart-container">
+                <canvas id="telemetry-chart"></canvas>
+            </div>
+        </section>
+
+        <!-- Right Panel: Gemini Chatbot -->
+        <section class="commander-panel">
+            <h2>Gemini Swarm Commander</h2>
+            <div style="padding: 0.5rem 1rem; background: #030712; border-bottom: 1px solid var(--border);">
+                <input type="password" id="gemini-api-key" placeholder="Enter Gemini API Key to activate AI..." style="width: 100%; padding: 0.5rem; background: #111827; color: white; border: 1px solid #374151; border-radius: 4px;">
+            </div>
+            <div class="chat-window" id="chat-window">
+                <div class="message system">
+                    <strong>System:</strong> WARL AI initialized.
+                </div>
+                <div class="message gemini">
+                    <strong>Commander:</strong> I am the Gemini Swarm Commander. I monitor the RL agents in real-time. Ask me why the swarm is making its decisions.
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chat-input-field" placeholder="Ask the Commander a question...">
+                <button id="btn-send" class="btn primary">Send</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js?v=5"></script>
+</body>
+</html>

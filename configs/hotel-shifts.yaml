@@ -1,0 +1,9 @@
+# H2-01: open shifts across the 5 sample hotels filled by a staff market under Ontario ESA
+# limits. Generated weeks; rates are assumptions (apps/hotel/shifts DEFAULTS).
+app: hotel-shifts
+env:
+  scenarios: 50
+  seed: 0
+  open_shifts: 25
+  agency_rate: 40.0
+  fairness: 20.0

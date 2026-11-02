@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Staff Schedule Builder</title>
+<meta name="description" content="Builds a weekly housekeeping schedule from expected workload, checks every labour rule, and outputs to Excel, print and the staff app.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">Hospitality <span>BI</span> Portfolio</a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="revenue.html">Revenue Command Centre</a>
+      <a class="active" href="schedule.html">Staff Schedule Builder</a>
+      <a href="index.html#proposals">Proposals</a>
+      <a href="https://github.com/nihalunfc/hotel-business">Code</a>
+    </nav>
+  </div>
+</header>
+
+<div class="intro">
+  <div class="wrap">
+    <h1>Staff Schedule Builder</h1>
+    <p class="lead">Builds next week's housekeeping schedule from the rooms that will actually need cleaning, checks every labour rule, and produces the same schedule for the staff app, the familiar Excel sheet and the printed board.</p>
+    <div class="badge-row">
+      <span class="badge info">Sample: housekeeping at Summit Tower Hotel (620 rooms), 44 staff</span>
+      <span class="badge">Related proposal: H2-05</span>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="block no-print">
+    <div class="block-head">
+      <div><span class="step">Step 1</span><h2>Choose a week</h2>
+      <p>The same team and the same rules, tested on three very different weeks.</p></div>
+    </div>
+    <div class="tabs" id="tabs"></div>
+    <p class="muted" id="scenario-sub" style="margin-top:10px"></p>
+  </section>
+
+  <section class="block no-print">
+    <div class="block-head">
+      <div><span class="step">Step 2</span><h2>The result at a glance</h2>
+      <p>The built schedule compared with a typical fixed pattern, where everyone works the same days every week regardless of how busy the hotel is.</p></div>
+    </div>
+    <div class="grid g5" id="kpis"></div>
+    <div class="takeaway" id="kpi-takeaway"></div>
+  </section>
+
+  <section class="block no-print">
+    <div class="block-head">
+      <div><span class="step">Step 3</span><h2>Work needed against staff scheduled, day by day</h2>
+      <p>Cleaning hours come from expected departures (30 minutes per room) and stayovers (20 minutes per room).</p></div>
+      <div class="seg" id="view-toggle"><button data-v="optimized" class="active">Built schedule</button><button data-v="manual">Fixed weekly pattern</button></div>
+    </div>
+    <div class="card"><div class="chart-box"><canvas id="coverage"></canvas></div></div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <div><span class="step no-print">Step 4</span><h2 id="grid-title">The schedule</h2>
+      <p class="no-print">Colour-coded the same way as the weekly Excel sheet. A red outline marks a shift on a day the employee asked to have off. "Print" marks staff who prefer a paper schedule.</p></div>
+      <div class="toolbar no-print">
+        <a class="btn primary" id="dl" href="#">Download Excel</a>
+        <button class="btn" onclick="window.print()">Print schedule</button>
+        <button class="btn" id="payload-btn">Show staff-app data</button>
+      </div>
+    </div>
+    <div class="legend-row" id="legend"></div>
+    <div class="card table-wrap"><table class="sched" id="grid"></table></div>
+    <pre id="payload" class="no-print" style="display:none;margin-top:12px"></pre>
+  </section>
+
+  <section class="block grid g2 no-print">
+    <div class="card">
+      <span class="step">Rules</span><h3>Labour rule check</h3>
+      <p class="muted">Every schedule is checked by a separate checker, not by the scheduler itself, against Ontario Employment Standards Act hours-of-work rules.</p>
+      <div class="table-wrap"><table><thead><tr><th>Rule</th><th class="num">Breaks</th><th>Result</th></tr></thead><tbody id="rules"></tbody></table></div>
+    </div>
+    <div class="card">
+      <span class="step">Workload</span><h3>Expected work this week</h3>
+      <p class="muted">Calculated from the sample hotel's bookings.</p>
+      <div class="table-wrap"><table><thead><tr><th>Day</th><th class="num">Departures</th><th class="num">Stayovers</th><th class="num">Cleaning hours</th><th class="num">Inspectors</th><th class="num">Evening</th></tr></thead><tbody id="demand"></tbody></table></div>
+    </div>
+  </section>
+
+  <details class="tech no-print">
+    <summary>For BI reviewers: the optimization model</summary>
+    <p>The schedule is a mixed-integer program solved with the open-source CBC solver through PuLP (<a href="https://github.com/nihalunfc/hotel-business/blob/main/analytics/hbi/schedule.py">schedule.py</a>). It solves in under a second for 44 employees.</p>
+    <ul>
+      <li><b>Decision variables:</b> one binary per employee, day and allowed shift (AM, MID, short, inspector, evening). Unavailable days have no variables.</li>
+      <li><b>Hard constraints:</b> one shift per day; at least 11 hours between consecutive shifts (stricter than the 8-hour between-shift rule, and it also guarantees 11 hours off per day); at most 5 shifts for full-time and 4 for part-time, which guarantees 24 consecutive hours off; at most 48 hours in the week.</li>
+      <li><b>Soft constraints (penalized):</b> uncovered cleaning hours, missing inspectors or evening staff, hours above 44 (overtime at 1.5 times pay), full-time staff below 32 hours, shifts on requested days off, and the maximum number of weekend shifts any full-time employee works (fairness).</li>
+      <li><b>Objective:</b> minimize wages plus overtime premium plus penalties.</li>
+      <li><b>Comparison:</b> both schedules are scored with the same evaluator. Uncovered work is costed as call-in hours at 1.5 times pay.</li>
+      <li><b>Outputs:</b> a colour-coded Excel workbook with live SUM formulas (<a href="https://github.com/nihalunfc/hotel-business/blob/main/analytics/hbi/excel.py">excel.py</a>), a print layout from this page, and a JSON shift list ready to map to a workforce system's schedule import API (validate first, then post).</li>
+    </ul>
+  </details>
+</main>
+
+<footer class="site-footer no-print"><div class="wrap">Built by Nihal as a portfolio demonstration. All employees and figures on this page are fictional.</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="assets/common.js"></script>
+<script>
+const DAYNAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const CODE_LABEL = { AM: "AM 07:00-15:30", MID: "MID 09:00-17:30", SH: "Short 09:00-13:00", INS: "Inspector 07:00-15:30", PM: "Evening 15:00-23:00", OFF: "Day off", "N/A": "Not available" };
+let S, current, view = "optimized", chart;
+
+function render() {
+  const sc = S.scenarios.find(s => s.key === current);
+  const res = sc[view], other = sc[view === "optimized" ? "manual" : "optimized"];
+  const o = sc.optimized.evaluation, m = sc.manual.evaluation;
+  document.getElementById("scenario-sub").textContent = sc.subtitle + ".";
+  document.querySelectorAll("#tabs .tab").forEach(t => t.classList.toggle("active", t.dataset.k === current));
+  document.querySelectorAll("#view-toggle button").forEach(b => b.classList.toggle("active", b.dataset.v === view));
+
+  const rulesOk = sc.optimized.rules.filter(r => r.passed).length;
+  const totalWork = sc.demand.reduce((s, d) => s + d.cleaning_hours, 0);
+  const saving = m.total_cost - o.total_cost;
+  document.getElementById("kpis").innerHTML = [
+    ["Cleaning work this week", fmt.num(totalWork) + " h", `${fmt.num(sc.demand.reduce((s, d) => s + d.departures, 0))} departures expected`],
+    ["Labour rules passed", `${rulesOk} of ${sc.optimized.rules.length}`, "Checked independently of the scheduler"],
+    ["Staff day-off requests honoured", `${o.requests_honoured} of ${o.requests_total}`, `Fixed pattern: ${m.requests_honoured} of ${m.requests_total}`],
+    ["Weekly cost including call-ins", fmt.money(o.total_cost), `Fixed pattern: ${fmt.money(m.total_cost)}`],
+    ["Extra shifts to book in advance", fmt.num(o.extra_shifts_needed), `Fixed pattern leaves ${fmt.num(m.extra_shifts_needed)} uncovered`],
+  ].map(k => `<div class="kpi"><div class="label">${k[0]}</div><div class="value">${k[1]}</div><div class="sub">${k[2]}</div></div>`).join("");
+
+  const short = o.extra_shifts_needed > 0
+    ? ` The team is too small for this week's demand: the schedule shows ${o.extra_shifts_needed} extra shifts to book from on-call or seasonal staff now, instead of finding out on the day.`
+    : " Every hour of expected work is covered with the existing team.";
+  document.getElementById("kpi-takeaway").innerHTML = `<strong>What this means:</strong> the built schedule costs ${fmt.money(Math.abs(saving))} ${saving >= 0 ? "less" : "more"} than the fixed pattern this week, mainly by putting people on the days the work actually is instead of paying overtime to fill gaps.${short}`;
+
+  // Coverage chart
+  const cov = res.evaluation.coverage;
+  const data = {
+    labels: cov.map((c, i) => `${c.day} ${sc.demand[i].date.slice(5)}`),
+    datasets: [
+      { type: "bar", label: "Cleaning hours needed", data: cov.map(c => c.cleaning_hours_needed), backgroundColor: "#cfd6de" },
+      { type: "bar", label: view === "optimized" ? "Scheduled (built schedule)" : "Scheduled (fixed pattern)", data: cov.map(c => c.cleaning_hours_scheduled), backgroundColor: view === "optimized" ? COLORS.s1 : COLORS.s2 },
+    ],
+  };
+  if (chart) chart.destroy();
+  chart = new Chart(document.getElementById("coverage"), {
+    data, options: { scales: { y: gridScale({ min: 0, title: { display: true, text: "Hours" } }), x: gridScale({ grid: { display: false } }) },
+      plugins: { tooltip: { callbacks: { afterBody: items => { const c = cov[items[0].dataIndex]; return c.gap_hours < 0 ? `Short by ${(-c.gap_hours).toFixed(1)} hours` : `Covered (+${c.gap_hours.toFixed(1)} hours)`; } } } } },
+  });
+
+  // Grid
+  document.getElementById("grid-title").textContent = `${view === "optimized" ? "Built schedule" : "Fixed weekly pattern"}: ${sc.title}`;
+  document.getElementById("legend").innerHTML = Object.entries(CODE_LABEL).map(([k, v]) => `<span><span class="code ${k === "N/A" ? "NA" : k}">${k}</span>${v}</span>`).join("");
+  const days = sc.demand.map(d => `${d.day}<br><span class="muted" style="font-weight:400">${d.date.slice(5)}</span>`);
+  const hoursOf = s => (S.shifts[s] ? S.shifts[s].paid_hours : 0);
+  let html = `<thead><tr><th class="name">Employee</th><th>Type</th>${days.map(d => `<th>${d}</th>`).join("")}<th>Hours</th></tr></thead><tbody>`;
+  S.staff.forEach(e => {
+    const g = res.grid[e.id];
+    const hrs = g.reduce((s, c) => s + hoursOf(c), 0);
+    html += `<tr><td class="name">${e.name}${e.prefers_printed ? '<span class="tag">Print</span>' : ""}</td><td>${e.contract}</td>` +
+      g.map((c, d) => `<td><span class="code ${c === "N/A" ? "NA" : c}${e.requested_off.includes(d) && S.shifts[c] ? " req" : ""}" title="${CODE_LABEL[c] || c}">${c}</span></td>`).join("") +
+      `<td><b>${hrs}</b></td></tr>`;
+  });
+  const staffed = d => S.staff.filter(e => S.shifts[res.grid[e.id][d]]).length;
+  html += `<tr><td class="name"><b>Staff on shift</b></td><td></td>${DAYNAMES.map((_, d) => `<td><b>${staffed(d)}</b></td>`).join("")}<td></td></tr></tbody>`;
+  document.getElementById("grid").innerHTML = html;
+
+  document.getElementById("dl").href = sc.excel;
+  document.getElementById("dl").style.display = view === "optimized" ? "" : "none";
+  document.getElementById("payload").textContent =
+    "// Shift list prepared for a workforce system's schedule import API.\n// Field names are mapped to the property's configuration during setup; validate first, then post.\n" +
+    JSON.stringify({ validate_only: true, shifts: sc.payload_preview }, null, 2);
+
+  document.getElementById("rules").innerHTML = res.rules.map(r => `<tr><td>${r.rule}</td><td class="num">${r.violations}</td><td><span class="pill ${r.passed ? "pass" : "fail"}">${r.passed ? "Pass" : "Fail"}</span></td></tr>`).join("");
+  document.getElementById("demand").innerHTML = sc.demand.map(d => `<tr><td>${d.day} ${d.date.slice(5)}</td><td class="num">${d.departures}</td><td class="num">${d.stayovers}</td><td class="num">${d.cleaning_hours}</td><td class="num">${d.inspectors_needed}</td><td class="num">${d.evening_needed}</td></tr>`).join("");
+}
+
+(async function () {
+  chartDefaults();
+  S = await loadJSON("data/schedule.json");
+  current = S.scenarios[0].key;
+  document.getElementById("tabs").innerHTML = S.scenarios.map(s => `<button class="tab" data-k="${s.key}">${s.title}</button>`).join("");
+  document.querySelectorAll("#tabs .tab").forEach(t => t.addEventListener("click", () => { current = t.dataset.k; render(); }));
+  document.querySelectorAll("#view-toggle button").forEach(b => b.addEventListener("click", () => { view = b.dataset.v; render(); }));
+  document.getElementById("payload-btn").addEventListener("click", () => {
+    const p = document.getElementById("payload"); p.style.display = p.style.display === "none" ? "block" : "none";
+  });
+  render();
+})();
+</script>
+</body>
+</html>
