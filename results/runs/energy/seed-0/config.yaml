@@ -1,0 +1,38 @@
+app: energy
+seed: 0
+env:
+  data_path: null
+  val_start: '2020-09-01'
+  test_start: '2020-10-01'
+  n_agents: 10
+  capacity_mwh: 400
+  max_rate_mw: 100
+  round_trip_efficiency: 0.9
+  episode_hours: 168
+  eval_episode_hours: null
+agent:
+  mixer: vdn
+  hidden:
+  - 128
+  - 128
+  lr: 0.0005
+  gamma: 0.97
+  tau: 0.01
+  agent_id: false
+train:
+  total_steps: 60000
+  n_step: 1
+  num_envs: 8
+  batch_size: 256
+  buffer_size: 100000
+  learning_starts: 2000
+  gradient_steps: 1
+  eps_start: 1.0
+  eps_end: 0.02
+  eps_fraction: 0.5
+  log_every: 10000
+  eval_every: 10000
+eval:
+  episodes: 1
+  val_episodes: 1
+label: energy

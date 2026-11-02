@@ -1,0 +1,19 @@
+{
+  "app": "energy",
+  "seed": 0,
+  "git_commit": "c33fe828fb0b13ac75fc9a60d012042191e89ab4",
+  "git_dirty": false,
+  "command": "cli.py train --config configs/energy.yaml --out /tmp/claude-0/final/seeds-energy-20261102-210840/seed-0 --set seed=0 label=energy",
+  "started": "2026-11-02T21:08:40+0000",
+  "seconds": 104.6,
+  "python": "3.13.18",
+  "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.5",
+    "torch": "2.15.0+cu132",
+    "yaml": "6.0.3"
+  },
+  "platform": "Linux-6.18.44-fc-v185-x86_64-with-glibc2.39",
+  "cpu_count": 4,
+  "ci": {}
+}
