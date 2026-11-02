@@ -1,0 +1,370 @@
+{
+  "hotel-energy": {
+    "app": "hotel-energy",
+    "split": "test",
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "episodes": 1,
+    "metrics": [
+      "net_saving_usd",
+      "peak_cut_kw",
+      "peak_cut_pct",
+      "peaks_hit",
+      "ga_saving_usd",
+      "extra_energy_usd",
+      "missed_kwh"
+    ],
+    "policies": {
+      "swarm (trained)": {
+        "net_saving_usd": [
+          221829.76930902302,
+          193168.11919487285,
+          250491.41942317318
+        ],
+        "peak_cut_kw": [
+          510.8995994036013,
+          444.0570310612185,
+          577.7421677459843
+        ],
+        "peak_cut_pct": [
+          19.304442357335752,
+          16.77878269917961,
+          21.83010201549188
+        ],
+        "peaks_hit": [
+          4.8,
+          4.4,
+          5.0
+        ],
+        "ga_saving_usd": [
+          229904.8197316206,
+          199825.6639775483,
+          259983.97548569288
+        ],
+        "extra_energy_usd": [
+          8075.050422597584,
+          6220.363273112899,
+          9935.887424883625
+        ],
+        "missed_kwh": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "no action": {
+        "net_saving_usd": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "peak_cut_kw": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "peak_cut_pct": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "peaks_hit": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "ga_saving_usd": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "extra_energy_usd": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "missed_kwh": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "every weekday": {
+        "net_saving_usd": [
+          250806.67710507935,
+          250806.67710507935,
+          250806.67710507935
+        ],
+        "peak_cut_kw": [
+          561.2729315833333,
+          561.2729315833333,
+          561.2729315833333
+        ],
+        "peak_cut_pct": [
+          21.20780867147208,
+          21.20780867147208,
+          21.20780867147208
+        ],
+        "peaks_hit": [
+          5.0,
+          5.0,
+          5.0
+        ],
+        "ga_saving_usd": [
+          252572.81921249998,
+          252572.81921249998,
+          252572.81921249998
+        ],
+        "extra_energy_usd": [
+          1766.142107420625,
+          1766.142107420625,
+          1766.142107420625
+        ],
+        "missed_kwh": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "peak-alert rule": {
+        "net_saving_usd": [
+          251685.38020989185,
+          251685.38020989185,
+          251685.38020989185
+        ],
+        "peak_cut_kw": [
+          561.2729315833333,
+          561.2729315833333,
+          561.2729315833333
+        ],
+        "peak_cut_pct": [
+          21.20780867147208,
+          21.20780867147208,
+          21.20780867147208
+        ],
+        "peaks_hit": [
+          5.0,
+          5.0,
+          5.0
+        ],
+        "ga_saving_usd": [
+          252572.81921249998,
+          252572.81921249998,
+          252572.81921249998
+        ],
+        "extra_energy_usd": [
+          887.4390026081252,
+          887.4390026081252,
+          887.4390026081252
+        ],
+        "missed_kwh": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "comparisons": {
+      "no action": {
+        "net_saving_usd": {
+          "diff": 221829.76930902302,
+          "diff_lo": 193168.11919487285,
+          "diff_hi": 250491.41942317318,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0625,
+          "n_seeds": 5,
+          "n_episodes": 1
+        },
+        "peak_cut_kw": {
+          "diff": 510.8995994036013,
+          "diff_lo": 444.0570310612185,
+          "diff_hi": 577.7421677459843,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0625,
+          "n_seeds": 5,
+          "n_episodes": 1
+        },
+        "peak_cut_pct": {
+          "diff": 19.304442357335752,
+          "diff_lo": 16.77878269917961,
+          "diff_hi": 21.83010201549188,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0625,
+          "n_seeds": 5,
+          "n_episodes": 1
+        },
+        "peaks_hit": {
+          "diff": 4.8,
+          "diff_lo": 4.4,
+          "diff_hi": 5.0,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0625,
+          "n_seeds": 5,
+          "n_episodes": 1
+        },
+        "ga_saving_usd": {
+          "diff": 229904.8197316206,
+          "diff_lo": 199825.6639775483,
+          "diff_hi": 259983.97548569288,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0625,
+          "n_seeds": 5,
+          "n_episodes": 1
+        },
+        "extra_energy_usd": {
+          "diff": 8075.050422597584,
+          "diff_lo": 6220.363273112878,
+          "diff_hi": 9935.887424883625,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0625,
+          "n_seeds": 5,
+          "n_episodes": 1
+        },
+        "missed_kwh": {
+          "diff": 0.0,
+          "diff_lo": 0.0,
+          "diff_hi": 0.0,
+          "p_value": 1.0,
+          "p_value_episodes": 1.0,
+          "n_seeds": 5,
+          "n_episodes": 1
+        }
+      },
+      "every weekday": {
+        "net_saving_usd": {
+          "diff": -28976.90779605632,
+          "diff_lo": -57638.55791020648,
+          "diff_hi": -315.25768190615344,
+          "p_value": 0.0376,
+          "p_value_episodes": 0.25,
+          "n_seeds": 5,
+          "n_episodes": 1
+        },
+        "peak_cut_kw": {
+          "diff": -50.37333217973192,
+          "diff_lo": -117.21590052211482,
+          "diff_hi": 16.469236162650986,
+          "p_value": 0.1648,
+          "p_value_episodes": 0.3125,
+          "n_seeds": 5,
+          "n_episodes": 1
+        },
+        "peak_cut_pct": {
+          "diff": -1.9033663141363324,
+          "diff_lo": -4.429025972292467,
+          "diff_hi": 0.6222933440198026,
+          "p_value": 0.1648,
+          "p_value_episodes": 0.3125,
+          "n_seeds": 5,
+          "n_episodes": 1
+        },
+        "peaks_hit": {
+          "diff": -0.2,
+          "diff_lo": -0.6,
+          "diff_hi": 0.0,
+          "p_value": 0.6448,
+          "p_value_episodes": 1.0,
+          "n_seeds": 5,
+          "n_episodes": 1
+        },
+        "ga_saving_usd": {
+          "diff": -22667.99948087937,
+          "diff_lo": -52747.15523495168,
+          "diff_hi": 7411.156273192935,
+          "p_value": 0.1648,
+          "p_value_episodes": 0.3125,
+          "n_seeds": 5,
+          "n_episodes": 1
+        },
+        "extra_energy_usd": {
+          "diff": 6308.908315176957,
+          "diff_lo": 4454.221165692253,
+          "diff_hi": 8169.745317462997,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0625,
+          "n_seeds": 5,
+          "n_episodes": 1
+        },
+        "missed_kwh": {
+          "diff": 0.0,
+          "diff_lo": 0.0,
+          "diff_hi": 0.0,
+          "p_value": 1.0,
+          "p_value_episodes": 1.0,
+          "n_seeds": 5,
+          "n_episodes": 1
+        }
+      },
+      "peak-alert rule": {
+        "net_saving_usd": {
+          "diff": -29855.610900868825,
+          "diff_lo": -58517.26101501899,
+          "diff_hi": -1193.9607867186598,
+          "p_value": 0.0272,
+          "p_value_episodes": 0.25,
+          "n_seeds": 5,
+          "n_episodes": 1
+        },
+        "peak_cut_kw": {
+          "diff": -50.37333217973192,
+          "diff_lo": -117.21590052211482,
+          "diff_hi": 16.469236162650986,
+          "p_value": 0.1648,
+          "p_value_episodes": 0.3125,
+          "n_seeds": 5,
+          "n_episodes": 1
+        },
+        "peak_cut_pct": {
+          "diff": -1.9033663141363324,
+          "diff_lo": -4.429025972292467,
+          "diff_hi": 0.6222933440198026,
+          "p_value": 0.1648,
+          "p_value_episodes": 0.3125,
+          "n_seeds": 5,
+          "n_episodes": 1
+        },
+        "peaks_hit": {
+          "diff": -0.2,
+          "diff_lo": -0.6,
+          "diff_hi": 0.0,
+          "p_value": 0.6448,
+          "p_value_episodes": 1.0,
+          "n_seeds": 5,
+          "n_episodes": 1
+        },
+        "ga_saving_usd": {
+          "diff": -22667.99948087937,
+          "diff_lo": -52747.15523495168,
+          "diff_hi": 7411.156273192935,
+          "p_value": 0.1648,
+          "p_value_episodes": 0.3125,
+          "n_seeds": 5,
+          "n_episodes": 1
+        },
+        "extra_energy_usd": {
+          "diff": 7187.611419989456,
+          "diff_lo": 5332.924270504754,
+          "diff_hi": 9048.448422275496,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0625,
+          "n_seeds": 5,
+          "n_episodes": 1
+        },
+        "missed_kwh": {
+          "diff": 0.0,
+          "diff_lo": 0.0,
+          "diff_hi": 0.0,
+          "p_value": 1.0,
+          "p_value_episodes": 1.0,
+          "n_seeds": 5,
+          "n_episodes": 1
+        }
+      }
+    }
+  }
+}
