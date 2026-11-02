@@ -87,7 +87,8 @@ def to_markdown(summary: dict, digits: int = 2) -> str:
         for pol, ms in s["policies"].items():
             lines.append(f"| {pol} | " + " | ".join("–" if np.isnan(ms[m][0]) else fmt_ci(*ms[m], digits)
                                                    for m in s["metrics"]) + " |")
-        lines += ["", "**Swarm minus rule** on the same episodes (difference [95% CI], permutation p-value):", "",
+        lines += ["", "**Swarm minus rule** on the same episodes (difference [95% CI], bootstrap p-value over seeds "
+                  "and episodes):", "",
                   "| vs rule | " + " | ".join(s["metrics"]) + " |",
                   "| :-- | " + " | ".join("--:" for _ in s["metrics"]) + " |"]
         for rule, ms in s["comparisons"].items():
