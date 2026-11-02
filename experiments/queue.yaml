@@ -13,21 +13,14 @@
 # extras (optional dependency groups from pyproject.toml, e.g. [citylearn]), scale (swarm
 # sizes for a `swarm scale` study after training) and scale_set (overrides for it).
 branch: claude/project-thread-xchy7b
-experiments:
-  # Earlier runs (wildfire methods, neighbour messages, CityLearn, VMAS) are in results/;
-  # this file lists only what is still to run.
-  # Drone scale fix (item 4): pads that tile the forest, with and without a 6 -> 24 drone curriculum.
-  - {config: configs/wildfire-scale.yaml, label: wildfire-scale, seeds: [0, 1, 2], scale: [6, 24, 100, 1000]}
-  - {config: configs/wildfire-imitate.yaml, label: wildfire-imitate-pads, seeds: [0, 1, 2],
-     set: [env.scale_pads=true], scale: [6, 24, 100, 1000]}
-  # Beating the rule (item 3): residual swarm, and choosing which fire to fight.
-  - {config: configs/wildfire-residual.yaml, label: wildfire-residual, seeds: [0, 1, 2]}
-  - {config: configs/wildfire-targets.yaml, label: wildfire-targets, seeds: [0, 1, 2]}
-  # Hotel peak energy with seeds (item 1).
-  - {config: configs/hotel-energy.yaml, label: hotel-energy, seeds: [0, 1, 2, 3, 4]}
-  # Ablations whose local runs were lost to a machine restart (item 5).
-  - {config: configs/energy.yaml, label: energy-no-val-selection, seeds: [0, 1, 2, 3, 4], set: [train.eval_every=0]}
-  - {config: configs/hotel-housekeeping.yaml, label: hotel-housekeeping-independent, seeds: [0, 1, 2, 3, 4],
-     set: [agent.mixer=independent]}
-  - {config: configs/hotel-housekeeping.yaml, label: hotel-housekeeping-qmix, seeds: [0, 1, 2, 3, 4],
-     set: [agent.mixer=qmix]}
+# Robustness re-tests (item 6) of trained seeds, by label; run_id points at the
+# Actions run that trained them (default: this run). Written to results/robustness-<label>.md.
+robustness:
+  - {label: wildfire-imitate, run_id: 41525733788}
+  - {label: wildfire, run_id: 41525733788}
+  - {label: wildfire-mappo, run_id: 41525733788}
+  - {label: wildfire-residual, run_id: 41538017841}
+  - {label: wildfire-targets, run_id: 41538017841, scenario_set: wildfire}
+experiments: []
+# Already queued in run 41538017841 (wildfire-scale, wildfire-imitate-pads, wildfire-residual,
+# wildfire-targets, hotel-energy, energy-no-val-selection, hotel-housekeeping-independent/-qmix).

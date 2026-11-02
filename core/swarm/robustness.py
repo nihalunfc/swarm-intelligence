@@ -116,13 +116,13 @@ def run(run_dirs: list[Path], scenarios: list[dict], episodes: int | None = None
 
     from .benchmark import eval_env_cfg, load_agent
     from .registry import get_app
-    from .trainer import evaluate_episodes
+    from .trainer import evaluate_episodes, final_cfg
 
     out: dict = {"scenarios": [], "app": None}
     for sc in scenarios:
         per_policy: dict[str, list[list[float]]] = {}
         for k, rd in enumerate(run_dirs):
-            cfg = yaml.safe_load((rd / "config.yaml").read_text())
+            cfg = final_cfg(yaml.safe_load((rd / "config.yaml").read_text()))  # a curriculum: its last stage
             app = get_app(cfg["app"])
             if cfg.get("residual"):
                 from .residual import wrap
