@@ -1,0 +1,30 @@
+# External benchmark: the unchanged swarm engine on the CityLearn Challenge 2022 dataset
+# (17 homes with solar and batteries). Needs: pip install -e ".[citylearn]" (Python 3.10/3.11)
+# and python -m apps.citylearn.download.
+app: citylearn
+seed: 0
+env:
+  schema: null               # null = data/citylearn/citylearn_challenge_2022_phase_all/schema.json
+agent:
+  mixer: vdn
+  hidden: [128, 128]
+  lr: 0.0005
+  gamma: 0.95
+  tau: 0.01
+  agent_id: false
+train:
+  total_steps: 120000        # ~20 passes over Jan-Aug per env copy; CityLearn runs ~60 steps/s
+  n_step: 3
+  num_envs: 4
+  batch_size: 256
+  buffer_size: 100000
+  learning_starts: 2000
+  gradient_steps: 1
+  eps_start: 1.0
+  eps_end: 0.02
+  eps_fraction: 0.4
+  log_every: 10000
+  eval_every: 20000          # validation = September
+eval:
+  episodes: 1                # test = October-December
+  val_episodes: 1

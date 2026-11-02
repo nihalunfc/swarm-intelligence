@@ -8,6 +8,7 @@ so peaks are shaved and troughs are filled.
 """
 
 import numpy as np
+
 from swarm.env import SwarmEnv
 
 from . import data as D
@@ -17,20 +18,29 @@ CHARGE, IDLE, DISCHARGE = 0, 1, 2
 _CACHE: dict = {}
 
 
-def _prepared(path, test_start):
-    key = (str(path), test_start)
+def _prepared(path, test_start, val_start=None):
+    """Chronological train / validation / test frames and the training-set scaling.
+
+    With ``val_start`` the months between it and ``test_start`` are a validation
+    period used to choose settings and checkpoints; test is only for the final report.
+    """
+    key = (str(path), test_start, val_start)
     if key not in _CACHE:
         df = D.load(path)
         df["target_mw"] = D.day_mean_target(df)
         train, test = D.split(df, test_start)
+        val = None
+        if val_start:
+            train, val = D.split(train, val_start)
         cols = ["load_mw", "ghi", "temp_c", "wind_ms"]
         stats = {c: (train[c].mean(), train[c].std() + 1e-6) for c in cols}
-        _CACHE[key] = (train, test, stats)
+        _CACHE[key] = (train, val, test, stats)
     return _CACHE[key]
 
 
 class EnergySwarmEnv(SwarmEnv):
     n_actions = 3
+    null_action = IDLE  # a failed battery sits idle (robustness tests)
 
     def __init__(self, frame, stats, n_agents=10, capacity_mwh=400.0, max_rate_mw=100.0,
                  round_trip_efficiency=0.90, initial_soc=0.5, episode_hours=168, seed=0):
@@ -127,8 +137,11 @@ class EnergySwarmEnv(SwarmEnv):
 
 def make_env(env_cfg: dict, split: str, seed: int) -> EnergySwarmEnv:
     cfg = dict(env_cfg)
-    train, test, stats = _prepared(cfg.pop("data_path", None), cfg.pop("test_start", None))
-    frame = train if split == "train" else test
+    train, val, test, stats = _prepared(cfg.pop("data_path", None), cfg.pop("test_start", None),
+                                        cfg.pop("val_start", None))
+    if split == "val" and val is None:
+        raise ValueError("energy: set env.val_start to evaluate on a validation period")
+    frame = {"train": train, "val": val}.get(split, test)
     if split != "train":
         cfg["episode_hours"] = cfg.get("eval_episode_hours")  # None = the whole held-out period
     cfg.pop("eval_episode_hours", None)

@@ -8,8 +8,9 @@ from pathlib import Path
 
 import yaml
 
+from .manifest import track, write_manifest
 from .registry import get_app, is_trainable
-from .trainer import evaluate, train
+from .trainer import evaluate_episodes, final_cfg, mean_metrics, train
 
 
 def eval_env_cfg(cfg: dict) -> dict:
@@ -22,31 +23,49 @@ def make_run_dir(root: str | Path, app: str) -> Path:
     return run
 
 
+def load_agent(env, state: dict):
+    """Rebuild a trained swarm (DQN or MAPPO) for ``env`` from a saved state."""
+    if state.get("algo") == "mappo":
+        from .ppo import PPOAgent
+
+        agent = PPOAgent(env, state["cfg"])
+    else:
+        from .agents import make_agent
+
+        agent = make_agent(env, state["cfg"])
+    agent.load_state_dict(state)
+    return agent
+
+
 def run_app(name: str, cfg: dict, run_dir: Path | None = None, model_path: str | None = None, log=print) -> list[dict]:
+    started = time.time()
     app = get_app(name)
+    if cfg.get("residual"):
+        from .residual import wrap
+
+        app = wrap(app, cfg["residual"])
     if not is_trainable(app):
         return app.benchmark_rows(cfg)
 
     import torch
 
-    from .agents import make_agent
-
     if model_path:
         state = torch.load(model_path, map_location="cpu", weights_only=False)
-        probe = app.make_env(cfg.get("env", {}), "train", 0)
-        agent = make_agent(probe, state["cfg"])
-        agent.load_state_dict(state)
+        agent = load_agent(app.make_env(final_cfg(cfg).get("env", {}), "train", 0), state)
         history = []
     else:
         log(f"[{name}] training swarm ...")
         agent, history = train(app, cfg, log=log)
 
-    ecfg = eval_env_cfg(cfg)
+    ecfg = eval_env_cfg(final_cfg(cfg))  # a curriculum is tested in its last stage
     episodes = int(cfg.get("eval", {}).get("episodes", 1))
     seed = int(cfg.get("eval", {}).get("seed", 10_000))
-    rows = [{"app": name, "policy": "swarm (trained)", **evaluate(app, ecfg, agent.policy(), episodes, seed)}]
-    for bname, policy in app.BASELINES.items():
-        rows.append({"app": name, "policy": bname, **evaluate(app, ecfg, policy, episodes, seed)})
+    split = str(cfg.get("eval", {}).get("split", "test"))
+    policies = {"swarm (trained)": agent.policy(), **{k: v for k, v in app.BASELINES.items() if k != "follow rule"}}
+    per_episode = {p: evaluate_episodes(app, ecfg, pol, episodes, seed, split) for p, pol in policies.items()}
+    for reference in getattr(app, "REFERENCES", []):
+        per_episode.update(reference(app, ecfg, split, episodes, seed))
+    rows = [{"app": name, "policy": p, **mean_metrics(eps)} for p, eps in per_episode.items()]
 
     if run_dir is not None:
         run_dir.mkdir(parents=True, exist_ok=True)
@@ -57,8 +76,17 @@ def run_app(name: str, cfg: dict, run_dir: Path | None = None, model_path: str |
                 w = csv.DictWriter(f, fieldnames=list(history[0]))
                 w.writeheader()
                 w.writerows(history)
+        if getattr(agent, "val_history", None):
+            with open(run_dir / "val_history.csv", "w", newline="") as f:
+                w = csv.DictWriter(f, fieldnames=list(agent.val_history[0]))
+                w.writeheader()
+                w.writerows(agent.val_history)
         (run_dir / "results.json").write_text(json.dumps(rows, indent=2))
+        (run_dir / "episodes.json").write_text(json.dumps(
+            {"app": name, "seed": cfg.get("seed", 0), "split": split, "eval_seed": seed, "policies": per_episode}))
         (run_dir / "results.md").write_text(format_table(rows, app.KEY_METRICS))
+        write_manifest(run_dir, cfg, started)
+        track(run_dir, cfg, rows)
     return rows
 
 

@@ -31,6 +31,8 @@ train:
   eps_end: 0.02
   eps_fraction: 0.5
   log_every: 10000
+  eval_every: 15000          # keep the checkpoint that does best on validation days
 eval:
   episodes: 50
+  val_episodes: 20           # validation days use seeds 5000+, test days 10000+
   seed: 10000

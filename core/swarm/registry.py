@@ -14,11 +14,14 @@ import importlib
 APPS = {
     "energy": "apps.energy",
     "wildfire": "apps.wildfire",
+    "wildfire-targets": "apps.wildfire.targets",
     "hotel": "apps.hotel",
     "hotel-energy": "apps.hotel.energy",
     "hotel-housekeeping": "apps.hotel.housekeeping",
     "hotel-relocation": "apps.hotel.relocation",
     "hotel-shifts": "apps.hotel.shifts",
+    "citylearn": "apps.citylearn",          # optional: needs the citylearn package
+    "vmas": "apps.vmas",                    # optional: needs the vmas package
 }
 
 

@@ -1,6 +1,26 @@
-| app | policy | par_after | peak_reduction_mw | std_reduction_pct | return |
-| :-- | :-- | --: | --: | --: | --: |
-| energy | swarm (trained) | 1.496 | 948.683 | 9.891 | 1,302.024 |
-| energy | no battery | 1.579 | 0.000 | 0.000 | 0.000 |
-| energy | threshold rule | 1.577 | 0.000 | 5.029 | 732.824 |
-| energy | proportional rule | 1.577 | 0.000 | 9.058 | 1,235.927 |
+# Multi-seed results
+
+## energy
+
+10 training seeds (0, 1, 2, 3, 4, 5, 6, 7, 8, 9) x 1 test episode(s). Mean with 95% bootstrap interval (seeds and episodes resampled; rules have no training seed, so their interval covers episodes only).
+
+| policy | par_after | peak_reduction_mw | std_reduction_pct | return |
+| :-- | --: | --: | --: | --: |
+| swarm (trained) | 1.52 [1.50, 1.53] | 704.26 [546.83, 857.30] | 10.79 [10.58, 11.03] | 1,385.64 [1,361.31, 1,413.29] |
+| no battery | 1.58 [1.58, 1.58] | 0.00 [0.00, 0.00] | 0.00 [0.00, 0.00] | 0.00 [0.00, 0.00] |
+| threshold rule | 1.58 [1.58, 1.58] | 0.00 [0.00, 0.00] | 5.03 [5.03, 5.03] | 732.82 [732.82, 732.82] |
+| proportional rule | 1.58 [1.58, 1.58] | 0.00 [0.00, 0.00] | 9.06 [9.06, 9.06] | 1,235.93 [1,235.93, 1,235.93] |
+| MPC (24 h forecast) | 1.58 [1.58, 1.58] | 0.00 [0.00, 0.00] | 6.84 [6.84, 6.84] | 957.12 [957.12, 957.12] |
+| optimum: min peak (perfect foresight) | 1.50 [1.50, 1.50] | 948.68 [948.68, 948.68] | -0.06 [-0.06, -0.06] | -4.98 [-4.98, -4.98] |
+| optimum: flattest (perfect foresight) | 1.49 [1.49, 1.49] | 948.68 [948.68, 948.68] | 14.67 [14.67, 14.67] | 1,880.44 [1,880.44, 1,880.44] |
+
+**Swarm minus rule** on the same episodes (difference [95% CI], bootstrap p-value over seeds and episodes):
+
+| vs rule | par_after | peak_reduction_mw | std_reduction_pct | return |
+| :-- | --: | --: | --: | --: |
+| no battery | -0.06 [-0.08, -0.05], p=<0.001 | 704.26 [546.83, 857.30], p=<0.001 | 10.79 [10.58, 11.03], p=<0.001 | 1,385.64 [1,361.31, 1,413.29], p=<0.001 |
+| threshold rule | -0.06 [-0.07, -0.05], p=<0.001 | 704.26 [546.83, 857.30], p=<0.001 | 5.76 [5.55, 6.00], p=<0.001 | 652.82 [628.48, 680.47], p=<0.001 |
+| proportional rule | -0.06 [-0.07, -0.05], p=<0.001 | 704.26 [546.83, 857.30], p=<0.001 | 1.73 [1.52, 1.97], p=<0.001 | 149.71 [125.38, 177.36], p=<0.001 |
+| MPC (24 h forecast) | -0.06 [-0.07, -0.05], p=<0.001 | 704.26 [546.83, 857.30], p=<0.001 | 3.96 [3.74, 4.20], p=<0.001 | 428.52 [404.19, 456.17], p=<0.001 |
+| optimum: min peak (perfect foresight) | 0.02 [0.01, 0.03], p=0.002 | -244.43 [-401.86, -91.38], p=0.002 | 10.85 [10.64, 11.09], p=<0.001 | 1,390.62 [1,366.28, 1,418.27], p=<0.001 |
+| optimum: flattest (perfect foresight) | 0.02 [0.01, 0.04], p=<0.001 | -244.43 [-401.86, -91.38], p=0.002 | -3.88 [-4.09, -3.64], p=<0.001 | -494.80 [-519.14, -467.15], p=<0.001 |

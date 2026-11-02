@@ -1,0 +1,48 @@
+app: hotel-housekeeping
+residual:
+  rule: soonest needed
+  override_cost: 0.002
+pretrain:
+  rule: follow rule
+  demo_steps: 50000
+  updates: 10000
+  margin: 0.8
+  demo_weight: 1.0
+  demo_decay_fraction: 0.5
+seed: 2
+env:
+  rooms: 300
+  floors: 10
+  attendants: 8
+  departure_rate: 0.35
+  arrival_rate: 0.85
+  early_share: 0.15
+  early_weight: 3.0
+  candidates: 6
+agent:
+  mixer: vdn
+  hidden:
+  - 128
+  - 128
+  lr: 0.0005
+  gamma: 0.97
+  tau: 0.01
+  agent_id: false
+train:
+  total_steps: 150000
+  n_step: 3
+  num_envs: 8
+  batch_size: 256
+  buffer_size: 100000
+  learning_starts: 2000
+  gradient_steps: 1
+  eps_start: 0.2
+  eps_end: 0.02
+  eps_fraction: 0.5
+  log_every: 10000
+  eval_every: 15000
+eval:
+  episodes: 50
+  val_episodes: 20
+  seed: 10000
+label: hotel-housekeeping-residual

@@ -1,0 +1,25 @@
+# Experiments to run on GitHub Actions (.github/workflows/experiments.yml).
+#
+# Pushing a change to this file starts one job per (experiment, seed), each on
+# its own runner (up to 6 hours), so long training no longer depends on a
+# laptop or chat session staying awake. A final job aggregates the seeds into
+# results/<label>.md and .json (confidence intervals, paired tests against the
+# rules) and commits them, with each run's config, manifest and per-episode
+# metrics under results/runs/<label>/, back to the same branch.
+#
+# Fields: config (required), label (default: config file name), seeds
+# (default 0-4), set (extra KEY=VALUE overrides, as for `swarm train --set`),
+# extras (optional dependency groups from pyproject.toml, e.g. [citylearn]), scale (swarm
+# sizes for a `swarm scale` study after training) and scale_set (overrides for it).
+experiments:
+  # Earlier runs (wildfire methods, neighbour messages, CityLearn, VMAS) are in results/;
+  # this file lists only what is still to run.
+  # Drone scale fix (item 4): pads that tile the forest, with and without a 6 -> 24 drone curriculum.
+  - {config: configs/wildfire-scale.yaml, label: wildfire-scale, seeds: [0, 1, 2], scale: [6, 24, 100, 1000]}
+  - {config: configs/wildfire-imitate.yaml, label: wildfire-imitate-pads, seeds: [0, 1, 2],
+     set: [env.scale_pads=true], scale: [6, 24, 100, 1000]}
+  # Beating the rule (item 3): residual swarm, and choosing which fire to fight.
+  - {config: configs/wildfire-residual.yaml, label: wildfire-residual, seeds: [0, 1, 2]}
+  - {config: configs/wildfire-targets.yaml, label: wildfire-targets, seeds: [0, 1, 2]}
+  # Hotel peak energy with seeds (item 1).
+  - {config: configs/hotel-energy.yaml, label: hotel-energy, seeds: [0, 1, 2, 3, 4]}

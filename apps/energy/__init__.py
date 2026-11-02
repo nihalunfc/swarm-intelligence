@@ -2,6 +2,10 @@
 
 from .baselines import BASELINES
 from .env import EnergySwarmEnv, make_env
+from .references import optimum_rows
+
+# Bounds computed outside the step-by-step loop (perfect foresight), reported next to the rules.
+REFERENCES = [optimum_rows]
 
 KEY_METRICS = ["par_after", "peak_reduction_mw", "std_reduction_pct", "return"]
 

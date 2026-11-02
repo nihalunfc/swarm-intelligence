@@ -15,5 +15,7 @@ __pycache__/
 data/raw/
 data/clean/
 runs/
+!results/runs/
 *.egg-info/
 .pytest_cache/
+data/citylearn/

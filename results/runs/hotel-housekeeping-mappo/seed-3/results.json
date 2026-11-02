@@ -1,0 +1,61 @@
+[
+  {
+    "app": "hotel-housekeeping",
+    "policy": "swarm (trained)",
+    "return": -2.6925,
+    "guest_wait_hours": 21.54,
+    "early_promises_kept_pct": 48.22310398751574,
+    "ready_by_noon_pct": 40.30938185076486,
+    "rooms_cleaned": 100.8,
+    "rooms": 103.12,
+    "workload_spread": 0.6750586135979216,
+    "floor_changes": 77.38,
+    "episodes": 50
+  },
+  {
+    "app": "hotel-housekeeping",
+    "policy": "floor order",
+    "return": -13.912916666666668,
+    "guest_wait_hours": 111.30333333333334,
+    "early_promises_kept_pct": 25.17543818926172,
+    "ready_by_noon_pct": 45.8305285240378,
+    "rooms_cleaned": 94.02,
+    "rooms": 103.12,
+    "workload_spread": 3.0915857582916844,
+    "floor_changes": 4.7,
+    "episodes": 50
+  },
+  {
+    "app": "hotel-housekeeping",
+    "policy": "soonest needed",
+    "return": -2.6925,
+    "guest_wait_hours": 21.54,
+    "early_promises_kept_pct": 48.22310398751574,
+    "ready_by_noon_pct": 40.30938185076486,
+    "rooms_cleaned": 100.8,
+    "rooms": 103.12,
+    "workload_spread": 0.6750586135979216,
+    "floor_changes": 77.38,
+    "episodes": 50
+  },
+  {
+    "app": "hotel-housekeeping",
+    "policy": "random room",
+    "return": -3.7204166666666665,
+    "guest_wait_hours": 29.763333333333332,
+    "early_promises_kept_pct": 42.07027776145423,
+    "ready_by_noon_pct": 39.212253036511804,
+    "rooms_cleaned": 99.24,
+    "rooms": 103.12,
+    "workload_spread": 0.6404202439929947,
+    "floor_changes": 87.34,
+    "episodes": 50
+  },
+  {
+    "app": "hotel-housekeeping",
+    "policy": "lower bound (perfect foresight, no elevator time)",
+    "guest_wait_hours": 18.06999999999998,
+    "return": -2.2587499999999974,
+    "episodes": 50
+  }
+]

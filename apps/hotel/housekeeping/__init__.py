@@ -2,6 +2,10 @@
 
 from .baselines import BASELINES
 from .env import HousekeepingSwarmEnv, make_env
+from .references import lower_bound_rows
+
+# Perfect-foresight lower bound on guest waiting, reported next to the rules.
+REFERENCES = [lower_bound_rows]
 
 KEY_METRICS = ["guest_wait_hours", "early_promises_kept_pct", "ready_by_noon_pct", "workload_spread", "floor_changes"]
 
