@@ -121,3 +121,18 @@ def test_failed_agents_take_the_null_action():
     env.reset(seed=3)
     m = env.action_mask()
     assert env.failed.sum() == 2 and (m[env.failed].sum(1) == 1).all() and m[env.failed, HOLD].all()
+
+
+def test_failed_agents_get_no_work_from_rules_that_assign_rooms():
+    from apps.hotel.housekeeping.baselines import floor_order
+    from apps.hotel.housekeeping.env import make_env
+    from swarm.robustness import PerturbedEnv
+
+    inner = make_env({}, "test", 10_000)
+    env = PerturbedEnv(inner, fail=0.5, fail_at=0.0, horizon=10)
+    obs = env.reset(seed=10_000)
+    for _ in range(20):
+        a = floor_order(inner, obs, inner.action_mask())
+        before = inner.busy.copy()
+        obs, *_ = env.step(a)
+        assert not ((inner.busy > 0) & (before == 0) & env.failed).any()

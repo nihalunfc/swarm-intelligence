@@ -1,0 +1,79 @@
+[
+  {
+    "app": "energy",
+    "policy": "swarm (trained)",
+    "return": 1353.603355982792,
+    "par_before": 1.578953592690629,
+    "par_after": 1.550426652924918,
+    "peak_reduction_mw": 309.65758500000084,
+    "std_reduction_pct": 10.564437860644372,
+    "hours": 2208.0,
+    "episodes": 1
+  },
+  {
+    "app": "energy",
+    "policy": "no battery",
+    "return": 0.0,
+    "par_before": 1.578953592690629,
+    "par_after": 1.578953592690629,
+    "peak_reduction_mw": 0.0,
+    "std_reduction_pct": 0.0,
+    "hours": 2208.0,
+    "episodes": 1
+  },
+  {
+    "app": "energy",
+    "policy": "threshold rule",
+    "return": 732.8238867365231,
+    "par_before": 1.578953592690629,
+    "par_after": 1.5765359447008105,
+    "peak_reduction_mw": 0.0,
+    "std_reduction_pct": 5.02872034632219,
+    "hours": 2208.0,
+    "episodes": 1
+  },
+  {
+    "app": "energy",
+    "policy": "proportional rule",
+    "return": 1235.9269906372035,
+    "par_before": 1.578953592690629,
+    "par_after": 1.5767482979756948,
+    "peak_reduction_mw": 0.0,
+    "std_reduction_pct": 9.057917656070602,
+    "hours": 2208.0,
+    "episodes": 1
+  },
+  {
+    "app": "energy",
+    "policy": "MPC (24 h forecast)",
+    "return": 957.1177046916284,
+    "par_before": 1.578953592690629,
+    "par_after": 1.5772724870866226,
+    "peak_reduction_mw": 0.0,
+    "std_reduction_pct": 6.835731065771277,
+    "hours": 2208.0,
+    "episodes": 1
+  },
+  {
+    "app": "energy",
+    "policy": "optimum: min peak (perfect foresight)",
+    "return": -4.975008640519583,
+    "par_before": 1.578953592690629,
+    "par_after": 1.4982503674630983,
+    "peak_reduction_mw": 948.6832980505133,
+    "std_reduction_pct": -0.06169088880090268,
+    "hours": 2208.0,
+    "episodes": 1
+  },
+  {
+    "app": "energy",
+    "policy": "optimum: flattest (perfect foresight)",
+    "return": 1880.4409383758498,
+    "par_before": 1.578953592690629,
+    "par_after": 1.4927733713389528,
+    "peak_reduction_mw": 948.6832980505133,
+    "std_reduction_pct": 14.671488790920439,
+    "hours": 2208.0,
+    "episodes": 1
+  }
+]

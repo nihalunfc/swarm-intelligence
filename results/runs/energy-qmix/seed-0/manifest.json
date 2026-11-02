@@ -1,0 +1,19 @@
+{
+  "app": "energy",
+  "seed": 0,
+  "git_commit": "e9aa7de0e9c33a048c1263cc36559e2a1da51b3f",
+  "git_dirty": false,
+  "command": "cli.py train --config configs/energy.yaml --out /tmp/claude-0/final/seeds-energy-qmix-20261102-221321/seed-0 --set label=energy-qmix agent.mixer=qmix seed=0 label=energy-qmix",
+  "started": "2026-11-02T22:13:21+0000",
+  "seconds": 140.4,
+  "python": "3.13.18",
+  "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.5",
+    "torch": "2.15.0+cu132",
+    "yaml": "6.0.3"
+  },
+  "platform": "Linux-6.18.44-fc-v185-x86_64-with-glibc2.39",
+  "cpu_count": 4,
+  "ci": {}
+}
