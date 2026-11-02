@@ -45,3 +45,21 @@ def test_observation_shape_and_baselines():
         acts = policy(env, obs, env.action_mask())
         assert acts.shape == (3,), name
         assert env.action_mask()[np.arange(3), acts].all(), name
+
+
+def test_several_pads_refill_and_scale():
+    import numpy as np
+
+    from apps.wildfire import scaled_env_cfg
+    from apps.wildfire.env import HOLD, WildfireSwarmEnv
+
+    env = WildfireSwarmEnv(grid_size=16, n_drones=8, pads_per_side=2, seed=0)
+    env.reset(seed=1)
+    assert len(env.pads) == 4 and env._at_base(8, 8) and not env._at_base(5, 5)
+    assert (env._pad_distance()[0] == 0).all()  # every drone starts on a pad
+    env.pos[0] = (9, 9)
+    env.payload[0] = 0
+    env.step(np.full(8, HOLD))
+    assert env.payload[0] == env.max_payload
+    cfg = scaled_env_cfg({"n_drones": 6, "grid_size": 16, "scale_pads": True}, 600)
+    assert cfg["pads_per_side"] == 10 and cfg["grid_size"] == 160 and "base_size" not in cfg

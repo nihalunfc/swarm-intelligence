@@ -1,5 +1,6 @@
 """Training and evaluation loops shared by every swarm application."""
 
+import copy
 import time
 from collections import deque
 
@@ -71,8 +72,78 @@ def collect_demos(app, cfg: dict, n: int, gamma: float, n_step: int, seed: int) 
     return buf
 
 
+class Validator:
+    """Checkpoint selection on the validation split (never on test).
+
+    Every ``train.eval_every`` steps the greedy swarm plays ``eval.val_episodes``
+    validation episodes (seeds from ``eval.val_seed``) and the best weights by
+    ``eval.select_metric`` (default: the return; ``select_mode: min`` for costs)
+    are kept and restored at the end. Off when ``eval_every`` is 0.
+    """
+
+    def __init__(self, app, cfg: dict, log=print):
+        self.app, self.log = app, log
+        vcfg = cfg.get("eval", {})
+        self.every = int(cfg.get("train", {}).get("eval_every", 0))
+        self.env_cfg = {**cfg.get("env", {}), **cfg.get("eval_env", {})}
+        self.episodes, self.seed = int(vcfg.get("val_episodes", 10)), int(vcfg.get("val_seed", 5_000))
+        self.metric = str(vcfg.get("select_metric", "return"))
+        self.sign = -1.0 if str(vcfg.get("select_mode", "max")) == "min" else 1.0
+        self.best, self.best_state, self.history, self.next = -np.inf, None, [], self.every
+
+    def run(self, steps: int, agent) -> None:
+        m = mean_metrics(evaluate_episodes(self.app, self.env_cfg, agent.policy(), self.episodes, self.seed, "val"))
+        self.history.append({"step": steps, **m})
+        if self.sign * m[self.metric] > self.best:
+            self.best, self.best_state = self.sign * m[self.metric], copy.deepcopy(agent.state_dict())
+        self.log(f"validation at {steps:,}: {self.metric} {m[self.metric]:.3f} (best {self.sign * self.best:.3f})")
+
+    def maybe(self, steps: int, agent) -> None:
+        if self.every and steps >= self.next:
+            self.run(steps, agent)
+            self.next += self.every
+
+    def finish(self, steps: int, agent) -> None:
+        if self.every:
+            if not self.history or self.history[-1]["step"] != steps:
+                self.run(steps, agent)
+            agent.load_state_dict(self.best_state)
+        agent.val_history = self.history
+
+
 def train(app, cfg: dict, log=print):
-    """Train one parameter-shared agent on ``num_envs`` environment copies in parallel."""
+    """Train one parameter-shared agent on ``num_envs`` environment copies in parallel.
+
+    ``stages`` (optional) is a curriculum: a list of ``{name, set: [KEY=VALUE, ...]}``
+    overrides applied in turn, each training the same weights further (for
+    example a growing swarm and forest). Validation and checkpoint selection
+    happen in the last stage, which is also the evaluated setting.
+    """
+    if cfg.get("algo", "dqn") == "mappo":
+        from .ppo import train_ppo
+
+        return train_ppo(app, cfg, log=log)
+    stages = cfg.get("stages") or []
+    if not stages:
+        return _train_dqn(app, cfg, log)
+    from .config import apply_overrides
+
+    agent, history = None, []
+    for k, stage in enumerate(stages):
+        scfg = apply_overrides({key: v for key, v in cfg.items() if key != "stages"}, list(stage.get("set", [])))
+        last = k == len(stages) - 1
+        if not last:
+            scfg.setdefault("train", {})["eval_every"] = 0
+            scfg.pop("pretrain", None) if k > 0 else None
+        elif k > 0:
+            scfg.pop("pretrain", None)
+        log(f"curriculum stage {k + 1}/{len(stages)}: {stage.get('name', '')} {' '.join(stage.get('set', []))}")
+        agent, h = _train_dqn(app, scfg, log, agent)
+        history += [{**row, "stage": k + 1} for row in h]
+    return agent, history
+
+
+def _train_dqn(app, cfg: dict, log=print, agent=None):
     from .agents import make_agent  # torch is only needed for training
 
     seed = int(cfg.get("seed", 0))
@@ -88,7 +159,8 @@ def train(app, cfg: dict, log=print):
 
     envs = [app.make_env(cfg.get("env", {}), "train", seed + i) for i in range(n_envs)]
     e0 = envs[0]
-    agent = make_agent(e0, cfg.get("agent", {}), device=cfg.get("device", "cpu"))
+    if agent is None:
+        agent = make_agent(e0, cfg.get("agent", {}), device=cfg.get("device", "cpu"))
     buf = ReplayBuffer(int(tcfg.get("buffer_size", 100_000)), e0.n_agents, e0.obs_dim, e0.n_actions, seed)
     rng = np.random.default_rng(seed)
     nsteps = [NStep(n_step, agent.gamma) for _ in envs]
@@ -114,6 +186,7 @@ def train(app, cfg: dict, log=print):
         demo_weight = float(pcfg.get("demo_weight", 1.0))
         demo_decay = float(pcfg.get("demo_decay_fraction", 0.5)) * total
 
+    validator = Validator(app, cfg, log)
     obs = np.stack([e.reset(seed=seed + i) for i, e in enumerate(envs)])
     returns = np.zeros(n_envs)
     history: list[dict] = []
@@ -145,11 +218,18 @@ def train(app, cfg: dict, log=print):
             mean_ret = np.mean(recent) if recent else float("nan")
             log(f"step {steps:>8,} | eps {eps:.2f} | loss {loss:.4f} | return(last 20) {mean_ret:9.2f} | {time.time() - t0:5.0f}s")
             next_log += log_every
+        validator.maybe(steps, agent)
+    validator.finish(steps, agent)
     return agent, history
 
 
-def evaluate(app, env_cfg: dict, policy, episodes: int = 1, seed: int = 10_000, split: str = "test") -> dict:
-    """Run ``policy(env, obs, mask)`` greedily and average the episode metrics."""
+def evaluate_episodes(app, env_cfg: dict, policy, episodes: int = 1, seed: int = 10_000,
+                      split: str = "test") -> list[dict]:
+    """Run ``policy(env, obs, mask)`` greedily; one metrics row per episode.
+
+    Episode ``k`` always starts from ``seed + k``, so every policy (and every
+    training seed of the swarm) plays exactly the same episodes: comparisons are paired.
+    """
     env = app.make_env(env_cfg, split, seed)
     rows = []
     for ep in range(episodes):
@@ -160,6 +240,15 @@ def evaluate(app, env_cfg: dict, policy, episodes: int = 1, seed: int = 10_000, 
             obs, r, term, trunc, _ = env.step(actions)
             total += r
             done = term or trunc
-        rows.append({"return": total, **env.episode_metrics()})
-    keys = [k for k in rows[0] if isinstance(rows[0][k], (int, float))]
-    return {k: float(np.mean([row[k] for row in rows])) for k in keys} | {"episodes": episodes}
+        metrics = {"return": total, **env.episode_metrics()}
+        rows.append({k: float(v) for k, v in metrics.items() if isinstance(v, (int, float, np.number))})
+    return rows
+
+
+def mean_metrics(rows: list[dict]) -> dict:
+    return {k: float(np.mean([row[k] for row in rows])) for k in rows[0]} | {"episodes": len(rows)}
+
+
+def evaluate(app, env_cfg: dict, policy, episodes: int = 1, seed: int = 10_000, split: str = "test") -> dict:
+    """Run ``policy(env, obs, mask)`` greedily and average the episode metrics."""
+    return mean_metrics(evaluate_episodes(app, env_cfg, policy, episodes, seed, split))

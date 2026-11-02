@@ -53,7 +53,7 @@ def cmd_benchmark(args):
 def cmd_replay(args):
     import torch
 
-    from .agents import make_agent
+    from .benchmark import load_agent
 
     run = Path(args.run)
     cfg = load_config(run / "config.yaml", args.set)
@@ -61,9 +61,7 @@ def cmd_replay(args):
     if not hasattr(app, "export_replay"):
         raise SystemExit(f"App '{cfg['app']}' has no replay export")
     state = torch.load(run / "model.pt", map_location="cpu", weights_only=False)
-    probe = app.make_env(cfg["env"], "train", 0)
-    agent = make_agent(probe, state["cfg"])
-    agent.load_state_dict(state)
+    agent = load_agent(app.make_env(cfg["env"], "train", 0), state)
     policies = {"swarm (trained)": agent.policy(), **app.BASELINES}
     app.export_replay(eval_env_cfg(cfg), policies, args.output, episodes=args.episodes)
     print(f"Wrote {args.output}")
@@ -78,6 +76,64 @@ def cmd_scale(args):
     out = Path(args.out) / f"scale-{cfg['app']}-{time.strftime('%Y%m%d-%H%M%S')}"
     print(write(rows, metric, out))
     print(f"Saved to {out}")
+
+
+def cmd_seeds(args):
+    """Train the same config with several seeds (in parallel processes), then aggregate."""
+    import os
+    import subprocess
+    import sys
+
+    from . import aggregate
+
+    cfg = load_config(args.config, args.set)
+    label = cfg.get("label") or Path(args.config).stem
+    out = Path(args.out) / f"seeds-{label}-{time.strftime('%Y%m%d-%H%M%S')}"
+    out.mkdir(parents=True, exist_ok=True)
+    env = {**os.environ, "OMP_NUM_THREADS": str(args.threads), "MKL_NUM_THREADS": str(args.threads)}
+    procs, done = [], []
+    for seed in args.seeds:
+        cmd = [sys.executable, "-m", "swarm.cli", "train", "--config", args.config, "--out", str(out / f"seed-{seed}"),
+               "--set", *args.set, f"seed={seed}", f"label={label}"]
+        while len([p for p in procs if p.poll() is None]) >= args.jobs:
+            time.sleep(2)
+        log = open(out / f"seed-{seed}.log", "w")
+        procs.append(subprocess.Popen(cmd, stdout=log, stderr=subprocess.STDOUT, env=env))
+        print(f"started seed {seed} -> {out / f'seed-{seed}.log'}")
+    for p in procs:
+        done.append(p.wait())
+    if any(done):
+        raise SystemExit(f"{sum(c != 0 for c in done)} seed run(s) failed; see the logs in {out}")
+    print(aggregate.write(aggregate.summarize(aggregate.load_runs([out])), out / "summary"))
+    print(f"Saved to {out}")
+
+
+def cmd_aggregate(args):
+    from . import aggregate
+
+    runs = aggregate.load_runs(args.runs)
+    md = aggregate.write(aggregate.summarize(runs, args.metrics), Path(args.output))
+    if args.compare_to:
+        metrics = args.metrics or get_app(runs[0]["app"]).KEY_METRICS[:2]
+        table = aggregate.compare_variants(runs, args.compare_to, metrics)
+        Path(args.output).with_name(Path(args.output).name + "-variants.md").write_text(table)
+        md += "\n" + table
+    print(md)
+
+
+def cmd_robustness(args):
+    import yaml
+
+    from . import robustness
+
+    runs = sorted({p.parent for d in args.runs for p in Path(d).rglob("model.pt")})
+    if not runs:
+        raise SystemExit("no trained runs (model.pt) under: " + ", ".join(args.runs))
+    app = yaml.safe_load((runs[0] / "config.yaml").read_text())["app"]
+    scenarios = yaml.safe_load(Path(args.scenarios).read_text())[args.scenario_set or app]
+    res = robustness.run(runs, scenarios, args.episodes)
+    metric = args.metric or get_app(app).KEY_METRICS[0]
+    print(robustness.write(res, metric, Path(args.output)))
 
 
 def main(argv=None):
@@ -96,7 +152,7 @@ def main(argv=None):
     e.set_defaults(fn=cmd_evaluate)
 
     b = sub.add_parser("benchmark", help="train and compare every app, one results table")
-    b.add_argument("--apps", nargs="+", default=list(APPS), choices=list(APPS))
+    b.add_argument("--apps", nargs="+", default=[a for a in APPS if a not in ("citylearn", "vmas")], choices=list(APPS))
     b.add_argument("--set", nargs="*", default=[], metavar="KEY=VALUE")
     b.add_argument("--out", default=str(REPO / "runs"))
     b.set_defaults(fn=cmd_benchmark)
@@ -115,6 +171,31 @@ def main(argv=None):
     s.add_argument("--metric", default=None, help="results column to tabulate (default: the app's first)")
     s.add_argument("--out", default=str(REPO / "runs"))
     s.set_defaults(fn=cmd_scale)
+
+    sd = sub.add_parser("seeds", help="train one config with several seeds and report confidence intervals")
+    sd.add_argument("--config", required=True)
+    sd.add_argument("--seeds", nargs="+", type=int, default=[0, 1, 2, 3, 4])
+    sd.add_argument("--jobs", type=int, default=2, help="seeds trained at the same time")
+    sd.add_argument("--threads", type=int, default=2, help="CPU threads per seed")
+    sd.add_argument("--set", nargs="*", default=[], metavar="KEY=VALUE")
+    sd.add_argument("--out", default=str(REPO / "runs"))
+    sd.set_defaults(fn=cmd_seeds)
+
+    ag = sub.add_parser("aggregate", help="combine seed runs into one table with CIs and paired tests")
+    ag.add_argument("runs", nargs="+", help="run directories (searched recursively for episodes.json)")
+    ag.add_argument("--output", required=True, help="output path without extension (.md and .json are written)")
+    ag.add_argument("--metrics", nargs="*", default=None)
+    ag.add_argument("--compare-to", default=None, help="label of the variant every other label is compared with")
+    ag.set_defaults(fn=cmd_aggregate)
+
+    rb = sub.add_parser("robustness", help="evaluate trained seeds and rules under failures, noise and new conditions")
+    rb.add_argument("runs", nargs="+", help="directories searched for trained runs (model.pt)")
+    rb.add_argument("--scenarios", default=str(REPO / "experiments" / "robustness.yaml"))
+    rb.add_argument("--scenario-set", default=None, help="key in the scenarios file (default: the app name)")
+    rb.add_argument("--episodes", type=int, default=None)
+    rb.add_argument("--metric", default=None)
+    rb.add_argument("--output", required=True)
+    rb.set_defaults(fn=cmd_robustness)
 
     args = p.parse_args(argv)
     args.fn(args)

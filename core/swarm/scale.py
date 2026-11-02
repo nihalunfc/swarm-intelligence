@@ -52,7 +52,7 @@ def scale_study(run: str | Path, sizes: list[int], episodes: int = 5, batch_size
         ecfg = app.scaled_env_cfg(eval_env_cfg(cfg), n)
         env = app.make_env(ecfg, "test", seed)
         acfg = dict(state["cfg"])
-        if acfg.get("agent_id"):
+        if acfg.get("agent_id") and not acfg.get("agent_id_count"):
             # Agent ids do not transfer to a new swarm size: reuse the trained ids cyclically.
             acfg["agent_id_count"] = trained_n
         agent = make_agent(env, acfg)

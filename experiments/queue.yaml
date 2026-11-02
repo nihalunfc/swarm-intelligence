@@ -1,0 +1,12 @@
+# Experiments to run on GitHub Actions (.github/workflows/experiments.yml).
+#
+# Pushing a change to this file starts one job per (experiment, seed), each on
+# its own runner (up to 6 hours), so long training no longer depends on a
+# laptop or chat session staying awake. A final job aggregates the seeds into
+# results/<label>.md and .json (confidence intervals, paired tests against the
+# rules) and commits them, with each run's config, manifest and per-episode
+# metrics under results/runs/<label>/, back to the same branch.
+#
+# Fields: config (required), label (default: config file name), seeds
+# (default 0-4), set (extra KEY=VALUE overrides, as for `swarm train --set`).
+experiments: []

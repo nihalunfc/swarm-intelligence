@@ -7,11 +7,14 @@ name = "swarm-intelligence"
 version = "0.1.0"
 description = "Decentralized swarm engine and its energy, wildfire and hotel applications"
 requires-python = ">=3.10"
-dependencies = ["numpy>=1.26", "pandas>=2.0", "pyyaml>=6.0", "torch>=2.2"]
+dependencies = ["numpy>=1.26", "osqp>=0.6", "pandas>=2.0", "pyyaml>=6.0", "scipy>=1.11", "torch>=2.2"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
 hotel = ["pulp>=3.0,<4.0", "openpyxl>=3.1", "python-dateutil>=2.9"]
+research = ["mlflow>=2.10"]
+citylearn = ["citylearn==2.3.1"]
+vmas = ["vmas>=1.4"]
 
 [project.scripts]
 swarm = "swarm.cli:main"
@@ -26,10 +29,12 @@ apps = "apps"
 "apps.hotel.housekeeping" = "apps/hotel/housekeeping"
 "apps.hotel.relocation" = "apps/hotel/relocation"
 "apps.hotel.shifts" = "apps/hotel/shifts"
+"apps.citylearn" = "apps/citylearn"
+"apps.vmas" = "apps/vmas"
 
 [tool.setuptools]
 packages = ["swarm", "apps", "apps.energy", "apps.wildfire", "apps.hotel", "apps.hotel.energy",
-            "apps.hotel.housekeeping", "apps.hotel.relocation", "apps.hotel.shifts"]
+            "apps.hotel.housekeeping", "apps.hotel.relocation", "apps.hotel.shifts", "apps.citylearn", "apps.vmas"]
 
 [tool.setuptools.package-data]
 "apps.energy" = ["data/sample/*.csv"]

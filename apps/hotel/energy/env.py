@@ -24,10 +24,10 @@ EARLY, NORMAL, SHED = 0, 1, 2
 _CACHE: dict = {}
 
 
-def _season(path, months, test_weeks):
+def _season(path, months, test_weeks, val_weeks=False):
     from apps.energy import data as D  # the grid signal and weather come from the energy pipeline
 
-    key = (str(path), tuple(months), test_weeks)
+    key = (str(path), tuple(months), test_weeks, bool(val_weeks))
     if key not in _CACHE:
         df = D.load(path)
         df = df[df.timestamp.dt.month.isin(months)].copy()
@@ -37,6 +37,12 @@ def _season(path, months, test_weeks):
         week = df.timestamp.dt.isocalendar().week.to_numpy()
         is_test = (week % 2 == 1) if test_weeks == "odd" else (week % 2 == 0)
         train, test = df[~is_test].reset_index(drop=True), df[is_test].reset_index(drop=True)
+        val = None
+        if val_weeks:
+            # Alternate the held-out weeks: every other one validates, the rest are the final test.
+            tw = test.timestamp.dt.isocalendar().week.to_numpy()
+            first = np.isin(tw, np.unique(tw)[::2])
+            val, test = test[first].reset_index(drop=True), test[~first].reset_index(drop=True)
         daily_max = train.groupby(train.timestamp.dt.date)["load_mw"].max()
         stats = {c: (train[c].mean(), train[c].std() + 1e-6) for c in ["load_mw", "temp_c"]}
         stats["day_max"] = (float(daily_max.quantile(0.8)), float(daily_max.std() + 1e-6))
@@ -45,12 +51,13 @@ def _season(path, months, test_weeks):
         counts = np.bincount(top_hours, minlength=24)
         start = int(np.argmax([counts[h:h + 4].sum() for h in range(21)]))
         stats["peak_window"] = (start, start + 4)
-        _CACHE[key] = (train, test, stats)
+        _CACHE[key] = (train, val, test, stats)
     return _CACHE[key]
 
 
 class HotelEnergySwarmEnv(SwarmEnv):
     n_actions = 3
+    null_action = NORMAL  # a failed controller leaves the equipment on its normal schedule
 
     def __init__(self, frame: pd.DataFrame, stats: dict, hotels_csv=None, episode_days=1, peak_hours=40,
                  ga_cost_per_kw_year=450.0, energy_price_kwh=0.11, energy_weight=0.02, miss_penalty=2.0, forecast_noise=0.02, seed=0):
@@ -209,9 +216,11 @@ class HotelEnergySwarmEnv(SwarmEnv):
 
 def make_env(env_cfg: dict, split: str, seed: int) -> HotelEnergySwarmEnv:
     cfg = dict(env_cfg)
-    train, test, stats = _season(cfg.pop("data_path", None), cfg.pop("months", [6, 7, 8, 9]),
-                                 cfg.pop("test_weeks", "odd"))
-    frame = train if split == "train" else test
+    train, val, test, stats = _season(cfg.pop("data_path", None), cfg.pop("months", [6, 7, 8, 9]),
+                                      cfg.pop("test_weeks", "odd"), cfg.pop("val_weeks", False))
+    if split == "val" and val is None:
+        raise ValueError("hotel-energy: set env.val_weeks: true to evaluate on validation weeks")
+    frame = {"train": train, "val": val}.get(split, test)
     if split != "train":
         cfg["episode_days"] = cfg.get("eval_episode_days")  # None = every held-out day in one run
     cfg.pop("eval_episode_days", None)

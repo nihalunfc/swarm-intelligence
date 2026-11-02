@@ -40,6 +40,9 @@ train:
   eps_end: 0.02
   eps_fraction: 0.3
   log_every: 10000
+  eval_every: 40000          # keep the checkpoint that does best on validation fires
 eval:
   episodes: 50
+  val_episodes: 20           # validation fires use seeds 5000+, test fires 10000+
+  select_metric: forest_saved_pct
   seed: 10000                # unseen fires: training uses seeds 0-7 streams

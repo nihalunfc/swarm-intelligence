@@ -4,7 +4,8 @@ app: energy
 seed: 0
 env:
   data_path: null            # null = apps/energy/data/sample/ercot_nrel_2020.csv
-  test_start: "2020-10-01"   # Jan-Sep trains, Oct-Dec is held out for evaluation
+  val_start: "2020-09-01"    # Jan-Aug trains, September validates (settings and checkpoints)
+  test_start: "2020-10-01"   # Oct-Dec is the final test, used only for reported numbers
   n_agents: 10
   capacity_mwh: 400          # per battery
   max_rate_mw: 100           # per battery: 10 x 100 MW = 1 GW fleet, 4-hour batteries
@@ -30,5 +31,7 @@ train:
   eps_end: 0.02
   eps_fraction: 0.5
   log_every: 10000
+  eval_every: 10000          # keep the checkpoint that does best on validation
 eval:
   episodes: 1
+  val_episodes: 1

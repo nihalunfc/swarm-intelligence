@@ -37,6 +37,7 @@ class HousekeepingSwarmEnv(SwarmEnv):
         self.K = int(candidates)
         self.n_actions = self.K + 1  # clean candidate k, or wait
         self.WAIT = self.K
+        self.null_action = self.WAIT  # an absent attendant picks no new rooms (robustness tests)
         self.obs_dim = 6 + 5 * self.K
         self.n_steps = (DAY_END - DAY_START) // STEP_MIN
         self.rng = np.random.default_rng(seed)
