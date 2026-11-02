@@ -65,7 +65,12 @@ class PerturbedEnv(SwarmEnv):
 
     def step(self, actions):
         a = np.array(actions, copy=True)
-        a[self._down()] = self.inner.null_action
+        down = self._down()
+        a[down] = self.inner.null_action
+        override = getattr(self.inner, "override", None)  # rules that assign work by side effect
+        if isinstance(override, dict):
+            for i in np.nonzero(down)[0]:
+                override.pop(int(i), None)
         obs, r, term, trunc, info = self.inner.step(a)
         self.t += 1
         return self._noisy(obs), r, term, trunc, info
