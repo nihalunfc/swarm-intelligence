@@ -1,0 +1,175 @@
+\documentclass[11pt]{article}
+
+% arXiv-friendly preamble: standard packages only, compiles with pdflatex + bibtex.
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage[section]{placeins}
+\usepackage{natbib}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+
+% Drafting marks. Set \drafttrue to \draftfalse before submission: every \todo then
+% becomes a build error, so nothing unfinished reaches arXiv.
+\newif\ifdraft \drafttrue
+\ifdraft
+  \newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\else
+  \newcommand{\todo}[1]{\errmessage{Unresolved TODO: #1}}
+\fi
+
+\newcommand{\repo}{\url{https://github.com/nihalunfc/swarm-intelligence}}
+
+\title{When Does a Learned Swarm Beat the Rule?\\
+\large An Honest Multi-Domain Study of Parameter-Shared and Residual Multi-Agent Reinforcement Learning}
+\author{Nihal}
+\date{November 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Multi-agent reinforcement learning (MARL) is usually compared with other learned methods, which leaves open whether it beats the hand-written rules that operators already use. We run one parameter-shared, value-decomposed swarm engine, without per-domain algorithm changes, on four problems: grid-battery peak shaving on real ERCOT load, drone wildfire suppression, hotel housekeeping and hotel peak-hour energy, plus the CityLearn and VMAS benchmarks. Every method is trained with multiple seeds and compared on held-out test episodes with the strongest simple rule we could write, MAPPO, and, where tractable, a perfect-foresight bound, using paired hierarchical-bootstrap tests. Learned swarms beat the rules only where the rules are structurally limited. On grid batteries the swarm reduces load spread by 10.8\% [10.6, 11.0] against 9.1\% for the best rule and 6.8\% for a forecast-driven MPC, and on CityLearn it scores 0.96 against 1.03 for the reference rule controller. Where a simple rule is already near the bound, nothing learned beats it. A residual swarm, which starts as an exact copy of the rule and learns when to override it, ties the rule in housekeeping and wildfire ($-0.3$ points, $p=0.81$) and is never significantly worse. A hand-written coordination rule outperforms every learned drone swarm, and learned drone swarms lose ground as the swarm grows beyond its training size, while the rule does not. We release the engine, configurations, per-seed episodes and the scripts that generate every table.
+\end{abstract}
+
+\section{Introduction}
+
+Many operational problems are decentralised. Each battery, drone or staff member sees only its surroundings and must act without a central planner. MARL promises controllers that coordinate such agents, and parameter sharing lets one small network drive any number of them \citep{christianos2021selective}. In deployed settings, however, the alternative to MARL is rarely another MARL method. It is a simple rule that an operator wrote, such as ``discharge in proportion to load'' or ``fly to the nearest fire''. Benchmarks such as CityLearn \citep{vazquez2020citylearn} and recent multi-KPI studies \citep{khouja2026citylearnmarl} mostly compare learned methods with each other, which leaves the practical question open.
+
+We ask \emph{when a learned swarm beats the rule}. To answer it we fix the learner and vary the domain. One engine runs every domain through the same environment interface with the same shared-weight agent and value decomposition \citep{sunehag2018vdn}. Each domain is evaluated against its best simple rule, a standard MARL baseline (MAPPO, \citealp{yu2022mappo}) and, where we can compute one, a perfect-foresight bound. Every result is a mean over independently trained seeds on held-out test episodes, with paired confidence intervals \citep{henderson2018matters,agarwal2021rliable}. We report results where learning loses as fully as those where it wins.
+
+\paragraph{Contributions.}
+\begin{enumerate}
+  \item An evaluation across four application domains and two community benchmarks, with rule, MAPPO and optimum references, held-out test splits and seed-level statistics (Sections~\ref{sec:protocol}--\ref{sec:results}).
+  \item Evidence that a learned swarm wins when the rule's structure cannot express the good policy (keeping battery charge for the exact peak hour), and does not win when the rule is near the bound (Section~\ref{sec:results}).
+  \item A residual swarm that starts as an exact copy of the rule \citep{silver2018residual,johannink2019residual}. It is never significantly worse than the rule, but in our domains it never beats it either (Section~\ref{sec:results}).
+  \item Robustness and scale studies: graceful degradation under agent failure, a sensitivity of value-based swarms to sensor noise that MAPPO does not share, and a failure of learned drone swarms to scale beyond their training size (Section~\ref{sec:robust}).
+\end{enumerate}
+
+\section{Related work}
+
+\paragraph{Cooperative MARL.} Value decomposition sums per-agent values into a team value (VDN, \citealp{sunehag2018vdn}) or mixes them monotonically (QMIX, \citealp{rashid2018qmix}). MAPPO shows that PPO with a centralised critic is a strong baseline \citep{yu2022mappo}. Parameter sharing makes the network size independent of the number of agents \citep{christianos2021selective}. We use VDN with shared weights by default and report QMIX, independent learners and MAPPO as variants.
+
+\paragraph{Residual and rule-guided learning.} Residual policy learning adds a learned correction to a fixed controller \citep{silver2018residual,johannink2019residual}. Recent work applies residual learning to safety-critical multi-agent decisions \citep{residualsafe2025}. Deep Q-learning from demonstrations pre-trains a Q-network on expert moves with a large-margin loss \citep{hester2018dqfd}. We use the domain's rule both as the residual base and as the demonstrator.
+
+\paragraph{Energy.} CityLearn standardises multi-agent demand response \citep{vazquez2020citylearn}. \citet{khouja2026citylearnmarl} benchmark six MARL variants on it with seeds, bootstrap intervals and robustness to agent removal, but without rule or optimum baselines. MPC-based RL has been applied to multi-agent battery storage \citep{mpcrlbattery2021}. We add rule, MPC and perfect-foresight references, and we report CityLearn against its own rule-based controllers.
+
+\paragraph{Wildfire.} HIVEX includes multi-agent wildfire resource-management and aerial-suppression tasks \citep{siedler2025hivex}, and cellular-automaton models are used for autonomous wildfire response \citep{warpca2024}. Our forest is a stochastic cellular automaton with wind, burn-out and refill pads. We test it from 6 to 1{,}000 drones.
+
+\paragraph{Hotel operations.} We found no MARL work on hotel housekeeping, peak-hour energy or shift exchange. The nearest work is general multi-agent scheduling with RL \citep{flexsched2022}. We provide mixed-integer optima or lower bounds as references.
+
+\section{Method}
+
+\subsection{Swarm environment interface}
+Each domain implements one interface: \texttt{reset}, \texttt{step}, \texttt{action\_mask} and \texttt{episode\_metrics}. At each step agent $i$ receives a local observation $o_i$ and a mask of legal actions. The environment returns a team reward $r$, optionally with small per-agent shaping terms.
+
+\subsection{Shared-weight agent with value decomposition}
+All agents use one network $Q_\theta(o_i, a)$, optionally with a one-hot agent id. The actions of all agents in all parallel environment copies are chosen in one batched forward pass. The team value is $Q_{\text{tot}} = \sum_i Q_\theta(o_i, a_i)$ (VDN). It is trained with $n$-step double-Q targets \citep{vanhasselt2016double}, a soft-updated target network and action masks. Independent Q-learning and a QMIX mixer are configuration switches. MAPPO uses a shared actor and a pooled centralised critic.
+
+\subsection{Learning from the rule and the residual swarm}
+Let $\pi_{\text{rule}}$ be the domain's best rule. \emph{Imitation, then RL} records transitions from $\pi_{\text{rule}}$, pre-trains with a large-margin loss \citep{hester2018dqfd}, and then fine-tunes with RL while the demonstration loss fades. In the \emph{residual swarm}, each agent observes $o_i$ together with the rule's suggested action $\pi_{\text{rule}}(o_i)$. It chooses either one of its normal actions (an override) or an extra action, \emph{follow the rule}. Pre-training on ``follow the rule'' makes the untrained swarm behave exactly like $\pi_{\text{rule}}$, so RL only has to learn when deviating pays. Every deviation is an explicit, logged decision, which makes the policy easy to audit.
+
+\subsection{Evaluation protocol}\label{sec:protocol}
+Each domain has disjoint train, validation and test splits. For energy these are January to August, September, and October to December 2020. For generated domains, episode seeds start at 0, 5000 and 10000 respectively. Checkpoints and settings are chosen on validation, and the test split is used only for reported numbers. Each method is trained with independent seeds: 10 for energy, 5 for the main methods elsewhere and 3 for variants. All seeds and all rules play the same test episodes. We report means with 95\% hierarchical bootstrap intervals (5{,}000 resamples), which resample training seeds and, jointly, the shared test episodes \citep{agarwal2021rliable}. Comparisons with a rule are paired differences on the same episodes, with a two-sided bootstrap $p$-value from the same resamples, so $p<0.05$ exactly when the interval excludes zero.
+
+\section{Domains}
+
+\paragraph{Grid batteries.} Ten batteries (100\,MW / 400\,MWh each, 90\% round-trip efficiency) shave ERCOT COAST native load for 2020, joined with NREL NSRDB weather for Houston. Each agent chooses to charge, hold or discharge every hour. The rules are a threshold rule and a load-proportional rule. The references are an MPC controller on a 24-hour seasonal-naive forecast and perfect-foresight programs that minimise the peak (LP) or the squared deviation from mean load (QP).
+
+\paragraph{Wildfire.} Six drones with a payload of 6 and a view radius of 3 cover a $16\times16$ forest. Two random ignitions spread with probability 0.12 (0.30 downwind) and burn out after 3 to 6 ticks. Drones move three cells per fire tick, drop retardant or hold, and refill on a launch pad. The rule flies to the nearest burning cell and drops. A second action space lets each drone choose \emph{which} fire to fight. In it, a hand-written \emph{spread rule} takes the nearest fire that no other drone is closer to.
+
+\paragraph{Hotel housekeeping.} Eight attendants clean the departures of a 300-room, 10-floor hotel from 08:00 to 17:00 in 10-minute steps. Each chooses among six candidate rooms. The objective is guest waiting time, with paid early check-ins weighted three times. The rule cleans the room needed soonest. The reference is a perfect-foresight MILP lower bound that ignores elevator time.
+
+\paragraph{Hotel peak energy, shifts and relocation.} Sixteen equipment agents shift load away from the grid's five annual peak hours, where an Ontario-style global-adjustment charge dominates the bill. Open shifts across five properties are filled by a contract-net market under Ontario Employment Standards Act limits. Guests on oversold nights are relocated by an auction. The last two are deterministic market mechanisms, not learned, and are compared with simple rules and an exact optimum.
+
+\paragraph{Benchmarks.} To check the engine we run it unchanged on CityLearn Challenge 2022 (17 homes) and on VMAS navigation \citep{bettini2022vmas} with 4 robots.
+
+Forests and hotels are synthetic, and their generators are released.
+
+\section{Results}\label{sec:results}
+
+\input{tables/energy}
+\input{tables/wildfire}
+\input{tables/housekeeping}
+
+\paragraph{Grid batteries: the swarm beats every rule.} The VDN swarm reduces load spread by 10.8\% [10.6, 11.0], against 9.1\% for the proportional rule, 6.8\% for MPC and 5.0\% for the threshold rule ($p<0.001$ each; Table~\ref{tab:energy}). The rules empty the batteries in the hours before the evening peak. The swarm learns to keep charge for the peak hour itself. It closes 74\% of the gap between doing nothing and the perfect-foresight bound on its own objective (14.7\%), and 31\% of the gap between the best rule and that bound. Its peak cut varies by seed, 704\,MW [547, 857] against a bound of 949\,MW set by the fleet's power after losses. QMIX gives a similar result. Independent learners, 3-step returns and MAPPO keep less of the peak. MAPPO is not significantly better than the proportional rule on spread. Choosing checkpoints on validation does not change spread but helps keep the peak cut (704 vs 483\,MW, $p=0.11$).
+
+\paragraph{Wildfire: nothing learned beats the rule.} The nearest-fire rule saves 90.1\% of the forest (Table~\ref{tab:wildfire}). The residual swarm ties it ($-0.3$ points [$-3.3$, 2.5], $p=0.81$) with fewer burning cells at the peak. Learning from the rule first is the best non-residual recipe at 87.2\%. Learning from scratch reaches 79.2\%, MAPPO 72.1\%, and neighbour messages lower the imitation swarm to 82.1\%. The idea that helps is hand-written. When drones choose which fire to fight, the spread rule saves 91.2\%. A swarm trained in that action space reaches 88.0\%, level with that space's nearest-fire rule (88.9\%, $p=0.58$) and below the spread rule ($p=0.004$).
+
+\paragraph{Housekeeping: the rule is near the bound.} Every learned swarm cuts guest waiting about five-fold against floor order (Table~\ref{tab:housekeeping}). None beats the soonest-needed rule at 21.5\,h/day, and the MILP lower bound leaves at most 3.5\,h/day to be won. The residual swarm learns that overriding the rule does not pay and reproduces it exactly. MAPPO ties the rule ($+0.07$\,h, $p=0.43$). VDN, QMIX and independent learners are significantly worse by 0.3 to 0.8\,h.
+
+\input{tables/hotel-energy}
+\input{tables/shifts}
+\input{tables/relocation}
+
+\paragraph{Hotel peak energy and markets.} With 5 seeds, the learned peak-energy swarm saves \$211k per year [166k, 250k]. That is \$40k less than the peak-alert rule ($p=0.03$; Table~\ref{tab:hotel-energy}), because the rule already sheds load at all five peaks. An earlier single-seed run had suggested the opposite, which shows why multiple seeds matter. The deterministic market swarms come within 3\% of the optimum on shift cost and 5\% on relocation value, ahead of the simple rules (Tables~\ref{tab:shifts} and~\ref{tab:relocation}).
+
+\input{tables/citylearn}
+\input{tables/vmas}
+
+\paragraph{External benchmarks.} On CityLearn Challenge 2022 the swarm's district score is 0.96 [0.95, 0.97], against 1.03 for CityLearn's OptimizedRBC and 1.13 for its BasicRBC (Table~\ref{tab:citylearn}). It cuts cost by 8\% and the average daily peak by 15\% relative to no battery control. On VMAS navigation the swarm reaches 91\% of goals with 0.07 collisions per episode, while the go-to-goal rule reaches 98\% with 16 collisions (Table~\ref{tab:vmas}). Both results suggest the engine learns sensible policies on tasks it was not designed for.
+
+\section{Robustness and scale}\label{sec:robust}
+
+\input{tables/robust-energy}
+\input{tables/robust-housekeeping}
+\input{tables/robust-wildfire}
+
+No policy is retrained for these tests. A failed agent takes the domain's null action from the failure time on, and the other agents are not told.
+
+\paragraph{Agent failure is handled gracefully.} With 30\% of batteries failing mid-period, the energy swarm still reduces spread by 10.0\%, more than any rule with all of its batteries working (Table~\ref{tab:robust-energy}). In wildfire, every policy keeps at least 93\% of its result with half the drones failed (Table~\ref{tab:robust-wildfire}). In housekeeping, the learned swarm and the rules degrade in proportion as attendants leave or the day gets busier (Table~\ref{tab:robust-housekeeping}).
+
+\paragraph{Value-based swarms are sensitive to sensor noise.} With Gaussian observation noise of $\sigma=0.3$, the imitation swarm falls from 87\% to 44\% forest saved and the residual swarm from 90\% to 64\%. MAPPO is unaffected (72\% in every noise setting). The rules read the true state in our simulator, so this comparison favours them. A deployed rule would face the same sensors.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{semilogxaxis}[
+  width=0.7\linewidth, height=5.2cm,
+  xlabel={Drones}, ylabel={Forest saved (\%)},
+  xtick={6,24,100,1000}, xticklabels={6,24,100,1{,}000},
+  ymin=0, ymax=100, legend pos=south west, legend style={font=\small, draw=none, fill=none},
+  grid=major, grid style={gray!20}]
+\addplot[black, thick, mark=square*] table[x=n, y=rule] {figures/scale.dat};
+\addplot[blue!70!black, thick, mark=*, error bars/.cd, y dir=both, y explicit]
+  table[x=n, y=swarm, y error plus expr=\thisrow{swarm_hi}-\thisrow{swarm}, y error minus expr=\thisrow{swarm}-\thisrow{swarm_lo}] {figures/scale.dat};
+\addplot[orange!80!black, thick, mark=triangle*, error bars/.cd, y dir=both, y explicit]
+  table[x=n, y=curriculum, y error plus expr=\thisrow{curriculum_hi}-\thisrow{curriculum}, y error minus expr=\thisrow{curriculum}-\thisrow{curriculum_lo}] {figures/scale.dat};
+\legend{{Nearest-fire rule},{Swarm trained with 6 drones},{Swarm with 6--24 drone curriculum}}
+\end{semilogxaxis}
+\end{tikzpicture}
+\caption{Wildfire scale with launch pads tiling the forest. Each model runs unchanged at every size; error bars are 95\% intervals over 3 training seeds.}
+\label{fig:scale}
+\end{figure}
+
+\input{tables/compute}
+
+\paragraph{Learned drone swarms do not scale.} One network runs unchanged at any swarm size with the same parameters, and choosing actions for 1{,}000 drones takes 2.7\,ms on one CPU core (Table~\ref{tab:compute}). With a single corner launch pad, refill trips dominated at large sizes, so we tile the forest with pads. The nearest-fire rule then saves 86 to 92\% of the forest at every size (Figure~\ref{fig:scale}). The swarm trained with 6 drones matches the rule at its training size (90.5\%) but falls to 82.6\%, 65.9\% and 47.9\% at 24, 100 and 1{,}000 drones. A curriculum from 6 to 24 drones was worse at every size. The battery swarm keeps its peak cut at 10, 100 and 1{,}000 agents, but the fleet's total power stays 1\,GW. This shows stable coordination, not added benefit.
+
+\section{Discussion}
+
+Across domains, one pattern explains our results. A learned swarm helps when the best simple rule cannot express the good policy. In energy, rules that react to the current load cannot hold charge for a peak that arrives hours later, but a learned value function can. When the rule's structure already matches the problem, as in nearest-fire suppression or soonest-needed cleaning, learning only adds variance. The residual swarm makes this trade-off explicit. It costs nothing where the rule is good, because it can always follow the rule. It has not yet found improvements where we measured none to find: in housekeeping, the bound leaves at most 3.5\,h/day.
+
+For practitioners, this suggests a simple order of work. First write the best rule and compute a bound. Then use learning where the gap between them is large and the rule's structure is the bottleneck. Our wildfire results also show that thinking about coordination by hand (the spread rule) can beat learning it.
+
+\section{Limitations}
+Energy results use one year of one ERCOT zone. Multi-year data and a learned load forecast are left for future work. Forests and hotels are synthetic, so absolute numbers (dollars, hours) depend on the generators' assumptions. The perfect-foresight references know the future and act continuously, so they are bounds, not deployable controllers. Several variants use 3 seeds, which leaves wide intervals. In our simulator the rules read the true state, which flatters them under sensor noise. No policy has been tested on hardware or with people.
+
+\section{Conclusion}
+A learned swarm beat hand-written rules where the rules' structure was the bottleneck: grid batteries and CityLearn. It did not beat them where a simple rule was near the bound: wildfire and housekeeping. Starting from the rule and learning only when to override it removes the downside, but it did not find an upside in those domains. Making learned swarms scale beyond their training size, and robust to noisy sensors, are the open problems this study points to.
+
+\section*{Code and data availability}
+Code, configurations, per-seed results and the scripts that generate every table and figure in this paper are available at \repo{} under the MIT license. \todo{the repository must be public, or a public copy made, before submission.}
+
+\section*{Acknowledgements}
+The author used AI tools (Claude, Claude Code, Antigravity and Gemini) for software development and drafting. The author designed the study, checked all results and takes full responsibility for the content.
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\end{document}
