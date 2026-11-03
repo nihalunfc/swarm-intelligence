@@ -2,7 +2,7 @@
 
 arXiv preprint: *When Does a Learned Swarm Beat the Rule? Residual Multi-Agent Reinforcement Learning for Grid Batteries, Wildfire Drones and Hotel Operations*. Author: Nihal.
 
-Every table is generated from [`../results/`](../results), so re-running an experiment and rebuilding updates the paper.
+Every table and the scale figure are generated from [`../results/`](../results) by `make_tables.py`, so re-running an experiment and rebuilding updates the paper.
 
 ```bash
 sudo apt-get install texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended
@@ -14,7 +14,7 @@ CI builds the PDF on every pull request and keeps it as a downloadable artifact 
 
 ## Before submitting
 
-- [ ] Multi-seed results from the research-grade upgrade are in `results/` and wired into `make_tables.py`
+- [x] Multi-seed results from the research-grade upgrade are in `results/` and wired into `make_tables.py`
 - [ ] Every `\todo{}` is resolved, then `\drafttrue` is switched to `\draftfalse` in `main.tex` (any leftover TODO then fails the build)
 - [ ] Bibliography entries checked against their arXiv pages
 - [ ] Repository (or a public copy of the engine) is public and its URL is in the paper
