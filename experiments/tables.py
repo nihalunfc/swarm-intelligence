@@ -29,7 +29,7 @@ TABLES = {
     "wildfire": {
         "base": "wildfire-imitate",
         "variants": ["wildfire", "wildfire-imitate", "wildfire-imitate-qmix", "wildfire-mappo",
-                     "wildfire-imitate-messages", "wildfire-residual"],
+                     "wildfire-imitate-messages", "wildfire-imitate-pads", "wildfire-residual"],
         "metrics": ["forest_saved_pct", "peak_fire_cells"],
         "about": "Drone swarm (6 drones, 16x16 forest). Base: independent DQN that first learns from the nearest-fire rule.",
     },

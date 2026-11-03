@@ -67,7 +67,8 @@ Every number below is a mean over independently trained seeds and the same held-
 
 - On load spread, the swarm beats every rule and the MPC baseline (p < 0.001 for each).
 - It closes about 74% of the gap between doing nothing and the perfect-foresight optimum of its own objective.
-- Its peak cut depends on the seed. QMIX gives a similar result. Independent learners, 3-step returns and MAPPO keep less of the peak ([`results/methods-energy.md`](results/methods-energy.md)).
+- Its peak cut depends on the seed. QMIX gives a similar result. Independent learners, 3-step returns and MAPPO keep less of the peak.
+- Choosing the checkpoint on validation does not change the spread result but helps keep the peak cut (705 vs 483 MW, not significant) ([`results/methods-energy.md`](results/methods-energy.md)).
 - **Robustness:** with 30% of batteries failing mid-period it still reduces the spread by 10.0%, which beats every rule even with all their batteries working ([`results/robustness-energy.md`](results/robustness-energy.md)).
 
 **Hotel housekeeping**: 8 room attendants, 50 generated test days, 5 seeds ([`results/methods-hotel-housekeeping.md`](results/methods-hotel-housekeeping.md)).
@@ -77,6 +78,7 @@ Every number below is a mean over independently trained seeds and the same held-
 | Today's floor order | 111.3 |
 | Swarm (VDN DQN) | 22.4 [19.4, 25.4] |
 | MAPPO | 21.6 [18.8, 24.5] |
+| Independent learners | 21.9 [18.9, 24.8] |
 | Residual swarm (rule + learned overrides) | 21.5 [18.7, 24.4] |
 | Soonest-needed rule | 21.5 [18.7, 24.3] |
 | Lower bound (perfect foresight, no elevator time) | 18.1 |
@@ -89,7 +91,9 @@ Every number below is a mean over independently trained seeds and the same held-
 
 | Policy | Forest saved |
 | :-- | --: |
-| Nearest-fire rule | **90.1% [87.4, 92.5]** |
+| Spread rule (new hand-written coordination rule, target-choice actions) | **91.2% [88.9, 93.2]** |
+| Nearest-fire rule | 90.1% [87.4, 92.5] |
+| Residual swarm: rule + learned overrides (3 seeds) | 89.8% [86.6, 92.0] |
 | Learning from the rule, then RL (5 seeds) | 87.2% [82.3, 90.9] |
 | Same with QMIX (3 seeds) | 86.8% [82.8, 90.1] |
 | Same with neighbour messages (3 seeds) | 82.1% [77.6, 86.0] |
@@ -97,30 +101,41 @@ Every number below is a mean over independently trained seeds and the same held-
 | MAPPO (3 seeds) | 72.1% [62.2, 81.0] |
 | No drones | 33.2% |
 
-- Learning from the rule first is the best method. It is not significantly worse than the rule (p = 0.13), but it does not beat it.
+- **No learned swarm beats the nearest-fire rule.** The residual swarm matches it (−0.3 points, p = 0.81) with fewer burning cells at the peak (p = 0.02).
+- Learning from the rule first is the best way to train from the rule's moves.
 - Neighbour messages make things worse at this budget.
-- The residual swarm, a fire-assignment action space, the pad/curriculum scale fix and the drone robustness tests are running on GitHub Actions. Their tables will be added here.
+- The coordination idea that helps is hand-written. Letting drones choose *which* fire to fight, and taking the nearest one no other drone is closer to, beats nearest-fire by 2.4 points. A swarm trained in that action space reaches 88.0% ([`results/wildfire-targets.md`](results/wildfire-targets.md)).
+- **Robustness:** with half the drones failing, every policy keeps at least 93% of its result. Sensor noise hurts the DQN swarms: the best one drops from 87% to 44% saved at noise 0.3. MAPPO is unaffected, and the rules read the true state, so noise cannot reach them ([`results/robustness-wildfire-imitate.md`](results/robustness-wildfire-imitate.md)).
 
 **External benchmarks**: the same engine on two community benchmarks, 3 seeds each.
 
 - **CityLearn Challenge 2022** (17 homes, Oct–Dec test). The swarm's district score is **0.96 [0.95, 0.97]**, against 1.03 for CityLearn's OptimizedRBC and 1.13 for its BasicRBC (lower is better; 1.0 = no battery control). It cuts cost by 8% and the average daily peak by 15% ([`results/citylearn.md`](results/citylearn.md)).
 - **VMAS navigation** (4 robots). The swarm reaches 91% of goals with 0.07 collisions per episode. The go-to-goal rule reaches 98% but has 16 collisions ([`results/vmas-navigation.md`](results/vmas-navigation.md)).
 
-**Hotel energy, relocation and shifts** (five sample hotels; dollar figures rest on the assumptions in each config):
+**Hotel energy, relocation and shifts** (five sample hotels; dollar figures rest on the assumptions in each config). With 5 seeds, the peak-hour energy swarm is worse than the peak-alert rule by $40k/yr (p = 0.03). An earlier single-seed run had shown $279k; it was a lucky seed ([`results/hotel-energy.md`](results/hotel-energy.md)).
 
 | Swarm | Swarm result | Best simple rule | Exact optimum |
 | :-- | :-- | :-- | :-- |
-| Peak-hour energy, HARLTON-01 (16 equipment agents, RL; single seed, multi-seed run in progress) | $279k/yr net, 666 kW off the top 5 grid hours | Peak-alert rule $251k/yr, 561 kW | n/a |
+| Peak-hour energy, HARLTON-01 (16 equipment agents, RL, 5 seeds) | $211k/yr net [166k, 250k], 486 kW off the top 5 grid hours | **Peak-alert rule $252k/yr, 561 kW** | n/a |
 | Guest relocation, HARLTON-02 (auction) | +$4.6k net per oversold night | Nearest sister hotel +$3.6k; walking guests -$10.2k | +$4.9k |
 | Shift exchange, H2-01 (contract net, Ontario ESA rules) | $4.8k per week of open shifts | First to accept $5.2k; agency only $8.0k | $4.7k |
 
-**Scale** (`swarm scale`): one model runs unchanged at 10, 100 and 1,000 agents with the same 18k / 110k parameters, and choosing all 1,000 agents' actions takes 3.5 ms.
+**Scale** (`swarm scale`): one model runs unchanged at any swarm size with the same 18k / 110k parameters. Choosing actions for all 1,000 drones takes 2.8 ms.
 
-- The battery swarm keeps its peak cut at every size.
-- In the first study, a single launch pad made refill trips long on large forests, and the drones fell behind the rule at 100 and 1,000 drones ([`results/scale-wildfire.md`](results/scale-wildfire.md)).
-- The fix, launch pads that tile the forest plus a 6 to 24 drone curriculum, is being re-run with seeds.
+- **Battery swarm:** keeps its peak cut at every size, because the fleet stays 1 GW.
+- **Drone simulator fix:** launch pads that tile the forest keep refill trips short. The nearest-fire rule now saves 86% of the forest at 1,000 drones, against 40% with one pad.
+- **Learned drone swarms do not scale on this task** ([`results/scale-wildfire-imitate-pads.md`](results/scale-wildfire-imitate-pads.md), [`results/scale-wildfire-scale.md`](results/scale-wildfire-scale.md)):
 
-**What is not claimed.** The learned swarms beat the rules on energy and CityLearn, but not on housekeeping or wildfire. Every simulator here is simplified. See the [model card](docs/model-card.md) and the [dataset card](docs/dataset-card.md).
+| Forest saved | 6 drones | 24 | 100 | 1,000 |
+| :-- | --: | --: | --: | --: |
+| Nearest-fire rule | 91.6% | 87.8% | 91.6% | 85.9% |
+| Swarm trained with 6 drones (3 seeds) | 90.5% | 82.6% | 65.9% | 47.9% |
+| Swarm with a 6→24 drone curriculum (3 seeds) | 70.8% | 67.6% | 43.7% | 33.2% |
+
+- The swarm trained with 6 drones matches the rule at its training size, then falls behind as the swarm grows.
+- Training on 24 drones (the curriculum) made it worse at every size. How to train swarms that grow is still an open question here.
+
+**What is not claimed.** The learned swarms beat the rules on grid energy and CityLearn. They do not beat them on housekeeping, wildfire or hotel peak energy, and on wildfire they do not scale past their training size. Every simulator here is simplified. See the [model card](docs/model-card.md) and the [dataset card](docs/dataset-card.md).
 
 ## Research objectives
 
