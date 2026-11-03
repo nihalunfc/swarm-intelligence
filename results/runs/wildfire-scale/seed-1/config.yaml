@@ -1,0 +1,66 @@
+app: wildfire
+seed: 1
+env:
+  grid_size: 16
+  n_drones: 6
+  max_payload: 6
+  view_radius: 3
+  max_steps: 300
+  p_spread: 0.12
+  p_wind: 0.3
+  burn_time:
+  - 3
+  - 6
+  n_ignitions: 2
+  fire_every: 3
+  shaping: 0.1
+  pads_per_side: 1
+  scale_pads: true
+agent:
+  mixer: independent
+  hidden:
+  - 256
+  - 256
+  lr: 0.0005
+  gamma: 0.98
+  tau: 0.01
+  agent_id: true
+  agent_id_count: 6
+pretrain:
+  rule: nearest-fire rule
+  demo_steps: 100000
+  updates: 20000
+  margin: 0.8
+  demo_weight: 1.0
+  demo_decay_fraction: 0.5
+train:
+  total_steps: 300000
+  n_step: 5
+  num_envs: 8
+  batch_size: 256
+  buffer_size: 200000
+  learning_starts: 2000
+  gradient_steps: 1
+  eps_start: 0.2
+  eps_end: 0.02
+  eps_fraction: 0.3
+  log_every: 10000
+  eval_every: 25000
+stages:
+- name: 6 drones, one pad
+- name: 24 drones, 4 pads (2x2 tiles of the stage-1 forest)
+  set:
+  - env.n_drones=24
+  - env.grid_size=32
+  - env.pads_per_side=2
+  - env.n_ignitions=8
+  - env.max_steps=600
+  - train.total_steps=150000
+  - train.num_envs=4
+  - train.eps_start=0.05
+eval:
+  episodes: 30
+  val_episodes: 10
+  select_metric: forest_saved_pct
+  seed: 10000
+label: wildfire-scale
