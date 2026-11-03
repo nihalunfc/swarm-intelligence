@@ -18,8 +18,6 @@ plus the environment's one-hour end-of-day charge.
 from __future__ import annotations
 
 import numpy as np
-from scipy.optimize import Bounds, LinearConstraint, milp
-from scipy.sparse import lil_matrix
 
 from .env import CLEAN_STEPS, DAY_START, NO_ARRIVAL, STEP_MIN
 
@@ -27,6 +25,9 @@ NAME = "lower bound (perfect foresight, no elevator time)"
 
 
 def day_bound(env, time_limit: float = 60.0) -> float:
+    from scipy.optimize import Bounds, LinearConstraint, milp  # loaded only when the bound is computed
+    from scipy.sparse import lil_matrix
+
     S, N = env.n_steps, env.n_agents
     now = DAY_START + np.arange(1, S + 1) * STEP_MIN               # clock after each step
     n = len(env.needed)

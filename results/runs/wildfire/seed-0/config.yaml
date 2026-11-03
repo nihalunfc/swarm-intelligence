@@ -1,0 +1,44 @@
+app: wildfire
+seed: 0
+env:
+  grid_size: 16
+  n_drones: 6
+  max_payload: 6
+  view_radius: 3
+  max_steps: 300
+  p_spread: 0.12
+  p_wind: 0.3
+  burn_time:
+  - 3
+  - 6
+  n_ignitions: 2
+  fire_every: 3
+  shaping: 0.1
+agent:
+  mixer: independent
+  hidden:
+  - 256
+  - 256
+  lr: 0.0005
+  gamma: 0.98
+  tau: 0.01
+  agent_id: true
+train:
+  total_steps: 600000
+  n_step: 5
+  num_envs: 8
+  batch_size: 256
+  buffer_size: 100000
+  learning_starts: 2000
+  gradient_steps: 1
+  eps_start: 1.0
+  eps_end: 0.05
+  eps_fraction: 0.4
+  log_every: 10000
+  eval_every: 50000
+eval:
+  episodes: 50
+  val_episodes: 20
+  select_metric: forest_saved_pct
+  seed: 10000
+label: wildfire

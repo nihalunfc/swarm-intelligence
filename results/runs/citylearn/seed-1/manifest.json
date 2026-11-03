@@ -1,0 +1,23 @@
+{
+  "app": "citylearn",
+  "seed": 1,
+  "git_commit": "c33fe828fb0b13ac75fc9a60d012042191e89ab4",
+  "git_dirty": false,
+  "command": "swarm train --config configs/citylearn.yaml --out out --set seed=1 label=citylearn",
+  "started": "2026-11-02T21:21:28+0000",
+  "seconds": 5532.1,
+  "python": "3.11.17",
+  "packages": {
+    "numpy": "1.26.4",
+    "pandas": "3.0.6",
+    "torch": "2.15.0+cpu",
+    "yaml": "6.0.3"
+  },
+  "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.43",
+  "cpu_count": 2,
+  "ci": {
+    "GITHUB_RUN_ID": "41525733788",
+    "GITHUB_SHA": "c33fe828fb0b13ac75fc9a60d012042191e89ab4",
+    "GITHUB_REF_NAME": "claude/project-thread-xchy7b"
+  }
+}

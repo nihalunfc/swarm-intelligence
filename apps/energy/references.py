@@ -20,8 +20,6 @@ controller achieves.
 from __future__ import annotations
 
 import numpy as np
-from scipy.optimize import linprog
-from scipy.sparse import diags, eye, hstack, lil_matrix, vstack
 
 from .env import CHARGE, DISCHARGE, IDLE
 
@@ -38,6 +36,9 @@ def _lp(load: np.ndarray, target: np.ndarray, cap: float, rate: float, eta: floa
     objective "l1": minimise sum u_t with |net_t - target_t| <= u_t (extra = u, T values).
     Returns the net load.
     """
+    from scipy.optimize import linprog  # solvers load only when a bound is computed
+    from scipy.sparse import diags, eye, hstack, lil_matrix, vstack
+
     T = len(load)
     I = eye(T, format="csr")
     # Energy balance: E_t - E_{t-1} - eta c_t + d_t = 0 (E_{-1} = e0).
@@ -73,7 +74,7 @@ def _qp(load: np.ndarray, target: np.ndarray, cap: float, rate: float, eta: floa
     Variables are scaled by the fleet power so the problem is well conditioned.
     """
     import osqp
-    from scipy.sparse import csc_matrix, triu
+    from scipy.sparse import csc_matrix, diags, eye, hstack, lil_matrix, triu, vstack
 
     T, s = len(load), rate
     I = eye(T, format="csc")

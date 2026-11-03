@@ -1,0 +1,272 @@
+{
+  "wildfire-mappo": {
+    "app": "wildfire",
+    "split": "test",
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "episodes": 50,
+    "metrics": [
+      "forest_saved_pct",
+      "burned_cells",
+      "peak_fire_cells",
+      "contained",
+      "return"
+    ],
+    "policies": {
+      "swarm (trained)": {
+        "forest_saved_pct": [
+          72.11197916666667,
+          62.222851562500004,
+          80.96901041666666
+        ],
+        "burned_cells": [
+          71.39333333333333,
+          48.71933333333334,
+          96.70949999999995
+        ],
+        "peak_fire_cells": [
+          16.86,
+          13.339666666666668,
+          20.44
+        ],
+        "contained": [
+          0.9866666666666667,
+          0.96,
+          1.0
+        ],
+        "return": [
+          -6.939333333333334,
+          -9.470949999999998,
+          -4.6719333333333335
+        ]
+      },
+      "no drones": {
+        "forest_saved_pct": [
+          33.21875,
+          27.5154296875,
+          39.3671875
+        ],
+        "burned_cells": [
+          170.96,
+          155.22,
+          185.5605
+        ],
+        "peak_fire_cells": [
+          37.9,
+          34.48,
+          41.36
+        ],
+        "contained": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "return": [
+          -16.896,
+          -18.356050000000003,
+          -15.322000000000003
+        ]
+      },
+      "random": {
+        "forest_saved_pct": [
+          36.8046875,
+          30.7498046875,
+          42.84375
+        ],
+        "burned_cells": [
+          161.78,
+          146.32,
+          177.2805
+        ],
+        "peak_fire_cells": [
+          34.7,
+          31.42,
+          38.02
+        ],
+        "contained": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "return": [
+          -15.978,
+          -17.52805,
+          -14.432000000000002
+        ]
+      },
+      "nearest-fire rule": {
+        "forest_saved_pct": [
+          90.1015625,
+          87.3904296875,
+          92.515625
+        ],
+        "burned_cells": [
+          25.34,
+          19.16,
+          32.280499999999996
+        ],
+        "peak_fire_cells": [
+          10.36,
+          8.84,
+          12.0
+        ],
+        "contained": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "return": [
+          -2.3340000000000005,
+          -3.02805,
+          -1.716
+        ]
+      }
+    },
+    "comparisons": {
+      "no drones": {
+        "forest_saved_pct": {
+          "diff": 38.893229166666664,
+          "diff_lo": 28.8984375,
+          "diff_hi": 48.049934895833324,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "burned_cells": {
+          "diff": -99.56666666666666,
+          "diff_lo": -123.00783333333332,
+          "diff_hi": -73.98,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "peak_fire_cells": {
+          "diff": -21.04,
+          "diff_lo": -24.6805,
+          "diff_hi": -17.25316666666667,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "contained": {
+          "diff": -0.013333333333333334,
+          "diff_lo": -0.04,
+          "diff_hi": 0.0,
+          "p_value": 0.576,
+          "p_value_episodes": 0.50145,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "return": {
+          "diff": 9.95666666666667,
+          "diff_lo": 7.3980000000000015,
+          "diff_hi": 12.300783333333335,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        }
+      },
+      "random": {
+        "forest_saved_pct": {
+          "diff": 35.307291666666664,
+          "diff_lo": 25.616145833333334,
+          "diff_hi": 44.98470052083333,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "burned_cells": {
+          "diff": -90.38666666666667,
+          "diff_lo": -115.16083333333333,
+          "diff_hi": -65.57733333333337,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "peak_fire_cells": {
+          "diff": -17.84,
+          "diff_lo": -21.5,
+          "diff_hi": -14.126500000000002,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "contained": {
+          "diff": -0.013333333333333334,
+          "diff_lo": -0.04,
+          "diff_hi": 0.0,
+          "p_value": 0.576,
+          "p_value_episodes": 0.50145,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "return": {
+          "diff": 9.038666666666668,
+          "diff_lo": 6.557733333333333,
+          "diff_hi": 11.516083333333334,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        }
+      },
+      "nearest-fire rule": {
+        "forest_saved_pct": {
+          "diff": -17.989583333333332,
+          "diff_lo": -27.588671875000003,
+          "diff_hi": -9.195117187500003,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "burned_cells": {
+          "diff": 46.053333333333335,
+          "diff_lo": 23.5395,
+          "diff_hi": 70.627,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "peak_fire_cells": {
+          "diff": 6.5,
+          "diff_lo": 3.1998333333333338,
+          "diff_hi": 9.900499999999994,
+          "p_value": 0.0,
+          "p_value_episodes": 5e-05,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "contained": {
+          "diff": -0.013333333333333334,
+          "diff_lo": -0.04,
+          "diff_hi": 0.0,
+          "p_value": 0.576,
+          "p_value_episodes": 0.50145,
+          "n_seeds": 3,
+          "n_episodes": 50
+        },
+        "return": {
+          "diff": -4.605333333333333,
+          "diff_lo": -7.0627,
+          "diff_hi": -2.3539499999999998,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 3,
+          "n_episodes": 50
+        }
+      }
+    }
+  }
+}

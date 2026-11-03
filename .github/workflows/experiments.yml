@@ -20,6 +20,8 @@ jobs:
     outputs:
       matrix: ${{ steps.plan.outputs.matrix }}
       any: ${{ steps.plan.outputs.any }}
+      robustness: ${{ steps.plan.outputs.robustness }}
+      robustness_any: ${{ steps.plan.outputs.robustness_any }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -32,6 +34,10 @@ jobs:
           echo "matrix=$m" >> "$GITHUB_OUTPUT"
           echo "any=$([ "$(echo "$m" | python -c 'import json,sys;print(len(json.load(sys.stdin)["include"]))')" != 0 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
           echo "$m"
+          r=$(python experiments/plan.py --robustness)
+          echo "robustness=$r" >> "$GITHUB_OUTPUT"
+          echo "robustness_any=$([ "$(echo "$r" | python -c 'import json,sys;print(len(json.load(sys.stdin)["include"]))')" != 0 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          echo "$r"
 
   train:
     needs: plan
@@ -68,9 +74,49 @@ jobs:
           path: out
           retention-days: 90
 
+  robustness:
+    needs: [plan, train]
+    if: ${{ !cancelled() && needs.plan.outputs.robustness_any == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.plan.outputs.robustness) }}
+    name: robustness ${{ matrix.label }}
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install (CPU PyTorch)
+        run: |
+          pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+          pip install -e ".[${{ matrix.extras }}]"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: run-${{ matrix.label }}-seed-*
+          path: trained
+          run-id: ${{ matrix.run_id || github.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Re-test under failures, noise and new conditions
+        run: |
+          mkdir -p rob
+          swarm robustness trained --output "rob/robustness-${{ matrix.label }}" \
+            ${{ matrix.scenario_set && format('--scenario-set {0}', matrix.scenario_set) || '' }} \
+            ${{ matrix.episodes && format('--episodes {0}', matrix.episodes) || '' }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: robustness-${{ matrix.label }}
+          path: rob
+          retention-days: 90
+
   collect:
-    needs: train
-    if: always() && needs.train.result != 'skipped'
+    needs: [train, robustness]
+    if: ${{ !cancelled() && (needs.train.result != 'skipped' || needs.robustness.result != 'skipped') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -80,13 +126,23 @@ jobs:
         with:
           python-version: "3.11"
       - uses: actions/download-artifact@v4
+        continue-on-error: true      # a robustness-only run has no training artifacts
         with:
           pattern: run-*
           path: downloads
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: robustness-*
+          path: robustness
+          merge-multiple: true
       - name: Aggregate seeds
         run: |
-          pip install numpy pandas pyyaml
+          pip install numpy pandas pyyaml scipy
+          mkdir -p downloads robustness
           PYTHONPATH=core:. python experiments/collect.py downloads results
+          PYTHONPATH=core:. python experiments/tables.py results
+          cp robustness/robustness-*.md robustness/robustness-*.json results/ 2>/dev/null || true
       - name: Commit results
         run: |
           git config user.name "github-actions[bot]"

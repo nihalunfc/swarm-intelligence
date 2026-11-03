@@ -1,0 +1,320 @@
+{
+  "citylearn": {
+    "app": "citylearn",
+    "split": "test",
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "episodes": 1,
+    "metrics": [
+      "score",
+      "cost_total",
+      "carbon_emissions_total",
+      "ramping_average",
+      "daily_peak_average",
+      "one_minus_load_factor"
+    ],
+    "policies": {
+      "swarm (trained)": {
+        "score": [
+          0.9583936798306775,
+          0.9490237520886623,
+          0.970711858908186
+        ],
+        "cost_total": [
+          0.9183010693129635,
+          0.911319333691447,
+          0.9322630187018275
+        ],
+        "carbon_emissions_total": [
+          0.9597977917482879,
+          0.9479413916284593,
+          0.9665340782045199
+        ],
+        "ramping_average": [
+          1.061139144219575,
+          1.0437450013249523,
+          1.0895201553064282
+        ],
+        "daily_peak_average": [
+          0.8487528250467115,
+          0.8324205712199647,
+          0.8605301274743886
+        ],
+        "one_minus_load_factor": [
+          0.9330252126419857,
+          0.9254687858648162,
+          0.9403891499152629
+        ]
+      },
+      "no battery": {
+        "score": [
+          1.0000000009890393,
+          1.0000000009890393,
+          1.0000000009890393
+        ],
+        "cost_total": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "carbon_emissions_total": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "ramping_average": [
+          1.0000000051223255,
+          1.0000000051223255,
+          1.0000000051223255
+        ],
+        "daily_peak_average": [
+          1.0000000002310654,
+          1.0000000002310654,
+          1.0000000002310654
+        ],
+        "one_minus_load_factor": [
+          1.0000000008119105,
+          1.0000000008119105,
+          1.0000000008119105
+        ]
+      },
+      "CityLearn BasicRBC": {
+        "score": [
+          1.1261668514916796,
+          1.1261668514916796,
+          1.1261668514916796
+        ],
+        "cost_total": [
+          1.108117095341373,
+          1.108117095341373,
+          1.108117095341373
+        ],
+        "carbon_emissions_total": [
+          1.1697503002935745,
+          1.1697503002935745,
+          1.1697503002935745
+        ],
+        "ramping_average": [
+          1.221379202944288,
+          1.221379202944288,
+          1.221379202944288
+        ],
+        "daily_peak_average": [
+          1.1228684171992762,
+          1.1228684171992762,
+          1.1228684171992762
+        ],
+        "one_minus_load_factor": [
+          0.9798871147358954,
+          0.9798871147358954,
+          0.9798871147358954
+        ]
+      },
+      "CityLearn OptimizedRBC": {
+        "score": [
+          1.0341101026368753,
+          1.0341101026368753,
+          1.0341101026368753
+        ],
+        "cost_total": [
+          1.0344577766480278,
+          1.0344577766480278,
+          1.0344577766480278
+        ],
+        "carbon_emissions_total": [
+          1.0633092868892533,
+          1.0633092868892533,
+          1.0633092868892533
+        ],
+        "ramping_average": [
+          1.0428092011354642,
+          1.0428092011354642,
+          1.0428092011354642
+        ],
+        "daily_peak_average": [
+          0.9478342755428968,
+          0.9478342755428968,
+          0.9478342755428968
+        ],
+        "one_minus_load_factor": [
+          0.9663172876112253,
+          0.9663172876112253,
+          0.9663172876112253
+        ]
+      }
+    },
+    "comparisons": {
+      "no battery": {
+        "score": {
+          "diff": -0.041606321158361936,
+          "diff_lo": -0.050976248900377,
+          "diff_hi": -0.029288142080853286,
+          "p_value": 0.0,
+          "p_value_episodes": 0.25,
+          "n_seeds": 3,
+          "n_episodes": 1
+        },
+        "cost_total": {
+          "diff": -0.08169893068703642,
+          "diff_lo": -0.08868066630855309,
+          "diff_hi": -0.06773698129817252,
+          "p_value": 0.0,
+          "p_value_episodes": 0.25,
+          "n_seeds": 3,
+          "n_episodes": 1
+        },
+        "carbon_emissions_total": {
+          "diff": -0.04020220825171202,
+          "diff_lo": -0.05205860837154075,
+          "diff_hi": -0.033465921795480136,
+          "p_value": 0.0,
+          "p_value_episodes": 0.25,
+          "n_seeds": 3,
+          "n_episodes": 1
+        },
+        "ramping_average": {
+          "diff": 0.061139139097249696,
+          "diff_lo": 0.04374499620262684,
+          "diff_hi": 0.08952015018410275,
+          "p_value": 0.0,
+          "p_value_episodes": 0.25,
+          "n_seeds": 3,
+          "n_episodes": 1
+        },
+        "daily_peak_average": {
+          "diff": -0.15124717518435402,
+          "diff_lo": -0.16757942901110068,
+          "diff_hi": -0.13946987275667677,
+          "p_value": 0.0,
+          "p_value_episodes": 0.25,
+          "n_seeds": 3,
+          "n_episodes": 1
+        },
+        "one_minus_load_factor": {
+          "diff": -0.06697478816992482,
+          "diff_lo": -0.07453121494709436,
+          "diff_hi": -0.05961085089664764,
+          "p_value": 0.0,
+          "p_value_episodes": 0.25,
+          "n_seeds": 3,
+          "n_episodes": 1
+        }
+      },
+      "CityLearn BasicRBC": {
+        "score": {
+          "diff": -0.16777317166100225,
+          "diff_lo": -0.1771430994030173,
+          "diff_hi": -0.1554549925834936,
+          "p_value": 0.0,
+          "p_value_episodes": 0.25,
+          "n_seeds": 3,
+          "n_episodes": 1
+        },
+        "cost_total": {
+          "diff": -0.18981602602840944,
+          "diff_lo": -0.19679776164992613,
+          "diff_hi": -0.17585407663954555,
+          "p_value": 0.0,
+          "p_value_episodes": 0.25,
+          "n_seeds": 3,
+          "n_episodes": 1
+        },
+        "carbon_emissions_total": {
+          "diff": -0.20995250854528655,
+          "diff_lo": -0.22180890866511527,
+          "diff_hi": -0.20321622208905465,
+          "p_value": 0.0,
+          "p_value_episodes": 0.25,
+          "n_seeds": 3,
+          "n_episodes": 1
+        },
+        "ramping_average": {
+          "diff": -0.1602400587247129,
+          "diff_lo": -0.17763420161933574,
+          "diff_hi": -0.13185904763785983,
+          "p_value": 0.0,
+          "p_value_episodes": 0.25,
+          "n_seeds": 3,
+          "n_episodes": 1
+        },
+        "daily_peak_average": {
+          "diff": -0.2741155921525648,
+          "diff_lo": -0.2904478459793115,
+          "diff_hi": -0.2623382897248876,
+          "p_value": 0.0,
+          "p_value_episodes": 0.25,
+          "n_seeds": 3,
+          "n_episodes": 1
+        },
+        "one_minus_load_factor": {
+          "diff": -0.04686190209390969,
+          "diff_lo": -0.054418328871079225,
+          "diff_hi": -0.0394979648206325,
+          "p_value": 0.0,
+          "p_value_episodes": 0.25,
+          "n_seeds": 3,
+          "n_episodes": 1
+        }
+      },
+      "CityLearn OptimizedRBC": {
+        "score": {
+          "diff": -0.07571642280619795,
+          "diff_lo": -0.08508635054821301,
+          "diff_hi": -0.0633982437286893,
+          "p_value": 0.0,
+          "p_value_episodes": 0.25,
+          "n_seeds": 3,
+          "n_episodes": 1
+        },
+        "cost_total": {
+          "diff": -0.11615670733506427,
+          "diff_lo": -0.12313844295658094,
+          "diff_hi": -0.10219475794620037,
+          "p_value": 0.0,
+          "p_value_episodes": 0.25,
+          "n_seeds": 3,
+          "n_episodes": 1
+        },
+        "carbon_emissions_total": {
+          "diff": -0.10351149514096532,
+          "diff_lo": -0.11536789526079405,
+          "diff_hi": -0.09677520868473344,
+          "p_value": 0.0,
+          "p_value_episodes": 0.25,
+          "n_seeds": 3,
+          "n_episodes": 1
+        },
+        "ramping_average": {
+          "diff": 0.018329943084110994,
+          "diff_lo": 0.000935800189488134,
+          "diff_hi": 0.04671095417096405,
+          "p_value": 0.0,
+          "p_value_episodes": 0.25,
+          "n_seeds": 3,
+          "n_episodes": 1
+        },
+        "daily_peak_average": {
+          "diff": -0.0990814504961854,
+          "diff_lo": -0.11541370432293208,
+          "diff_hi": -0.08730414806850817,
+          "p_value": 0.0,
+          "p_value_episodes": 0.25,
+          "n_seeds": 3,
+          "n_episodes": 1
+        },
+        "one_minus_load_factor": {
+          "diff": -0.03329207496923955,
+          "diff_lo": -0.04084850174640908,
+          "diff_hi": -0.02592813769596236,
+          "p_value": 0.0,
+          "p_value_episodes": 0.25,
+          "n_seeds": 3,
+          "n_episodes": 1
+        }
+      }
+    }
+  }
+}

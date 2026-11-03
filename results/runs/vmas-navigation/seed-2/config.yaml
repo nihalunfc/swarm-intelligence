@@ -1,0 +1,33 @@
+app: vmas
+seed: 2
+env:
+  scenario: navigation
+  n_agents: 4
+  max_steps: 100
+agent:
+  mixer: vdn
+  hidden:
+  - 128
+  - 128
+  lr: 0.0005
+  gamma: 0.99
+  tau: 0.01
+  agent_id: false
+train:
+  total_steps: 300000
+  n_step: 3
+  num_envs: 8
+  batch_size: 256
+  buffer_size: 100000
+  learning_starts: 2000
+  gradient_steps: 1
+  eps_start: 1.0
+  eps_end: 0.02
+  eps_fraction: 0.4
+  log_every: 10000
+  eval_every: 30000
+eval:
+  episodes: 50
+  val_episodes: 20
+  select_metric: success
+label: vmas-navigation
