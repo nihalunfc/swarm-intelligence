@@ -138,7 +138,7 @@ jobs:
           merge-multiple: true
       - name: Aggregate seeds
         run: |
-          pip install numpy pandas pyyaml
+          pip install numpy pandas pyyaml scipy
           mkdir -p downloads robustness
           PYTHONPATH=core:. python experiments/collect.py downloads results
           PYTHONPATH=core:. python experiments/tables.py results
