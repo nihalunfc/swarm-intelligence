@@ -3,6 +3,7 @@
 import numpy as np
 
 from .env import CHARGE, DISCHARGE, IDLE
+from .references import mpc_policy
 
 
 def no_battery(env, obs, mask):
@@ -31,4 +32,5 @@ def proportional(env, obs, mask):
     return actions
 
 
-BASELINES = {"no battery": no_battery, "threshold rule": threshold, "proportional rule": proportional}
+BASELINES = {"no battery": no_battery, "threshold rule": threshold, "proportional rule": proportional,
+             "MPC (24 h forecast)": mpc_policy()}

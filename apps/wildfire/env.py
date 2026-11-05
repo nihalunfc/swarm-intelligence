@@ -11,6 +11,7 @@ launch pad refills). Fire spread is vectorized with NumPy shifts.
 """
 
 import numpy as np
+
 from swarm.env import SwarmEnv
 
 FUEL, BURNING, BURNED, WET = 0, 1, 2, 3
@@ -21,11 +22,12 @@ WINDS = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
 
 class WildfireSwarmEnv(SwarmEnv):
     n_actions = 6
+    null_action = HOLD  # what a failed drone does (robustness tests)
 
     def __init__(self, grid_size=16, n_drones=6, max_payload=6, view_radius=3, max_steps=150,
                  p_spread=0.12, p_wind=0.30, burn_time=(3, 6), n_ignitions=2, wind=None,
                  reward_extinguish=1.0, drop_near_fire_only=True, shaping=0.1, shaping_gamma=0.97, fire_every=1,
-                 base_size=3, comm_radius=4, seed=0):
+                 base_size=3, comm_radius=4, pads_per_side=1, seed=0):
         self.G = int(grid_size)
         self.n_agents = int(n_drones)
         self.max_payload = int(max_payload)
@@ -44,7 +46,12 @@ class WildfireSwarmEnv(SwarmEnv):
         self.obs_dim = 3 * w * w + 3 + 3 + 2 + 2 + 1
         self.base = (0, 0)
         self.comm_radius = int(comm_radius)  # drones within this many cells hear each other
-        self.base_size = int(base_size)  # drones launch from and refill anywhere in the top-left pad
+        self.base_size = int(base_size)  # drones launch from and refill anywhere on a pad
+        # Launch pads: one (top-left) by default, or a p x p grid of pads, one per tile of the
+        # forest, so refill trips stay short when the forest and swarm grow.
+        p = int(pads_per_side)
+        tile = self.G // p
+        self.pads = np.array([(i * tile, j * tile) for i in range(p) for j in range(p)], dtype=int)
 
     # --- SwarmEnv API -------------------------------------------------
     def reset(self, seed=None):
@@ -61,6 +68,7 @@ class WildfireSwarmEnv(SwarmEnv):
         self.wind = self.fixed_wind or WINDS[self.rng.integers(len(WINDS))]
         # Random launch cells on the pad, so identical drones do not start (and stay) stacked.
         self.pos = self.rng.integers(0, self.base_size, size=(self.n_agents, 2))
+        self.pos += self.pads[np.arange(self.n_agents) % len(self.pads)]  # drones spread over the pads
         self.payload = np.full(self.n_agents, self.max_payload)
         self.steps = 0
         self.drops = 0
@@ -164,14 +172,26 @@ class WildfireSwarmEnv(SwarmEnv):
         return len(ys)
 
     def _at_base(self, y, x) -> bool:
-        return y < self.base_size and x < self.base_size
+        d = np.array([y, x]) - self.pads
+        return bool(((d >= 0) & (d < self.base_size)).all(1).any())
+
+    def _pad_distance(self) -> tuple[np.ndarray, np.ndarray]:
+        """Steps from each drone to its nearest pad, and that pad's corner (y, x)."""
+        b = self.base_size - 1
+        lo = self.pads[None] - self.pos[:, None]          # (drones, pads, 2): pad corner minus position
+        gap = np.maximum(np.maximum(lo, 0), -(lo + b))     # 0 inside the pad along that axis
+        dist = gap.sum(-1)
+        k = dist.argmin(1)
+        return dist[np.arange(self.n_agents), k].astype(float), self.pads[k]
+
+    def nearest_pad(self, i: int) -> tuple[int, int]:
+        return tuple(self._pad_distance()[1][i])
 
     def _potential(self) -> np.ndarray:
         """Minus each drone's distance (in grids) to where it should head next."""
         fy, fx = np.nonzero(self.grid == BURNING)
         y, x = self.pos[:, 0:1], self.pos[:, 1:2]
-        b = self.base_size - 1
-        to_base = (np.maximum(y[:, 0] - b, 0) + np.maximum(x[:, 0] - b, 0)).astype(float)
+        to_base = self._pad_distance()[0]
         if len(fy):
             to_fire = (np.abs(fy[None] - y) + np.abs(fx[None] - x)).min(1).astype(float)
         else:
@@ -205,7 +225,7 @@ class WildfireSwarmEnv(SwarmEnv):
             fire.reshape(n, -1), fuel.reshape(n, -1), others.reshape(n, -1),
             np.stack([y / G, x / G, self.payload / self.max_payload], 1),
             near,
-            np.stack([-y / G, -x / G], 1),
+            (self._pad_distance()[1] - self.pos) / G,      # toward the nearest launch pad
             np.broadcast_to(np.asarray(self.wind, dtype=np.float32), (n, 2)),
             np.full((n, 1), len(fy) / G ** 2),
         ], axis=1).astype(np.float32)
@@ -213,4 +233,5 @@ class WildfireSwarmEnv(SwarmEnv):
 
 def make_env(env_cfg: dict, split: str, seed: int) -> WildfireSwarmEnv:
     # Fires are generated, so "test" uses unseen random seeds rather than held-out data.
-    return WildfireSwarmEnv(seed=seed, **env_cfg)
+    cfg = {k: v for k, v in env_cfg.items() if k != "scale_pads"}
+    return WildfireSwarmEnv(seed=seed, **cfg)

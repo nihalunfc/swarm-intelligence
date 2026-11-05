@@ -1,0 +1,50 @@
+[
+  {
+    "app": "wildfire",
+    "policy": "swarm (trained)",
+    "return": -35.74666666666667,
+    "burned_cells": 365.46666666666664,
+    "forest_saved_pct": 64.30989583333333,
+    "peak_fire_cells": 59.666666666666664,
+    "steps": 147.46666666666667,
+    "drops": 82.26666666666667,
+    "contained": 1.0,
+    "episodes": 30
+  },
+  {
+    "app": "wildfire",
+    "policy": "no drones",
+    "return": -79.77666666666664,
+    "burned_cells": 805.7666666666667,
+    "forest_saved_pct": 21.311848958333332,
+    "peak_fire_cells": 117.4,
+    "steps": 261.2,
+    "drops": 0.0,
+    "contained": 1.0,
+    "episodes": 30
+  },
+  {
+    "app": "wildfire",
+    "policy": "random",
+    "return": -70.51666666666667,
+    "burned_cells": 713.1666666666666,
+    "forest_saved_pct": 30.354817708333332,
+    "peak_fire_cells": 105.5,
+    "steps": 247.7,
+    "drops": 49.233333333333334,
+    "contained": 1.0,
+    "episodes": 30
+  },
+  {
+    "app": "wildfire",
+    "policy": "nearest-fire rule",
+    "return": -10.453333333333335,
+    "burned_cells": 112.53333333333333,
+    "forest_saved_pct": 89.01041666666667,
+    "peak_fire_cells": 32.8,
+    "steps": 50.766666666666666,
+    "drops": 69.73333333333333,
+    "contained": 1.0,
+    "episodes": 30
+  }
+]

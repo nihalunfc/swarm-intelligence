@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Swarm Intelligence: a decentralized multi-agent engine for grid, wildfire and hotel operations"
+authors:
+  - name: "Nihal"
+repository-code: "https://github.com/nihalunfc/swarm-intelligence"
+license: MIT
+version: 0.2.0
+date-released: 2026-11-02
+keywords:
+  - multi-agent reinforcement learning
+  - swarm intelligence
+  - parameter sharing
+  - battery dispatch
+  - wildfire response

@@ -1,0 +1,51 @@
+# Drones choose which fire to fight (apps/wildfire/targets.py): among their 4 nearest fire
+# targets, a pad, or holding; moving, dropping and refilling follow the rule's logic. The swarm
+# first copies the best hand-made rule (spread rule), then RL improves the coordination.
+# Same forest and budget as configs/wildfire-imitate.yaml.
+app: wildfire-targets
+seed: 0
+env:
+  grid_size: 16
+  n_drones: 6
+  max_payload: 6
+  view_radius: 3
+  max_steps: 300
+  p_spread: 0.12
+  p_wind: 0.30
+  burn_time: [3, 6]
+  n_ignitions: 2
+  fire_every: 3              # drones move 3 cells per fire-spread tick (real drones are far faster than fire)
+  shaping: 0.1               # per-drone training credit for closing in on the fire
+  targets: 4                 # fire targets each drone chooses between
+agent:
+  mixer: independent        # beat vdn here (66% vs 52% forest saved at 200k steps)
+  hidden: [256, 256]
+  lr: 0.0005
+  gamma: 0.98
+  tau: 0.01
+  agent_id: true             # breaks symmetry between identical drones (77% vs 62% saved)
+pretrain:
+  rule: spread rule          # the best rule in this action space
+  demo_steps: 100000         # transitions recorded from the rule (kept in replay)
+  updates: 20000             # gradient steps on the demos before any RL
+  margin: 0.8                # large-margin loss: the rule's action must lead by this much
+  demo_weight: 1.0
+  demo_decay_fraction: 0.5   # demo loss fades to zero over the first half of fine-tuning
+train:
+  total_steps: 400000
+  n_step: 5
+  num_envs: 8
+  batch_size: 256
+  buffer_size: 200000
+  learning_starts: 2000
+  gradient_steps: 1
+  eps_start: 0.2
+  eps_end: 0.02
+  eps_fraction: 0.3
+  log_every: 10000
+  eval_every: 40000          # keep the checkpoint that does best on validation fires
+eval:
+  episodes: 50
+  val_episodes: 20           # validation fires use seeds 5000+, test fires 10000+
+  select_metric: forest_saved_pct
+  seed: 10000                # unseen fires: training uses seeds 0-7 streams

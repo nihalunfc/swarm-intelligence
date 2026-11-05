@@ -23,7 +23,7 @@ import numpy as np
 from .benchmark import eval_env_cfg
 from .config import load_config
 from .registry import get_app
-from .trainer import evaluate
+from .trainer import evaluate, final_cfg
 
 
 def _time(fn, repeats: int) -> float:
@@ -34,25 +34,26 @@ def _time(fn, repeats: int) -> float:
     return (time.perf_counter() - t) / repeats * 1000.0
 
 
-def scale_study(run: str | Path, sizes: list[int], episodes: int = 5, batch_size: int = 32, log=print) -> list[dict]:
+def scale_study(run: str | Path, sizes: list[int], episodes: int = 5, batch_size: int = 32, log=print,
+                overrides: list[str] | None = None) -> list[dict]:
     import torch
 
     from .agents import make_agent
 
     run = Path(run)
-    cfg = load_config(run / "config.yaml", [])
+    cfg = load_config(run / "config.yaml", list(overrides or []))
     app = get_app(cfg["app"])
     if not hasattr(app, "scaled_env_cfg"):
         raise SystemExit(f"App '{cfg['app']}' does not define scaled_env_cfg")
     state = torch.load(run / "model.pt", map_location="cpu", weights_only=False)
-    trained_n = app.make_env(cfg["env"], "train", 0).n_agents
+    trained_n = app.make_env(final_cfg(cfg)["env"], "train", 0).n_agents  # a curriculum ends at its last stage
     seed = int(cfg.get("eval", {}).get("seed", 10_000))
     rows = []
     for n in sizes:
         ecfg = app.scaled_env_cfg(eval_env_cfg(cfg), n)
         env = app.make_env(ecfg, "test", seed)
         acfg = dict(state["cfg"])
-        if acfg.get("agent_id"):
+        if acfg.get("agent_id") and not acfg.get("agent_id_count"):
             # Agent ids do not transfer to a new swarm size: reuse the trained ids cyclically.
             acfg["agent_id_count"] = trained_n
         agent = make_agent(env, acfg)

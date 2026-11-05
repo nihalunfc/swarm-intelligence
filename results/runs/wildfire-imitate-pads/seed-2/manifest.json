@@ -1,0 +1,23 @@
+{
+  "app": "wildfire",
+  "seed": 2,
+  "git_commit": "35e8b81832fc41e71fba574b4b7d3b831e8179a7",
+  "git_dirty": false,
+  "command": "swarm train --config configs/wildfire-imitate.yaml --out out --set seed=2 label=wildfire-imitate-pads env.scale_pads=true",
+  "started": "2026-11-02T22:55:18+0000",
+  "seconds": 2697.0,
+  "python": "3.11.17",
+  "packages": {
+    "numpy": "2.4.6",
+    "pandas": "3.1.0",
+    "torch": "2.15.0+cpu",
+    "yaml": "6.0.3"
+  },
+  "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.43",
+  "cpu_count": 2,
+  "ci": {
+    "GITHUB_RUN_ID": "41538017841",
+    "GITHUB_SHA": "35e8b81832fc41e71fba574b4b7d3b831e8179a7",
+    "GITHUB_REF_NAME": "claude/project-thread-xchy7b"
+  }
+}

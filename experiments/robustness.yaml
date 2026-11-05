@@ -1,0 +1,27 @@
+# Robustness scenarios per app (swarm robustness). The first is the reference.
+# fail: share of agents that fail at fail_at (fraction of the episode); noise: observation noise;
+# set: environment overrides for conditions never seen in training.
+wildfire:
+  - {name: normal}
+  - {name: 17% drones fail, fail: 0.17, fail_at: 0.1}
+  - {name: 33% drones fail, fail: 0.33, fail_at: 0.1}
+  - {name: 50% drones fail, fail: 0.5, fail_at: 0.1}
+  - {name: sensor noise 0.1, noise: 0.1}
+  - {name: sensor noise 0.3, noise: 0.3}
+  - {name: stronger wind, set: [p_wind=0.45]}
+  - {name: 4 ignitions, set: [n_ignitions=4]}
+energy:
+  - {name: normal}
+  - {name: 10% batteries fail, fail: 0.1, fail_at: 0.25}
+  - {name: 30% batteries fail, fail: 0.3, fail_at: 0.25}
+  - {name: 50% batteries fail, fail: 0.5, fail_at: 0.25}
+  - {name: sensor noise 0.1, noise: 0.1}
+  - {name: sensor noise 0.3, noise: 0.3}
+hotel-housekeeping:
+  - {name: normal}
+  - {name: 1 of 8 attendants leaves at 11:00, fail: 0.125, fail_at: 0.33}
+  - {name: 2 of 8 leave, fail: 0.25, fail_at: 0.33}
+  - {name: 4 of 8 leave, fail: 0.5, fail_at: 0.33}
+  - {name: sensor noise 0.1, noise: 0.1}
+  - {name: busier day (45% check-outs), set: [departure_rate=0.45]}
+  - {name: more early check-ins (30%), set: [early_share=0.3]}

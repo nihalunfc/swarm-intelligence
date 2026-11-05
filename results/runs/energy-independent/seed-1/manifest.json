@@ -1,0 +1,19 @@
+{
+  "app": "energy",
+  "seed": 1,
+  "git_commit": "b5edb92417bc1fc5604e24c4396a4abdb8f3cc55",
+  "git_dirty": false,
+  "command": "cli.py train --config configs/energy.yaml --out /tmp/claude-0/final/seeds-energy-independent-20261102-220743/seed-1 --set label=energy-independent agent.mixer=independent seed=1 label=energy-independent",
+  "started": "2026-11-02T22:07:43+0000",
+  "seconds": 100.9,
+  "python": "3.13.18",
+  "packages": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.5",
+    "torch": "2.15.0+cu132",
+    "yaml": "6.0.3"
+  },
+  "platform": "Linux-6.18.44-fc-v185-x86_64-with-glibc2.39",
+  "cpu_count": 4,
+  "ci": {}
+}

@@ -7,6 +7,7 @@ env:
   data_path: null            # merged grid + weather CSV; null = the energy app's 2020 sample
   months: [6, 7, 8, 9]       # the summer season, when the top-five hours fall
   test_weeks: odd            # even ISO weeks train, odd weeks are held out
+  val_weeks: true            # every other held-out week validates; the rest are the final test
   episode_days: 1            # training episodes are random single days
   eval_episode_days: null    # evaluation plays every held-out day in a row
   peak_hours: 40             # training credit: the split's top 40 grid hours (evaluation scores the top 5)
@@ -33,5 +34,7 @@ train:
   eps_end: 0.02
   eps_fraction: 0.5
   log_every: 10000
+  eval_every: 15000          # keep the checkpoint that does best on validation weeks
 eval:
   episodes: 1
+  val_episodes: 1

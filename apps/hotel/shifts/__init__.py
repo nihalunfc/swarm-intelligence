@@ -15,6 +15,7 @@ assumptions in ``DEFAULTS``.
 
 import numpy as np
 import pandas as pd
+
 from swarm.market import contract_net
 
 from ..energy.loads import HOTELS_CSV

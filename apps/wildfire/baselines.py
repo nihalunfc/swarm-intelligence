@@ -30,9 +30,10 @@ def nearest_fire(env, obs, mask):
     """The dashboard's original rule: fly to the nearest fire and drop; return to base when empty."""
     fy, fx = np.nonzero(env.grid == BURNING)
     actions = np.full(env.n_agents, HOLD)
+    pad = env._pad_distance()
     for i, (y, x) in enumerate(env.pos):
         if env.payload[i] == 0:
-            actions[i] = HOLD if env._at_base(y, x) else _toward(y, x, *env.base)
+            actions[i] = HOLD if pad[0][i] == 0 else _toward(y, x, *pad[1][i])
         elif env.grid[y, x] == BURNING and mask[i, DROP]:
             actions[i] = DROP
         elif len(fy):

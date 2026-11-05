@@ -1,0 +1,26 @@
+# Experiments to run on GitHub Actions (.github/workflows/experiments.yml).
+#
+# Pushing a change to this file starts one job per (experiment, seed), each on
+# its own runner (up to 6 hours), so long training no longer depends on a
+# laptop or chat session staying awake. A final job aggregates the seeds into
+# results/<label>.md and .json (confidence intervals, paired tests against the
+# rules) and commits them, with each run's config, manifest and per-episode
+# metrics under results/runs/<label>/, back to the same branch.
+#
+# `branch`: the queue runs only when pushed to this branch (merging it elsewhere does
+# not re-run it). Fields of each experiment: config (required), label (default: config file name), seeds
+# (default 0-4), set (extra KEY=VALUE overrides, as for `swarm train --set`),
+# extras (optional dependency groups from pyproject.toml, e.g. [citylearn]), scale (swarm
+# sizes for a `swarm scale` study after training) and scale_set (overrides for it).
+branch: claude/project-thread-xchy7b
+# Robustness re-tests (item 6) of trained seeds, by label; run_id points at the
+# Actions run that trained them (default: this run). Written to results/robustness-<label>.md.
+robustness:
+  - {label: wildfire-imitate, run_id: 41525733788}
+  - {label: wildfire, run_id: 41525733788}
+  - {label: wildfire-mappo, run_id: 41525733788}
+  - {label: wildfire-residual, run_id: 41538017841}
+  - {label: wildfire-targets, run_id: 41538017841, scenario_set: wildfire}
+experiments: []
+# Already queued in run 41538017841 (wildfire-scale, wildfire-imitate-pads, wildfire-residual,
+# wildfire-targets, hotel-energy, energy-no-val-selection, hotel-housekeeping-independent/-qmix).

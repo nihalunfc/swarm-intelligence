@@ -1,0 +1,336 @@
+{
+  "hotel-housekeeping-qmix": {
+    "app": "hotel-housekeeping",
+    "split": "test",
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "episodes": 50,
+    "metrics": [
+      "guest_wait_hours",
+      "early_promises_kept_pct",
+      "ready_by_noon_pct",
+      "workload_spread",
+      "floor_changes"
+    ],
+    "policies": {
+      "swarm (trained)": {
+        "guest_wait_hours": [
+          22.324,
+          19.435850000000002,
+          25.300016666666668
+        ],
+        "early_promises_kept_pct": [
+          46.594141133376425,
+          42.75613955521602,
+          50.337324373175825
+        ],
+        "ready_by_noon_pct": [
+          39.00292111508186,
+          38.07245047536799,
+          39.92135557740043
+        ],
+        "workload_spread": [
+          0.7748279588760966,
+          0.7039301809007397,
+          0.8543481283680047
+        ],
+        "floor_changes": [
+          79.8,
+          76.084,
+          83.092
+        ]
+      },
+      "floor order": {
+        "guest_wait_hours": [
+          111.30333333333334,
+          98.60549999999998,
+          123.59691666666667
+        ],
+        "early_promises_kept_pct": [
+          25.17543818926172,
+          21.78107191991015,
+          28.63166437728938
+        ],
+        "ready_by_noon_pct": [
+          45.8305285240378,
+          44.74771169597091,
+          46.8839509054824
+        ],
+        "workload_spread": [
+          3.0915857582916844,
+          2.89746372690608,
+          3.2941196464775975
+        ],
+        "floor_changes": [
+          4.7,
+          4.36,
+          5.06
+        ]
+      },
+      "soonest needed": {
+        "guest_wait_hours": [
+          21.54,
+          18.72,
+          24.33
+        ],
+        "early_promises_kept_pct": [
+          48.22310398751574,
+          44.23108879764026,
+          52.031891706332885
+        ],
+        "ready_by_noon_pct": [
+          40.30938185076486,
+          39.29402706576692,
+          41.32158262551039
+        ],
+        "workload_spread": [
+          0.6750586135979216,
+          0.6197487351005854,
+          0.732243931400604
+        ],
+        "floor_changes": [
+          77.38,
+          75.8,
+          78.98
+        ]
+      },
+      "random room": {
+        "guest_wait_hours": [
+          29.763333333333332,
+          26.34,
+          33.15
+        ],
+        "early_promises_kept_pct": [
+          42.07027776145423,
+          38.14333775293334,
+          45.87466896665425
+        ],
+        "ready_by_noon_pct": [
+          39.212253036511804,
+          38.23296549955425,
+          40.17930555213252
+        ],
+        "workload_spread": [
+          0.6404202439929947,
+          0.5890977898364887,
+          0.6899672392828682
+        ],
+        "floor_changes": [
+          87.34,
+          85.7,
+          89.02
+        ]
+      },
+      "lower bound (perfect foresight, no elevator time)": {
+        "guest_wait_hours": [
+          18.06999999999998,
+          15.589999999999979,
+          20.58999999999996
+        ],
+        "early_promises_kept_pct": [
+          NaN,
+          NaN,
+          NaN
+        ],
+        "ready_by_noon_pct": [
+          NaN,
+          NaN,
+          NaN
+        ],
+        "workload_spread": [
+          NaN,
+          NaN,
+          NaN
+        ],
+        "floor_changes": [
+          NaN,
+          NaN,
+          NaN
+        ]
+      }
+    },
+    "comparisons": {
+      "floor order": {
+        "guest_wait_hours": {
+          "diff": -88.97933333333334,
+          "diff_lo": -100.33725,
+          "diff_hi": -77.60249999999999,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 5,
+          "n_episodes": 50
+        },
+        "early_promises_kept_pct": {
+          "diff": 21.41870294411471,
+          "diff_lo": 18.105229137529136,
+          "diff_hi": 24.81691754895431,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 5,
+          "n_episodes": 50
+        },
+        "ready_by_noon_pct": {
+          "diff": -6.827607408955946,
+          "diff_lo": -7.454602501645388,
+          "diff_hi": -6.219734568892303,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 5,
+          "n_episodes": 50
+        },
+        "workload_spread": {
+          "diff": -2.316757799415588,
+          "diff_lo": -2.5087555258706904,
+          "diff_hi": -2.1333706200299014,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 5,
+          "n_episodes": 50
+        },
+        "floor_changes": {
+          "diff": 75.1,
+          "diff_lo": 71.3519,
+          "diff_hi": 78.38,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 5,
+          "n_episodes": 50
+        }
+      },
+      "soonest needed": {
+        "guest_wait_hours": {
+          "diff": 0.784,
+          "diff_lo": 0.378,
+          "diff_hi": 1.2926833333333332,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 5,
+          "n_episodes": 50
+        },
+        "early_promises_kept_pct": {
+          "diff": -1.6289628541393244,
+          "diff_lo": -2.604849401578813,
+          "diff_hi": -0.7873817401552703,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 5,
+          "n_episodes": 50
+        },
+        "ready_by_noon_pct": {
+          "diff": -1.3064607356830016,
+          "diff_lo": -1.746855502453595,
+          "diff_hi": -0.9245519267683036,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 5,
+          "n_episodes": 50
+        },
+        "workload_spread": {
+          "diff": 0.09976934527817485,
+          "diff_lo": 0.02038241688006787,
+          "diff_hi": 0.18689155076506905,
+          "p_value": 0.0144,
+          "p_value_episodes": 0.00045,
+          "n_seeds": 5,
+          "n_episodes": 50
+        },
+        "floor_changes": {
+          "diff": 2.42,
+          "diff_lo": -1.236,
+          "diff_hi": 5.5761999999999965,
+          "p_value": 0.1912,
+          "p_value_episodes": 0.0,
+          "n_seeds": 5,
+          "n_episodes": 50
+        }
+      },
+      "random room": {
+        "guest_wait_hours": {
+          "diff": -7.439333333333333,
+          "diff_lo": -8.502,
+          "diff_hi": -6.409983333333334,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 5,
+          "n_episodes": 50
+        },
+        "early_promises_kept_pct": {
+          "diff": 4.523863371922197,
+          "diff_lo": 2.8051707002148185,
+          "diff_hi": 6.229601881125409,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 5,
+          "n_episodes": 50
+        },
+        "ready_by_noon_pct": {
+          "diff": -0.20933192142993828,
+          "diff_lo": -0.6937257067559456,
+          "diff_hi": 0.1773321706197675,
+          "p_value": 0.3308,
+          "p_value_episodes": 0.1791,
+          "n_seeds": 5,
+          "n_episodes": 50
+        },
+        "workload_spread": {
+          "diff": 0.1344077148831019,
+          "diff_lo": 0.05475911701605094,
+          "diff_hi": 0.22170031391276937,
+          "p_value": 0.0008,
+          "p_value_episodes": 0.0,
+          "n_seeds": 5,
+          "n_episodes": 50
+        },
+        "floor_changes": {
+          "diff": -7.54,
+          "diff_lo": -11.152199999999999,
+          "diff_hi": -4.372,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 5,
+          "n_episodes": 50
+        }
+      },
+      "lower bound (perfect foresight, no elevator time)": {
+        "guest_wait_hours": {
+          "diff": 4.254000000000021,
+          "diff_lo": 3.6393000000000004,
+          "diff_hi": 5.044700000000019,
+          "p_value": 0.0,
+          "p_value_episodes": 0.0,
+          "n_seeds": 5,
+          "n_episodes": 50
+        },
+        "early_promises_kept_pct": {
+          "diff": NaN,
+          "diff_lo": NaN,
+          "diff_hi": NaN,
+          "p_value": NaN
+        },
+        "ready_by_noon_pct": {
+          "diff": NaN,
+          "diff_lo": NaN,
+          "diff_hi": NaN,
+          "p_value": NaN
+        },
+        "workload_spread": {
+          "diff": NaN,
+          "diff_lo": NaN,
+          "diff_hi": NaN,
+          "p_value": NaN
+        },
+        "floor_changes": {
+          "diff": NaN,
+          "diff_lo": NaN,
+          "diff_hi": NaN,
+          "p_value": NaN
+        }
+      }
+    }
+  }
+}
