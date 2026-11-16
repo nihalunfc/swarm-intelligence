@@ -8,6 +8,14 @@ One swarm engine, several real-world applications. Many independent agents each 
 | Wildfire | Retardant drones over a forest | Retardant and flight time | [`apps/wildfire`](apps/wildfire/README.md) |
 | Hotel | Equipment, room attendants, staff and properties | Peak-hour grid capacity, attendant time, rooms, shifts | [`apps/hotel`](apps/hotel/README.md) |
 
+## Universal swarm research and the swarm-universe model
+
+[`universal/`](universal/) measures the same features and fits one general adaptive swarm equation on 25 real
+public datasets (fish, birds, ants, crowds, traffic, aircraft, drones, epidemics, information cascades, wildfires,
+earthquakes, sunspots, populations, grids, markets, galaxies, supernovae, BAO), builds application frameworks
+(grid, wildfire, epidemics, air traffic, drones, logistics), and tests a speculative self-regulating
+"swarm universe" model against supernova, BAO and H(z) data. Summary: [docs/universal-swarm/](docs/universal-swarm/README.md).
+
 ## Repository layout
 
 ```
@@ -15,6 +23,7 @@ core/swarm/      the shared engine (environment interface, agent, trainer, bench
 apps/energy/     battery swarm, data pipeline, Phase 2 forecasts, notebooks
 apps/wildfire/   drone swarm and the web dashboard (copy of GDGCHackathon2026, history kept)
 apps/hotel/      hotel analytics, proposals and demo site (copy of hotel-business, history kept)
+universal/       universal swarm study, application frameworks, swarm-universe cosmology
 configs/         one YAML file per experiment
 tests/           smoke and unit tests for the engine and apps
 docs/            capstone proposals and reports

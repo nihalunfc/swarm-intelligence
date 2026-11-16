@@ -13,6 +13,7 @@ dependencies = ["numpy>=1.26", "osqp>=0.6", "pandas>=2.0", "pyyaml>=6.0", "scipy
 dev = ["pytest>=8.0"]
 hotel = ["pulp>=3.0,<4.0", "openpyxl>=3.1", "python-dateutil>=2.9"]
 research = ["mlflow>=2.10"]
+universal = ["matplotlib>=3.8", "openpyxl>=3.1"]
 citylearn = ["citylearn==2.3.1"]
 vmas = ["vmas>=1.4"]
 
