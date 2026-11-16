@@ -13,6 +13,7 @@ This folder summarises three connected pieces of work:
 
 | Read | What it is |
 | :-- | :-- |
+| [swarm-universe-paper.md](swarm-universe-paper.md) | Paper-style draft of the cosmology part (cautious, web-ready) |
 | [swarm-universe-theory.md](swarm-universe-theory.md) | The universe model: postulates, equations, fits, comparison table, evidence table, faults, predictions |
 | [../../results/universal/REPORT.md](../../results/universal/REPORT.md) | Full results of the universal swarm study |
 | [../../results/universal/cosmology.md](../../results/universal/cosmology.md) | Cosmology fit tables |
@@ -75,8 +76,9 @@ The leave-one-group-out check keeps the sign of every constant: no single domain
 
 | Domain | What the framework does | Demo result |
 | :-- | :-- | :-- |
-| Energy / grid | batteries share discharge by state of charge (alignment) toward a 24 h set point | real ERCOT Oct-Dec 2020: spread cut 7.3% vs 6.8% for a threshold rule; no peak cut (the fleet empties before the peak). The trained swarm in apps/energy (10.8% spread cut, 704 MW peak cut) remains the better controller |
-| Wildfire | each fire forecasts its final size with the Richards law and bids for crews | real MTBS/NBAC fires, 5 days of data: Richards error 1.81 (log), persistence 0.82, "stops now" 2.29. **The growth law is worse than persistence this early**; it needs weather inputs |
+| Energy / grid | batteries share discharge by state of charge (alignment) toward a 24 h set point; compared with the trained battery swarm from apps/energy on the same data and months | real ERCOT Oct-Dec 2020: the rule-based framework cuts spread 7.3% and no peak; the **trained swarm (10 seeds) cuts spread 10.8% and the peak by 704 MW**, ahead of the proportional rule (9.1%), MPC (6.8%) and threshold rule (5.0%); perfect foresight bound 949 MW. Use the trained swarm |
+| Mixed-role energy | batteries, solar with curtailment, and demand response act on the net load each sees, no central coordinator; loaders ready for IESO (Ontario) and AESO (Alberta) | on real ERCOT + NREL data until the Canadian files are downloaded: spread 1,743 MW → 1,490 MW (−14.5%) and peak −453 MW with all three roles, vs −11.7% with solar + batteries |
+| Wildfire | each fire forecasts its final size with the Richards law and bids for crews | real MTBS/NBAC fires (203 fires, same fires at each horizon), median abs log error after 5 / 8 / 12 / 16 days: Richards 1.81 / 1.52 / 0.94 / 0.68, persistence 0.83 / 0.84 / 0.56 / 0.40, "stops now" 2.42 / 1.68 / 1.06 / 0.64. **More days help the growth law a lot, but simple persistence still wins**; the law needs weather and fuel inputs |
 | Epidemics | each region forecasts its wave and requests help by forecast growth | real COVID first wave, 21-day forecast from 20% of the wave: Gompertz 0.16, Richards 0.26, exponential 0.86 (median abs log error). Saturating laws beat exponential by 3 to 5 times |
 | Air traffic | aircraft add the swarm separation and alignment terms only inside an alert radius | real OpenSky: 0.51 close (< 5 NM, 2D) pairs per snapshot; simulation: close-pair steps 28,635 to 3,920 (−86%) at 0.23 mean heading deviation |
 | Drones | flocking controller with real-swarm gains plus goal seeking | simulation: all 30 arrive, 3 obstacle hits vs 18 without alignment, polarization 0.81 |
