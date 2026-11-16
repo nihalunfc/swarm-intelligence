@@ -1,0 +1,57 @@
+# Real (not simulated) collective-motion datasets for the Bird Flock study.
+# Raw files are downloaded into nature/data/raw/<id>/ and are never committed.
+# fetch: zenodo = downloaded automatically by fetch.py
+#        manual = download in a browser and place the files in nature/data/raw/<id>/
+#                 (Dryad's file API needs a login token; its website download works in a browser)
+
+datasets:
+  - id: fish-tetra-2024
+    title: "Selective social interactions and speed-induced leadership in schooling fish"
+    species: black neon tetra (Hyphessobrycon herbertaxelrodi)
+    citation: "Puy et al. 2024, PNAS, doi:10.1073/pnas.2309733121"
+    url: https://zenodo.org/records/10890112
+    license: CC-BY-4.0
+    dims: 2
+    fps: 50
+    px_per_cm: 27.45          # 2745 px = 100 cm (dataset page)
+    body_length_cm: 2.5
+    fetch: zenodo
+    zenodo_record: "10890112"
+    files:
+      - "Experimental_school_N=39_recording_0.csv"
+      - "Experimental_school_N=39_recording_1.csv"
+      - "Experimental_school_N=8_recording_0.csv"
+    published_checks:
+      # values the paper's model was tuned to match from the data (paper Table I and SI)
+      mean_speed_cm_s: 11.0
+      nn_distance_cm: 5.8
+
+  - id: jackdaw-2019
+    title: "Local interactions and their group-level consequences in flocking jackdaws"
+    species: jackdaw (Corvus monedula), wild
+    citation: "Ling et al. 2019, Proc. R. Soc. B, doi:10.5061/dryad.kb8js06"
+    url: https://datadryad.org/stash/dataset/doi:10.5061/dryad.kb8js06
+    license: CC0-1.0
+    dims: 3
+    fetch: manual
+    files: [DataS1.txt, DataS2.txt]
+
+  - id: swift-2017
+    title: "Three-dimensional trajectories and network analyses of group behaviour within chimney swift flocks"
+    species: chimney swift (Chaetura pelagica), wild
+    citation: "Evangelista et al. 2017, Proc. R. Soc. B, doi:10.5061/dryad.p68f8"
+    url: https://datadryad.org/dataset/doi:10.5061/dryad.p68f8
+    license: CC0-1.0
+    dims: 3
+    fetch: manual
+    files: [A_nodes.hdf5, B_nodes.hdf5, C_nodes.hdf5]
+
+  - id: pigeon-predation-2022
+    title: "Emergence of splits and collective turns in pigeon flocks under predation"
+    species: homing pigeon (Columba livia), GPS, robotic falcon
+    citation: "Papadopoulou et al. 2022, doi:10.5061/dryad.905qfttkc"
+    url: https://datadryad.org/stash/dataset/doi:10.5061/dryad.905qfttkc
+    license: CC0-1.0
+    dims: 2
+    fetch: manual
+    files: [all_emp_data.csv, maneuver_outcomes.csv, README.txt]
