@@ -1,0 +1,228 @@
+# 25 real datasets for the universal swarm study, plus placeholders for data that needs
+# a manual download. status: auto = fetch.py downloads it; manual = nihal downloads it
+# (see docs/universal-swarm/TODO-manual.md); placeholder = loader ready, data not yet found.
+# Z = https://zenodo.org/api/records ; GH = https://raw.githubusercontent.com
+datasets:
+  # ---- A. animal collective motion (agent tracks) ----
+  - key: fish
+    category: Fish school (black neon tetras, 8 fish)
+    group: animal-motion
+    status: auto
+    license: CC BY 4.0
+    citation: "Puy et al. 2024, Zenodo 10.5281/zenodo.10890112"
+    files:
+      - {name: x8_0.csv, url: "Z/10890112/files/Experimental_school_N=8_recording_0.csv/content"}
+  - key: jackdaw
+    category: Bird flocks (wild jackdaws, 3D stereo tracks)
+    group: animal-motion
+    status: auto
+    license: CC0
+    citation: "Ling et al. 2019 Nat Ecol Evol, Zenodo 5007024 (Dryad 10.5061/dryad.kb8js06)"
+    files:
+      - {name: DataS1.txt, url: "Z/5007024/files/DataS1.txt/content"}
+  - key: pigeon
+    category: Bird flocks (homing pigeons under a robotic predator, GPS)
+    group: animal-motion
+    status: auto
+    license: CC0
+    citation: "Papadopoulou et al. 2022, Zenodo 6027115 (Dryad 10.5061/dryad.905qfttkc)"
+    files:
+      - {name: all_emp_data.csv, url: "Z/6027115/files/all_emp_data.csv/content"}
+  - key: ants
+    category: Insects (ant exploration trajectories)
+    group: animal-motion
+    status: auto
+    license: CC0
+    citation: "Ants determine their next move at rest, Zenodo 4931865"
+    files:
+      - {name: ants.zip, url: "Z/4931865/files/Ant%20exploration%20trajectories.zip/content", unzip: true}
+  # ---- B. human and machine motion ----
+  - key: crowd
+    category: Pedestrian crowds (Lyon field data)
+    group: human-motion
+    status: auto
+    license: CC BY 4.0
+    citation: "Garcia, Fray & Nicolas 2021, Zenodo 4527462"
+    files:
+      - {name: Bellecour_trajs.txt, url: "Z/4527462/files/Bellecour_trajs.txt/content"}
+      - {name: Terreaux_Terrasses_trajs.txt, url: "Z/4527462/files/Terreaux_Terrasses_trajs.txt/content"}
+  - key: traffic
+    category: Road traffic (NGSIM I-80 vehicle trajectories)
+    group: human-motion
+    status: auto
+    license: CC BY 4.0
+    citation: "Vehicle trajectory and pavement behavior data, Zenodo 7716863 (NGSIM I-80 subset)"
+    files:
+      - {name: ngsim_i80.xlsx, url: "Z/7716863/files/HDV_data_NGSIM_I_80.xlsx/content"}
+  - key: air
+    category: Air traffic (OpenSky ADS-B positions, Europe, July 2019)
+    group: human-motion
+    status: auto
+    license: CC BY 4.0
+    citation: "Subset of OpenSky dataset for aircraft trajectories, Zenodo 12751775"
+    files:
+      - {name: opensky.csv, url: "Z/12751775/files/opensky_aviation_dataset.csv/content"}
+  - key: drones
+    category: Drone flock (30 outdoor quadcopters, optimized flocking)
+    group: human-motion
+    status: auto
+    license: CC0
+    citation: "Vasarhelyi et al. 2018 Sci Robot, Zenodo 4983910"
+    files:
+      - {name: flight_logs.zip, url: "Z/4983910/files/flight_logs.zip/content", unzip: true}
+  # ---- C. spreading: epidemics and information ----
+  - key: covid
+    category: Epidemic (COVID-19 confirmed cases, JHU CSSE, by country)
+    group: spreading
+    status: auto
+    license: CC BY 4.0
+    citation: "Dong, Du & Gardner 2020, JHU CSSE COVID-19 repository"
+    files:
+      - {name: confirmed.csv, url: "GH/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"}
+  - key: cascade_higgs
+    category: Information cascade (Twitter, Higgs boson 2012)
+    group: spreading
+    status: auto
+    license: CC BY 4.0
+    citation: "De Domenico et al. 2013; Twitter cascade datasets, Zenodo 2585375"
+    files:
+      - {name: higgs.zip, url: "Z/2585375/files/Higgs-boson-2012.zip/content", unzip: true}
+  - key: cascade_15m
+    category: Social movement (Twitter, Spanish 15M 2011)
+    group: spreading
+    status: auto
+    license: CC BY 4.0
+    citation: "Twitter cascade datasets, Zenodo 2585375"
+    files:
+      - {name: 15m.zip, url: "Z/2585375/files/15m.zip/content", unzip: true}
+  # ---- D. hazards and self-organised criticality ----
+  - key: fire
+    category: Wildfire daily growth (MTBS + Canada NBAC, 2002-2020)
+    group: hazards
+    status: auto
+    license: CC0
+    citation: "Day of burning dataset, Zenodo 11046212 (Dryad 10.5061/dryad.2jm63xswg)"
+    files:
+      - {name: daily.csv, url: "Z/11046212/files/Biogeography_DailyFireProgressionDataset.csv/content"}
+  - key: evac
+    category: Wildfire evacuations (Canada 1980-2017)
+    group: hazards
+    status: auto
+    license: CC BY 4.0
+    citation: "Canadian Wildfire Evacuation Data, Zenodo 5703323"
+    files:
+      - {name: evac.csv, url: "Z/5703323/files/Canadian_Wildfire_Evacuation_Data.csv/content"}
+  - key: quake
+    category: Earthquakes (relocated catalog, Walker Lane, 2002-)
+    group: hazards
+    status: auto
+    license: CC BY 4.0
+    citation: "Relocated earthquake catalog, Zenodo 4141086"
+    files:
+      - {name: datasetS1.txt, url: "Z/4141086/files/datasetS1.txt/content"}
+  - key: sunspots
+    category: Solar activity (monthly sunspot number 1749-2013)
+    group: hazards
+    status: auto
+    license: public (SILSO via R datasets)
+    citation: "SIDC/SILSO, R datasets::sunspot.month"
+    files:
+      - {name: sunspot.month.csv, url: "GH/vincentarelbundock/Rdatasets/master/csv/datasets/sunspot.month.csv"}
+  # ---- E. ecology and populations ----
+  - key: lynx
+    category: Predator population (Canadian lynx trappings 1821-1934)
+    group: ecology
+    status: auto
+    license: public (R datasets)
+    citation: "Elton & Nicholson 1942, R datasets::lynx"
+    files:
+      - {name: lynx.csv, url: "GH/vincentarelbundock/Rdatasets/master/csv/datasets/lynx.csv"}
+  - key: birdcounts
+    category: Bird populations (Christmas bird count, Ontario, 1921-2017)
+    group: ecology
+    status: auto
+    license: public (bayesrules)
+    citation: "bayesrules::bird_counts"
+    files:
+      - {name: bird_counts.csv, url: "GH/vincentarelbundock/Rdatasets/master/csv/bayesrules/bird_counts.csv"}
+  # ---- F. engineered and economic networks ----
+  - key: grid
+    category: Electricity grid load (ERCOT COAST 2020, hourly)
+    group: socio-technical
+    status: auto
+    license: public (ERCOT)
+    citation: "ERCOT load archive, repo sample apps/energy/data/sample/ercot_nrel_2020.csv"
+    files: []
+  - key: bikes
+    category: Bike sharing (Capital Bikeshare daily rides 2011-2012)
+    group: socio-technical
+    status: auto
+    license: public (bayesrules)
+    citation: "Fanaee-T & Gama 2013, bayesrules::bikes"
+    files:
+      - {name: bikes.csv, url: "GH/vincentarelbundock/Rdatasets/master/csv/bayesrules/bikes.csv"}
+  - key: markets
+    category: Stock markets (DAX, SMI, CAC, FTSE daily 1991-1998)
+    group: socio-technical
+    status: auto
+    license: public (R datasets)
+    citation: "R datasets::EuStockMarkets"
+    files:
+      - {name: EuStockMarkets.csv, url: "GH/vincentarelbundock/Rdatasets/master/csv/datasets/EuStockMarkets.csv"}
+  # ---- G. cosmic structure and expansion ----
+  - key: sparc
+    category: Galaxy rotation curves (SPARC, 175 galaxies)
+    group: cosmic
+    status: auto
+    license: CC BY 4.0
+    citation: "Lelli, McGaugh & Schombert 2016 AJ 152 157; Zenodo 16284118"
+    files:
+      - {name: Rotmod_LTG.zip, url: "Z/16284118/files/Rotmod_LTG.zip/content", unzip: true}
+      - {name: SPARC_Lelli2016c.mrt, url: "Z/16284118/files/SPARC_Lelli2016c.mrt/content"}
+  - key: pantheon
+    category: Type Ia supernovae (Pantheon+, 1701 light curves)
+    group: cosmic
+    status: auto
+    license: public (Pantheon+ data release)
+    citation: "Scolnic et al. 2022; Brout et al. 2022 ApJ 938 110"
+    files:
+      - {name: Pantheon+SH0ES.dat, url: "GH/PantheonPlusSH0ES/DataRelease/main/Pantheon%2B_Data/4_DISTANCES_AND_COVAR/Pantheon%2BSH0ES.dat"}
+      - {name: Pantheon+SH0ES_STAT+SYS.cov, url: "GH/PantheonPlusSH0ES/DataRelease/main/Pantheon%2B_Data/4_DISTANCES_AND_COVAR/Pantheon%2BSH0ES_STAT%2BSYS.cov"}
+  - key: bao
+    category: Baryon acoustic oscillations (DESI DR2)
+    group: cosmic
+    status: auto
+    license: public (DESI DR2, via CobayaSampler/bao_data)
+    citation: "DESI Collaboration 2025, arXiv:2503.14738"
+    files:
+      - {name: mean.txt, url: "GH/CobayaSampler/bao_data/master/desi_bao_dr2/desi_gaussian_bao_ALL_GCcomb_mean.txt"}
+      - {name: cov.txt, url: "GH/CobayaSampler/bao_data/master/desi_bao_dr2/desi_gaussian_bao_ALL_GCcomb_cov.txt"}
+  - key: chronometers
+    category: Cosmic chronometers H(z) (Moresco BC03 set)
+    group: cosmic
+    status: auto
+    license: public
+    citation: "Moresco et al. 2012, 2015, 2016; gitlab.com/mmoresco/CCcovariance"
+    files:
+      - {name: HzTable_MM_BC03.dat, url: "https://gitlab.com/mmoresco/CCcovariance/-/raw/master/data/HzTable_MM_BC03.dat"}
+  - key: zebrafish
+    category: Fish school (zebrafish collective departures)
+    group: animal-motion
+    status: auto
+    license: CC BY 4.0
+    citation: "Collective departures and leadership in zebrafish, Zenodo 1470446"
+    files:
+      - {name: data.zip, url: "Z/1470446/files/data.zip/content", unzip: true}
+
+# Loaders or entries ready, data needs a person (see docs/universal-swarm/TODO-manual.md)
+placeholders:
+  - {key: swift, category: "Chimney swift flocks (1,800 birds, 3D)", source: "Dryad 10.5061/dryad.p68f8 (14 GB, browser download)"}
+  - {key: starling, category: "Starling murmurations", source: "COBBS Rome 3D tracks: request from authors (Zenodo 19628928 starling data is simulation, not usable)"}
+  - {key: locust, category: "Locust hopper bands", source: "Zenodo 10463065 (940 MB) - scriptable but large; run fetch.py --only locust"}
+  - {key: honeybee, category: "Honeybee swarm 3D assembly", source: "Zenodo 18992443 (132 MB)"}
+  - {key: fish39, category: "Tetra school, 39 fish", source: "Zenodo 10890112 N=39 files (261 MB each)"}
+  - {key: ieso, category: "Ontario grid (IESO hourly demand)", source: "reports-public.ieso.ca (blocked from the cloud runner)"}
+  - {key: aeso, category: "Alberta grid (AESO pool price and load)", source: "aeso.ca (blocked from the cloud runner)"}
+  - {key: cwfis, category: "Canadian National Fire Database (points, perimeters)", source: "cwfis.cfs.nrcan.gc.ca (blocked from the cloud runner)"}
+  - {key: comcat, category: "USGS global earthquake catalog", source: "earthquake.usgs.gov (blocked from the cloud runner)"}
+  - {key: planck, category: "Planck CMB likelihoods", source: "pla.esac.esa.int (blocked); compressed priors used instead"}

@@ -1,0 +1,26 @@
+{
+ "n_points": 2696,
+ "n_galaxies": 147,
+ "Newton (no dark matter)": {
+  "g_dagger": null,
+  "rms_dex": 0.5143568484816696,
+  "bias_dex": 0.4309080282442449,
+  "low_acc_bias_dex": 0.719495777221158
+ },
+ "RAR (McGaugh 2016)": {
+  "g_dagger": 1.1612469276279507e-10,
+  "rms_dex": 0.1326674729019793,
+  "bias_dex": 0.0013478724120418314,
+  "low_acc_bias_dex": -0.01194610620267629
+ },
+ "swarm cohesion floor": {
+  "g_dagger": 7.563081088784891e-11,
+  "rms_dex": 0.13829130245835736,
+  "bias_dex": -0.011844391616104347,
+  "low_acc_bias_dex": 0.025535679425653414
+ },
+ "H0_used": 68.6388158594608,
+ "cH0_over_2pi": 1.0613458268360313e-10,
+ "g_dagger_over_cH0_over_2pi": 1.0941268135851003,
+ "g_dagger_over_cH0_over_6": 1.0448141445087207
+}
