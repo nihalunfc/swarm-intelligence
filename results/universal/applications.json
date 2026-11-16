@@ -1,0 +1,89 @@
+{
+ "grid": {
+  "data": "ERCOT COAST 2020 Oct-Dec (real)",
+  "threshold": {
+   "peak_cut_MW": 0.0,
+   "spread_cut_pct": 6.845217907549939
+  },
+  "swarm": {
+   "peak_cut_MW": NaN,
+   "spread_cut_pct": NaN
+  }
+ },
+ "wildfire": {
+  "data": "MTBS + NBAC daily fire progression (real)",
+  "fires": 144,
+  "train_days": 5,
+  "richards": {
+   "median_abs_log_error": 1.8077755229363532
+  },
+  "persistence": {
+   "median_abs_log_error": 0.8222986676596262
+  },
+  "stop_now": {
+   "median_abs_log_error": 2.2862009832962475
+  }
+ },
+ "epidemics": {
+  "data": "JHU CSSE COVID-19 first wave (real)",
+  "countries": 25,
+  "horizon_days": 21,
+  "richards": {
+   "median_abs_log_error": 0.2643886247334834
+  },
+  "gompertz": {
+   "median_abs_log_error": 0.15713873263959152
+  },
+  "exponential": {
+   "median_abs_log_error": 0.8582651930460119
+  }
+ },
+ "air_traffic": {
+  "real": {
+   "data": "OpenSky ADS-B Europe July 2019 (real, 2D only)",
+   "timestamps": 26659,
+   "pairs_within_5NM": 13525,
+   "pairs_per_timestamp": 0.507333358340523
+  },
+  "simulated (not evidence)": {
+   "no swarm rule": {
+    "close_pair_steps": 28635,
+    "mean_heading_deviation": 5.700532638523253e-17
+   },
+   "swarm rule": {
+    "close_pair_steps": 3920,
+    "mean_heading_deviation": 0.23453985769931027
+   }
+  }
+ },
+ "drones": {
+  "simulated (not evidence)": {
+   "ensemble gains": {
+    "polarization": 0.9008843473431498,
+    "min_separation": 0.3672272496703741,
+    "obstacle_hits": 0,
+    "arrived_share": 0.03333333333333333
+   },
+   "no alignment": {
+    "polarization": 0.832723059552628,
+    "min_separation": 0.2996626067944602,
+    "obstacle_hits": 0,
+    "arrived_share": 0.0
+   }
+  }
+ },
+ "logistics": {
+  "simulated (not evidence)": {
+   "swarm (response threshold)": {
+    "mean_queue": 5.604875,
+    "p95_queue": 17.0,
+    "moves": 12095
+   },
+   "round robin": {
+    "mean_queue": 69.46875,
+    "p95_queue": 489.0,
+    "moves": 40000
+   }
+  }
+ }
+}
