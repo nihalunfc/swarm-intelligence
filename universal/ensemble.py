@@ -140,12 +140,12 @@ def report(rows: list[dict], table: pd.DataFrame, ens: dict, out: Path) -> None:
                      f"| {_fmt(e.get('pl_vs_lognormal_LR'))} ({_fmt(e.get('pl_vs_lognormal_p'), 2)}) |")
     L += ["", "## Ensemble: constants of the general equation", "",
           "| Constant | n | median | IQR | leave-one-group-out median range |", "| :-- | --: | --: | :-- | :-- |"]
-    for c, v in ens["constants"].items():
+    for v in ens["constants"].values():
         lo = v["leave_one_group_out_range"]
         L.append(f"| {v['desc']} | {v['n']} | {_fmt(v['median'])} | {_fmt(v['q25'])} to {_fmt(v['q75'])} | "
                  f"{_fmt(lo[0]) + ' to ' + _fmt(lo[1]) if lo else '-'} |")
     L += ["", "## Universality checks", ""]
-    for k, v in ens["checks"].items():
+    for v in ens["checks"].values():
         L.append(f"- **{v['desc']}**: {v['value']:.0%} of {v['n']}")
     L += ["", "## Major characteristics (PCA)", ""]
     for i, (pc, ld) in enumerate(ens["pca"]["loadings"].items()):
@@ -161,7 +161,7 @@ def report(rows: list[dict], table: pd.DataFrame, ens: dict, out: Path) -> None:
 
         fig, ax = plt.subplots(figsize=(7, 5))
         groups = sorted(table["group"].unique())
-        for gi, g in enumerate(groups):
+        for g in groups:
             ks = table.loc[table["group"] == g, "key"]
             xy = np.array([ens["pca"]["scores"][k][:2] for k in ks])
             ax.scatter(xy[:, 0], xy[:, 1], label=g, s=40)

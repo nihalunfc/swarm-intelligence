@@ -13,7 +13,6 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-
 REPO_SAMPLE = "apps/energy/data/sample/ercot_nrel_2020.csv"
 
 
