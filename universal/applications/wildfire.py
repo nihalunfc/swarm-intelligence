@@ -3,9 +3,9 @@ fires that will grow most (decentralised: each fire 'agent' bids with its foreca
 
 Growth law: Richards curve A(t) = K / (1 + nu exp(-r (t - tm)))^(1/nu), the self-limiting growth
 term of the general equation. Real data: daily progression of large fires (MTBS + Canada NBAC).
-Test: fit on the first k days, predict the final size; compare with 'persistence' (assume the
-fire keeps growing at its last daily rate for the same number of remaining days) and with
-'stop now' (final = current). KPI: median absolute log error of the final size.
+Test: fit on the first k days, predict the final size; compare with 'stop now' (final =
+current), 'persistence' (the last daily growth continues for the typical remaining duration),
+and an oracle persistence that knows the true remaining duration (not usable in practice). KPI: median absolute log error of the final size.
 """
 from __future__ import annotations
 
@@ -30,11 +30,9 @@ def forecast_final(days: np.ndarray, area: np.ndarray, k: int) -> float:
             return float(y[-1])
 
 
-def demo(k=5, n_fires=150) -> dict:
-    from ..loaders import load
-
-    fires = load("fire", n_growth=n_fires).series
-    err = {"richards": [], "persistence": [], "stop_now": []}
+def _one(fires, k):
+    err = {"richards": [], "persistence_typical_duration": [], "stop_now": [], "persistence_oracle_duration": []}
+    typical = float(np.median([len(s.t) - k for s in fires if len(s.t) >= k + 3]))
     for s in fires:
         t, a = s.t, s.x
         if len(t) < k + 3:
@@ -42,10 +40,22 @@ def demo(k=5, n_fires=150) -> dict:
         final = a[-1]
         err["richards"].append(abs(np.log(forecast_final(t, a, k) / final)))
         rate = a[k - 1] - a[k - 2]
-        err["persistence"].append(abs(np.log((a[k - 1] + rate * (len(t) - k)) / final)))
+        err["persistence_typical_duration"].append(abs(np.log((a[k - 1] + rate * typical) / final)))
+        # oracle: knows how many days the fire will really burn (not available in practice)
+        err["persistence_oracle_duration"].append(abs(np.log((a[k - 1] + rate * (len(t) - k)) / final)))
         err["stop_now"].append(abs(np.log(a[k - 1] / final)))
-    return {"data": "MTBS + NBAC daily fire progression (real)", "fires": len(err["richards"]), "train_days": k,
+    return {"fires": len(err["richards"]),
             **{m: {"median_abs_log_error": float(np.median(v))} for m, v in err.items()}}
+
+
+def demo(train_days=(5, 8, 12, 16), n_fires=300) -> dict:
+    """Forecast skill as more days of each fire are seen (same fires: those that burn at least 19 days)."""
+    from ..loaders import load
+
+    fires = [s for s in load("fire", n_growth=n_fires).series if len(s.t) >= max(train_days) + 3]
+    return {"data": "MTBS + NBAC daily fire progression (real)",
+            "note": "same fires at every horizon; error = median |log(predicted final / actual final)|",
+            **{f"{k}_days": _one(fires, k) for k in train_days}}
 
 
 def allocate(forecast_growth: np.ndarray, crews: int) -> np.ndarray:

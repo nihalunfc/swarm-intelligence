@@ -68,3 +68,13 @@ def test_nature_rule_and_logistics_run():
     assert NatureRule().accel(pos, vel).shape == (20, 2)
     r = logistics.simulate(steps=200)
     assert r["mean_queue"] >= 0
+
+
+def test_mixed_energy_swarm_flattens_load():
+    from universal.applications.energy_mixed import simulate
+
+    hours = np.arange(24 * 14)
+    load = 1000 + 300 * np.sin(2 * np.pi * hours / 24)
+    ghi = np.clip(800 * np.sin(2 * np.pi * (hours - 6) / 24), 0, None)
+    net, _ = simulate(load, ghi, n_batt=2, p_batt=50, e_batt=200, solar_mw=100, n_dr=2, dr_mw=20)
+    assert net.std() < load.std()

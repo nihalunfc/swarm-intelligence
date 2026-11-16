@@ -4,14 +4,14 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from . import air_traffic, drones, epidemics, grid, logistics, wildfire
+from . import air_traffic, drones, energy_mixed, epidemics, grid, logistics, wildfire
 
 OUT = Path(__file__).resolve().parents[2] / "results" / "universal"
 
 
 def main() -> None:
     res = {}
-    for name, mod in [("grid", grid), ("wildfire", wildfire), ("epidemics", epidemics),
+    for name, mod in [("grid", grid), ("energy_mixed_roles", energy_mixed), ("wildfire", wildfire), ("epidemics", epidemics),
                       ("air_traffic", air_traffic), ("drones", drones), ("logistics", logistics)]:
         try:
             res[name] = mod.demo()
