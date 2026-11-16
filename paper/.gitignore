@@ -1,0 +1,9 @@
+# Build outputs; tables are generated from ../results by make_tables.py
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+main.pdf
+arxiv.tar.gz
+tables/*.tex

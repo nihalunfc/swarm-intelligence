@@ -36,3 +36,4 @@ jobs:
         run: pytest -q tests
       - name: Hotel analytics
         run: pytest -q apps/hotel/analytics/tests
+
