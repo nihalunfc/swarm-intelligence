@@ -1,0 +1,28 @@
+name: Paper
+
+# Builds the paper PDF only when the paper or its results change, so ordinary
+# code pushes do not pay for a LaTeX install.
+on:
+  push:
+    branches: [main]
+    paths: ['paper/**', 'results/**', '.github/workflows/paper.yml']
+  pull_request:
+    paths: ['paper/**', 'results/**', '.github/workflows/paper.yml']
+  workflow_dispatch:
+
+jobs:
+  paper:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install LaTeX
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q --no-install-recommends texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended
+      - name: Build the paper from results/
+        run: make -C paper
+      - uses: actions/upload-artifact@v4
+        with:
+          name: paper
+          path: paper/main.pdf
