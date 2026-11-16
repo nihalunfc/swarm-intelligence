@@ -64,8 +64,15 @@ def _stride(tr: Tracks) -> int:
                 dn.append(np.median(cKDTree(p).query(p, 2)[0][:, 1]))
     if not v or not dn:
         return 1
-    move = np.median(np.concatenate(v)) * np.nanmedian(st)
-    return int(max(1, round(0.3 * np.median(dn) / max(move, 1e-12))))
+    move = _typical_speed(np.concatenate(v)) * np.nanmedian(st)
+    return int(min(10, max(1, round(0.3 * np.median(dn) / max(move, 1e-12)))))
+
+
+def _typical_speed(s: np.ndarray) -> float:
+    """Median speed of agents that are actually moving (cafe sitters and parked cars excluded)."""
+    s = s[np.isfinite(s)]
+    moving = s[s > 0.1 * np.percentile(s, 90)]
+    return float(np.median(moving)) if len(moving) else float(np.median(s))
 
 
 def track_features(tr: Tracks, max_frames: int = 4000, k: int = 3) -> dict:
@@ -91,7 +98,7 @@ def track_features(tr: Tracks, max_frames: int = 4000, k: int = 3) -> dict:
         frames.append(e)
     if not frames:
         return {}
-    v0 = float(np.median(np.concatenate(speeds)))
+    v0 = _typical_speed(np.concatenate(speeds))
     allf = pd.concat([f.assign(ep=i) for i, f in enumerate(frames)])
     keys = allf[["ep", "t"]].drop_duplicates()
     if len(keys) > max_frames:
