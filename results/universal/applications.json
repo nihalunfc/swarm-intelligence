@@ -1,27 +1,146 @@
 {
  "grid": {
   "data": "ERCOT COAST 2020 Oct-Dec (real)",
-  "threshold": {
+  "framework threshold rule": {
    "peak_cut_MW": 0.0,
    "spread_cut_pct": 6.845217907549939
   },
-  "swarm": {
+  "framework swarm rule": {
    "peak_cut_MW": 0.0,
    "spread_cut_pct": 7.266531618619531
+  },
+  "trained swarm and baselines (apps/energy, recorded test runs)": {
+   "swarm (trained)": {
+    "seeds": 10,
+    "peak_cut_MW": 704.257486925257,
+    "spread_cut_pct": 10.791225004287305
+   },
+   "no battery": {
+    "seeds": 10,
+    "peak_cut_MW": 0.0,
+    "spread_cut_pct": 0.0
+   },
+   "threshold rule": {
+    "seeds": 10,
+    "peak_cut_MW": 0.0,
+    "spread_cut_pct": 5.02872034632219
+   },
+   "proportional rule": {
+    "seeds": 10,
+    "peak_cut_MW": 0.0,
+    "spread_cut_pct": 9.057917656070602
+   },
+   "MPC (24 h forecast)": {
+    "seeds": 10,
+    "peak_cut_MW": 0.0,
+    "spread_cut_pct": 6.835731065771277
+   },
+   "optimum: min peak (perfect foresight)": {
+    "seeds": 10,
+    "peak_cut_MW": 948.6832980505133,
+    "spread_cut_pct": -0.06169088880090268
+   },
+   "optimum: flattest (perfect foresight)": {
+    "seeds": 10,
+    "peak_cut_MW": 948.6832980505133,
+    "spread_cut_pct": 14.67148879092044
+   }
+  }
+ },
+ "energy_mixed_roles": {
+  "data": "ERCOT COAST 2020 + NREL irradiance (real; Canadian files not downloaded yet)",
+  "hours": 2208,
+  "solar only (no control)": {
+   "peak_MW": 18418.541982,
+   "std_MW": 1654.9969753231155,
+   "peak_cut_vs_load_MW": 137.71593900000153,
+   "curtailed_MWh": 727.8203856040018
+  },
+  "solar + batteries": {
+   "peak_MW": 18189.51646992,
+   "std_MW": 1538.6492704317254,
+   "peak_cut_vs_load_MW": 366.74145108000084,
+   "curtailed_MWh": 727.8203856040018
+  },
+  "solar + demand response": {
+   "peak_MW": 18103.439813,
+   "std_MW": 1580.4328735342017,
+   "peak_cut_vs_load_MW": 452.8181079999995,
+   "curtailed_MWh": 727.8203856040018
+  },
+  "mixed swarm: solar + DR + batteries": {
+   "peak_MW": 18103.439813,
+   "std_MW": 1489.9174477384333,
+   "peak_cut_vs_load_MW": 452.8181079999995,
+   "curtailed_MWh": 727.8203856040018
+  },
+  "raw load": {
+   "peak_MW": 18556.257921,
+   "std_MW": 1742.6206889508157
   }
  },
  "wildfire": {
   "data": "MTBS + NBAC daily fire progression (real)",
-  "fires": 144,
-  "train_days": 5,
-  "richards": {
-   "median_abs_log_error": 1.8077755229363532
+  "note": "same fires at every horizon; error = median |log(predicted final / actual final)|",
+  "5_days": {
+   "fires": 203,
+   "richards": {
+    "median_abs_log_error": 1.8078748706731447
+   },
+   "persistence_typical_duration": {
+    "median_abs_log_error": 0.833419651083381
+   },
+   "stop_now": {
+    "median_abs_log_error": 2.424688254396813
+   },
+   "persistence_oracle_duration": {
+    "median_abs_log_error": 0.8191502516402669
+   }
   },
-  "persistence": {
-   "median_abs_log_error": 0.8222986676596262
+  "8_days": {
+   "fires": 203,
+   "richards": {
+    "median_abs_log_error": 1.5188164997255944
+   },
+   "persistence_typical_duration": {
+    "median_abs_log_error": 0.8370784729333911
+   },
+   "stop_now": {
+    "median_abs_log_error": 1.676203960347941
+   },
+   "persistence_oracle_duration": {
+    "median_abs_log_error": 0.7655974317388603
+   }
   },
-  "stop_now": {
-   "median_abs_log_error": 2.2862009832962475
+  "12_days": {
+   "fires": 203,
+   "richards": {
+    "median_abs_log_error": 0.9395946818631549
+   },
+   "persistence_typical_duration": {
+    "median_abs_log_error": 0.5552070956849501
+   },
+   "stop_now": {
+    "median_abs_log_error": 1.056551785915422
+   },
+   "persistence_oracle_duration": {
+    "median_abs_log_error": 0.47429618990664935
+   }
+  },
+  "16_days": {
+   "fires": 203,
+   "richards": {
+    "median_abs_log_error": 0.6836023370179762
+   },
+   "persistence_typical_duration": {
+    "median_abs_log_error": 0.3965851000390505
+   },
+   "stop_now": {
+    "median_abs_log_error": 0.6443116227138447
+   },
+   "persistence_oracle_duration": {
+    "median_abs_log_error": 0.2981683639413788
+   }
   }
  },
  "epidemics": {

@@ -42,6 +42,20 @@ def simulate(load: np.ndarray, n=10, p_max=100.0, e_max=400.0, rule="swarm", see
     return {"peak_MW": float(net.max()), "std_MW": float(net.std()), "net": net}
 
 
+def trained_swarm_results(root="results/runs/energy") -> dict:
+    """Held-out test results of the trained battery swarm (apps/energy, VDN, 10 seeds), same months and data."""
+    import json
+    from pathlib import Path
+
+    rows = {}
+    for f in sorted(Path(root).glob("seed-*/episodes.json")):
+        pol = json.loads(f.read_text())["policies"]
+        for name, eps in pol.items():
+            rows.setdefault(name, []).append((eps[0]["peak_reduction_mw"], eps[0]["std_reduction_pct"]))
+    return {name: {"seeds": len(v), "peak_cut_MW": float(np.mean([a for a, _ in v])),
+                   "spread_cut_pct": float(np.mean([b for _, b in v]))} for name, v in rows.items()}
+
+
 def demo(path=REPO_SAMPLE) -> dict:
     load = pd.read_csv(path)["demand_mw"].to_numpy(float)
     load = load[-24 * 92:]  # Oct-Dec, the held-out test months used in apps/energy
@@ -49,6 +63,9 @@ def demo(path=REPO_SAMPLE) -> dict:
     out = {"data": "ERCOT COAST 2020 Oct-Dec (real)"}
     for r in ["threshold", "swarm"]:
         s = simulate(load, rule=r)
-        out[r] = {"peak_cut_MW": base["peak_MW"] - s["peak_MW"],
-                  "spread_cut_pct": 100 * (1 - s["std_MW"] / base["std_MW"])}
+        out[f"framework {r} rule"] = {"peak_cut_MW": base["peak_MW"] - s["peak_MW"],
+                                      "spread_cut_pct": 100 * (1 - s["std_MW"] / base["std_MW"])}
+    # The trained swarm cannot be re-run without PyTorch, so its recorded held-out results are used:
+    # same data, same months, same 10 x 100 MW / 400 MWh fleet (results/runs/energy, seeds 0-9).
+    out["trained swarm and baselines (apps/energy, recorded test runs)"] = trained_swarm_results()
     return out
