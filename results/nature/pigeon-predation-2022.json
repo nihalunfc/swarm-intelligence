@@ -1,0 +1,4372 @@
+{
+ "dataset": "pigeon-predation-2022",
+ "runs": [
+  {
+   "recording": "pigeon_flight_9",
+   "summary": {
+    "frames": 162,
+    "animals": 10,
+    "dims": 2,
+    "duration_s": 32.4,
+    "missing_fraction": 0.13271604938271606,
+    "mean_speed_m_s": 20.891785050675768,
+    "median_speed_m_s": 19.382191640296014,
+    "mean_nn_distance_m": 1.9469367311458068,
+    "median_nn_distance_m": 1.5426036417671267,
+    "mean_speed_bl_s": 65.28682828336177,
+    "mean_nn_distance_bl": 6.084177284830646,
+    "polarisation_mean": 0.992511080415372,
+    "milling_mean": 0.11766145176309266,
+    "fraction_polarised_gt_0.8": 0.9938271604938271,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 1,
+    "given_speed_median": 17.63359733185735,
+    "given_nn_median": 1.35728093329531
+   }
+  },
+  {
+   "recording": "pigeon_flight_10",
+   "summary": {
+    "frames": 186,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 37.2,
+    "missing_fraction": 0.13709677419354838,
+    "mean_speed_m_s": 16.315990977479963,
+    "median_speed_m_s": 16.505901455259455,
+    "mean_nn_distance_m": 1.8824777242246842,
+    "median_nn_distance_m": 1.4034737644724995,
+    "mean_speed_bl_s": 50.98747180462488,
+    "mean_nn_distance_bl": 5.882742888202138,
+    "polarisation_mean": 0.9872088119627217,
+    "milling_mean": 0.13549798732960908,
+    "fraction_polarised_gt_0.8": 0.9946236559139785,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 2,
+    "given_speed_median": 15.6166005236215,
+    "given_nn_median": 1.189117649633715
+   }
+  },
+  {
+   "recording": "pigeon_flight_11",
+   "summary": {
+    "frames": 226,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 45.2,
+    "missing_fraction": 0.03982300884955752,
+    "mean_speed_m_s": 17.031229822057625,
+    "median_speed_m_s": 18.008115459595,
+    "mean_nn_distance_m": 1.5661366554947875,
+    "median_nn_distance_m": 1.211072317772366,
+    "mean_speed_bl_s": 53.22259319393008,
+    "mean_nn_distance_bl": 4.894177048421211,
+    "polarisation_mean": 0.9900522510429243,
+    "milling_mean": 0.12384471917243026,
+    "fraction_polarised_gt_0.8": 0.995575221238938,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 3,
+    "given_speed_median": 15.88042157918765,
+    "given_nn_median": 1.00566645675817
+   }
+  },
+  {
+   "recording": "pigeon_flight_12",
+   "summary": {
+    "frames": 387,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 77.4,
+    "missing_fraction": 0.010012919896640826,
+    "mean_speed_m_s": 17.281883666152577,
+    "median_speed_m_s": 17.543788036132053,
+    "mean_nn_distance_m": 1.7556377068499573,
+    "median_nn_distance_m": 1.3021547562544487,
+    "mean_speed_bl_s": 54.005886456726806,
+    "mean_nn_distance_bl": 5.486367833906116,
+    "polarisation_mean": 0.9933954392922643,
+    "milling_mean": 0.10582147014099491,
+    "fraction_polarised_gt_0.8": 0.9974160206718347,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 4,
+    "given_speed_median": 16.4961719282227,
+    "given_nn_median": 1.12965483192021
+   }
+  },
+  {
+   "recording": "pigeon_flight_13",
+   "summary": {
+    "frames": 208,
+    "animals": 10,
+    "dims": 2,
+    "duration_s": 41.6,
+    "missing_fraction": 0.28125,
+    "mean_speed_m_s": 17.542883629385617,
+    "median_speed_m_s": 17.804534490322865,
+    "mean_nn_distance_m": 1.8596335752902668,
+    "median_nn_distance_m": 1.7312396891148074,
+    "mean_speed_bl_s": 54.82151134183005,
+    "mean_nn_distance_bl": 5.811354922782084,
+    "polarisation_mean": 0.9873176245048569,
+    "milling_mean": 0.10312003712002833,
+    "fraction_polarised_gt_0.8": 0.9903846153846154,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 1,
+    "given_speed_median": 16.47291246102655,
+    "given_nn_median": 1.54614331661321
+   }
+  },
+  {
+   "recording": "pigeon_flight_14",
+   "summary": {
+    "frames": 200,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 40.0,
+    "missing_fraction": 0.125625,
+    "mean_speed_m_s": 16.781770328686044,
+    "median_speed_m_s": 16.794034018254848,
+    "mean_nn_distance_m": 1.62879622428076,
+    "median_nn_distance_m": 1.246087297282846,
+    "mean_speed_bl_s": 52.443032277143885,
+    "mean_nn_distance_bl": 5.089988200877375,
+    "polarisation_mean": 0.9953646848662694,
+    "milling_mean": 0.1322018852298148,
+    "fraction_polarised_gt_0.8": 0.995,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 2,
+    "given_speed_median": 15.7389845683834,
+    "given_nn_median": 1.04441745938182
+   }
+  },
+  {
+   "recording": "pigeon_flight_15",
+   "summary": {
+    "frames": 235,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 47.0,
+    "missing_fraction": 0.0,
+    "mean_speed_m_s": 18.847476856321165,
+    "median_speed_m_s": 20.197304575719606,
+    "mean_nn_distance_m": 1.9601283730397425,
+    "median_nn_distance_m": 1.2989708915120168,
+    "mean_speed_bl_s": 58.898365176003644,
+    "mean_nn_distance_bl": 6.125401165749195,
+    "polarisation_mean": 0.994278174280177,
+    "milling_mean": 0.1340696914950434,
+    "fraction_polarised_gt_0.8": 0.9957446808510638,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 3,
+    "given_speed_median": 15.2286283261956,
+    "given_nn_median": 1.129681489840745
+   }
+  },
+  {
+   "recording": "pigeon_flight_16",
+   "summary": {
+    "frames": 215,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 43.0,
+    "missing_fraction": 0.010465116279069767,
+    "mean_speed_m_s": 19.658301944380888,
+    "median_speed_m_s": 21.005567697259572,
+    "mean_nn_distance_m": 1.584345963396039,
+    "median_nn_distance_m": 1.2385587865268204,
+    "mean_speed_bl_s": 61.43219357619027,
+    "mean_nn_distance_bl": 4.951081135612622,
+    "polarisation_mean": 0.9940827462541791,
+    "milling_mean": 0.11936384651263854,
+    "fraction_polarised_gt_0.8": 0.9953488372093023,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 4,
+    "given_speed_median": 16.299876361471398,
+    "given_nn_median": 1.099699344560325
+   }
+  },
+  {
+   "recording": "pigeon_flight_17",
+   "summary": {
+    "frames": 228,
+    "animals": 10,
+    "dims": 2,
+    "duration_s": 45.6,
+    "missing_fraction": 0.35219298245614034,
+    "mean_speed_m_s": 19.947822404983736,
+    "median_speed_m_s": 20.264141852924034,
+    "mean_nn_distance_m": 1.632705715146968,
+    "median_nn_distance_m": 1.4785287267208993,
+    "mean_speed_bl_s": 62.33694501557417,
+    "mean_nn_distance_bl": 5.102205359834275,
+    "polarisation_mean": 0.998605444133133,
+    "milling_mean": 0.06241079036125605,
+    "fraction_polarised_gt_0.8": 1.0,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 1,
+    "given_speed_median": 17.4237272462625,
+    "given_nn_median": 1.31867885587644
+   }
+  },
+  {
+   "recording": "pigeon_flight_18",
+   "summary": {
+    "frames": 210,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 42.0,
+    "missing_fraction": 0.28273809523809523,
+    "mean_speed_m_s": 19.307510032664567,
+    "median_speed_m_s": 20.417558230570275,
+    "mean_nn_distance_m": 2.0815679506288456,
+    "median_nn_distance_m": 1.607000984204092,
+    "mean_speed_bl_s": 60.33596885207677,
+    "mean_nn_distance_bl": 6.504899845715142,
+    "polarisation_mean": 0.9864154749594206,
+    "milling_mean": 0.12498877390912724,
+    "fraction_polarised_gt_0.8": 0.9952380952380953,
+    "fraction_milling_gt_0.5": 0.009523809523809525
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 2,
+    "given_speed_median": 18.323922976491048,
+    "given_nn_median": 1.36083199536744
+   }
+  },
+  {
+   "recording": "pigeon_flight_19",
+   "summary": {
+    "frames": 136,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 27.200000000000003,
+    "missing_fraction": 0.05698529411764706,
+    "mean_speed_m_s": 20.03525993945945,
+    "median_speed_m_s": 21.079743000697423,
+    "mean_nn_distance_m": 1.9946797650671437,
+    "median_nn_distance_m": 1.362241362013528,
+    "mean_speed_bl_s": 62.61018731081078,
+    "mean_nn_distance_bl": 6.233374265834824,
+    "polarisation_mean": 0.994136410151234,
+    "milling_mean": 0.14330879719862358,
+    "fraction_polarised_gt_0.8": 1.0,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 3,
+    "given_speed_median": 21.1401691706532,
+    "given_nn_median": 1.18151579815721
+   }
+  },
+  {
+   "recording": "pigeon_flight_20",
+   "summary": {
+    "frames": 159,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 31.8,
+    "missing_fraction": 0.0,
+    "mean_speed_m_s": 18.53075250681778,
+    "median_speed_m_s": 20.1298234850386,
+    "mean_nn_distance_m": 1.344841764431639,
+    "median_nn_distance_m": 1.0889457632990127,
+    "mean_speed_bl_s": 57.90860158380556,
+    "mean_nn_distance_bl": 4.202630513848872,
+    "polarisation_mean": 0.993589361770053,
+    "milling_mean": 0.13410034511923025,
+    "fraction_polarised_gt_0.8": 0.9937106918238994,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "control",
+    "flock_size": "small",
+    "group": 4,
+    "given_speed_median": 19.401841179919103,
+    "given_nn_median": 0.909972432583715
+   }
+  },
+  {
+   "recording": "pigeon_flight_21",
+   "summary": {
+    "frames": 227,
+    "animals": 34,
+    "dims": 2,
+    "duration_s": 45.400000000000006,
+    "missing_fraction": 0.16416169992225965,
+    "mean_speed_m_s": 18.059914309418634,
+    "median_speed_m_s": 18.734101691237154,
+    "mean_nn_distance_m": 1.0917892507741833,
+    "median_nn_distance_m": 0.8445680948972007,
+    "mean_speed_bl_s": 56.43723221693323,
+    "mean_nn_distance_bl": 3.4118414086693227,
+    "polarisation_mean": 0.9946998297070291,
+    "milling_mean": 0.047685539149321186,
+    "fraction_polarised_gt_0.8": 1.0,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "big",
+    "group": 5,
+    "given_speed_median": 17.053989160479098,
+    "given_nn_median": 0.728624296960602
+   },
+   "neighbours": {
+    "lag_s": 0.2,
+    "topological": {
+     "1": {
+      "r2_test": -0.0432093448917934,
+      "coef_align_centre": [
+       0.15552925978568904,
+       0.005878607793792233
+      ]
+     },
+     "2": {
+      "r2_test": -0.05689213645201452,
+      "coef_align_centre": [
+       0.19296740540743143,
+       0.008057749420933742
+      ]
+     },
+     "3": {
+      "r2_test": -0.052946205579119665,
+      "coef_align_centre": [
+       0.20391337564838385,
+       0.008531788359583115
+      ]
+     },
+     "4": {
+      "r2_test": -0.0587134800369713,
+      "coef_align_centre": [
+       0.21800506548156676,
+       0.0074673301070903335
+      ]
+     },
+     "5": {
+      "r2_test": -0.05160458438283655,
+      "coef_align_centre": [
+       0.2231643375611642,
+       0.010069124481387318
+      ]
+     },
+     "6": {
+      "r2_test": -0.050947226956489455,
+      "coef_align_centre": [
+       0.2300033605519545,
+       0.010004240927342326
+      ]
+     },
+     "7": {
+      "r2_test": -0.03989534151898266,
+      "coef_align_centre": [
+       0.23275943192733645,
+       0.005843607661623996
+      ]
+     },
+     "8": {
+      "r2_test": -0.03691316761427177,
+      "coef_align_centre": [
+       0.22997323667257957,
+       0.0074543406591746535
+      ]
+     },
+     "10": {
+      "r2_test": -0.032418637780761594,
+      "coef_align_centre": [
+       0.22805072275469263,
+       0.0018209678088814737
+      ]
+     },
+     "12": {
+      "r2_test": -0.028310940014516728,
+      "coef_align_centre": [
+       0.2275738350882724,
+       -0.000907011441822364
+      ]
+     },
+     "15": {
+      "r2_test": -0.025195823261535466,
+      "coef_align_centre": [
+       0.20605723692641253,
+       0.006095076613494871
+      ]
+     },
+     "20": {
+      "r2_test": -0.032811354223556854,
+      "coef_align_centre": [
+       0.18944931718638144,
+       0.00992345115608849
+      ]
+     }
+    },
+    "metric_bl": {
+     "1": {
+      "r2_test": 0.006624323936757159,
+      "coef_align_centre": [
+       0.09415677609943181,
+       0.00132869330678288
+      ]
+     },
+     "1.5": {
+      "r2_test": -0.009319629315873268,
+      "coef_align_centre": [
+       0.07888025581208524,
+       0.011054574629259904
+      ]
+     },
+     "2": {
+      "r2_test": -0.013721530287259087,
+      "coef_align_centre": [
+       0.12385882089120641,
+       0.006645262114766126
+      ]
+     },
+     "3": {
+      "r2_test": -0.015266942280559137,
+      "coef_align_centre": [
+       0.1376758789471906,
+       0.006003523498798559
+      ]
+     },
+     "4": {
+      "r2_test": -0.03617876411704124,
+      "coef_align_centre": [
+       0.15374099418091938,
+       0.004895533001752623
+      ]
+     },
+     "5": {
+      "r2_test": -0.03225211915446824,
+      "coef_align_centre": [
+       0.140469247416011,
+       0.0012565204983613616
+      ]
+     },
+     "6": {
+      "r2_test": -0.025131854148306765,
+      "coef_align_centre": [
+       0.14382898058381485,
+       0.0003952798033681776
+      ]
+     },
+     "8": {
+      "r2_test": -0.0321905635456321,
+      "coef_align_centre": [
+       0.168155012231655,
+       0.0017635509649816705
+      ]
+     },
+     "10": {
+      "r2_test": -0.037247129787695066,
+      "coef_align_centre": [
+       0.18927544288643822,
+       0.002020243454795516
+      ]
+     },
+     "15": {
+      "r2_test": -0.04046886014463813,
+      "coef_align_centre": [
+       0.19097129376323518,
+       0.00996515566808219
+      ]
+     },
+     "20": {
+      "r2_test": -0.047955688168306976,
+      "coef_align_centre": [
+       0.1709320181334146,
+       0.01328531033852079
+      ]
+     }
+    },
+    "best_k": 15,
+    "best_k_r2": -0.025195823261535466,
+    "best_radius_bl": 1.0,
+    "best_radius_r2": 0.006624323936757159,
+    "winner": "no signal"
+   },
+   "spacing": {
+    "distance_bl": [
+     0.16495470603460952,
+     0.4948641181038286,
+     0.8247735301730477,
+     1.1546829422422666,
+     1.4845923543114856,
+     1.8145017663807046,
+     2.144411178449924,
+     2.4743205905191425,
+     2.804230002588362,
+     3.1341394146575805,
+     3.4640488267268,
+     3.793958238796019,
+     4.123867650865238,
+     4.453777062934456,
+     4.783686475003676,
+     5.113595887072895,
+     5.443505299142114,
+     5.773414711211333,
+     6.103324123280553,
+     6.433233535349771,
+     6.76314294741899,
+     7.093052359488209,
+     7.4229617715574285,
+     7.752871183626647,
+     8.082780595695866,
+     8.412690007765086,
+     8.742599419834304,
+     9.072508831903523,
+     9.402418243972743,
+     9.73232765604196,
+     10.06223706811118,
+     10.3921464801804
+    ],
+    "accel_toward_m_s2": [
+     0.15079297761063154,
+     -0.03273792992205221,
+     -0.1393933698410226,
+     0.07620380509701244,
+     0.0068405306324546495,
+     -0.015314189730103461,
+     -0.022379406599815802,
+     0.06075639762716249,
+     0.05554652723372829,
+     -0.010417423823244744,
+     0.11151487795433473,
+     0.06667985084691988,
+     -0.0023623047351299217,
+     0.09216987113910258,
+     0.12062684571520595,
+     0.16580428533335043,
+     0.10451644688830301,
+     0.33617899570934884,
+     0.057050599611418056,
+     0.11987303892504332,
+     0.14012290324711668,
+     0.3370780391703051,
+     0.3087886577696637,
+     0.16416197097893806,
+     0.3330651905235133,
+     -0.023794227725802013,
+     0.33095481669994864,
+     0.4855111570679967,
+     0.4599950338190554,
+     0.4569547338214653,
+     0.5372172929162098,
+     0.3162338982148655
+    ],
+    "counts": [
+     76,
+     246,
+     364,
+     606,
+     730,
+     842,
+     1090,
+     1147,
+     1271,
+     1429,
+     1555,
+     1671,
+     1594,
+     1675,
+     1653,
+     1582,
+     1489,
+     1479,
+     1386,
+     1287,
+     1222,
+     1055,
+     1006,
+     974,
+     903,
+     736,
+     792,
+     646,
+     659,
+     563,
+     493,
+     504
+    ],
+    "preferred_spacing_bl": 1.0380749554065472
+   }
+  },
+  {
+   "recording": "pigeon_flight_22",
+   "summary": {
+    "frames": 142,
+    "animals": 10,
+    "dims": 2,
+    "duration_s": 28.400000000000002,
+    "missing_fraction": 0.0,
+    "mean_speed_m_s": 18.575409223823065,
+    "median_speed_m_s": 19.540902403120562,
+    "mean_nn_distance_m": 1.404962051594833,
+    "median_nn_distance_m": 1.2135444756724254,
+    "mean_speed_bl_s": 58.04815382444708,
+    "mean_nn_distance_bl": 4.3905064112338525,
+    "polarisation_mean": 0.9960793884206484,
+    "milling_mean": 0.08639910325922079,
+    "fraction_polarised_gt_0.8": 1.0,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "control",
+    "flock_size": "small",
+    "group": 1,
+    "given_speed_median": 19.2244935096094,
+    "given_nn_median": 1.049400966052855
+   }
+  },
+  {
+   "recording": "pigeon_flight_23",
+   "summary": {
+    "frames": 171,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 34.2,
+    "missing_fraction": 0.10818713450292397,
+    "mean_speed_m_s": 17.246399623674805,
+    "median_speed_m_s": 18.07592919721082,
+    "mean_nn_distance_m": 2.0515613610796573,
+    "median_nn_distance_m": 1.8730244669551706,
+    "mean_speed_bl_s": 53.89499882398376,
+    "mean_nn_distance_bl": 6.411129253373929,
+    "polarisation_mean": 0.994590289687152,
+    "milling_mean": 0.08906933386107337,
+    "fraction_polarised_gt_0.8": 0.9941520467836257,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 2,
+    "given_speed_median": 17.7440797244758,
+    "given_nn_median": 1.60652437493985
+   }
+  },
+  {
+   "recording": "pigeon_flight_24",
+   "summary": {
+    "frames": 226,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 45.2,
+    "missing_fraction": 0.053650442477876106,
+    "mean_speed_m_s": 17.06744087778592,
+    "median_speed_m_s": 17.075107768854057,
+    "mean_nn_distance_m": 1.8633329393140519,
+    "median_nn_distance_m": 1.5976188916513019,
+    "mean_speed_bl_s": 53.335752743080995,
+    "mean_nn_distance_bl": 5.822915435356412,
+    "polarisation_mean": 0.9942015358492192,
+    "milling_mean": 0.054181919506926864,
+    "fraction_polarised_gt_0.8": 0.995575221238938,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 3,
+    "given_speed_median": 15.1830156714525,
+    "given_nn_median": 1.36136094664904
+   }
+  },
+  {
+   "recording": "pigeon_flight_25",
+   "summary": {
+    "frames": 214,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 42.800000000000004,
+    "missing_fraction": 0.08119158878504673,
+    "mean_speed_m_s": 16.57432531459218,
+    "median_speed_m_s": 16.700412794376305,
+    "mean_nn_distance_m": 1.4749059862139318,
+    "median_nn_distance_m": 1.226501705180511,
+    "mean_speed_bl_s": 51.79476660810056,
+    "mean_nn_distance_bl": 4.609081206918536,
+    "polarisation_mean": 0.9933527964969969,
+    "milling_mean": 0.10097746064861335,
+    "fraction_polarised_gt_0.8": 0.9953271028037384,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 4,
+    "given_speed_median": 15.3534960216484,
+    "given_nn_median": 1.04753940284821
+   }
+  },
+  {
+   "recording": "pigeon_flight_26",
+   "summary": {
+    "frames": 152,
+    "animals": 34,
+    "dims": 2,
+    "duration_s": 30.400000000000002,
+    "missing_fraction": 0.2881191950464396,
+    "mean_speed_m_s": 19.415367126462098,
+    "median_speed_m_s": 20.61779693733035,
+    "mean_nn_distance_m": 1.3605503003860495,
+    "median_nn_distance_m": 0.9200130359518909,
+    "mean_speed_bl_s": 60.67302227019405,
+    "mean_nn_distance_bl": 4.251719688706404,
+    "polarisation_mean": 0.9901629365814983,
+    "milling_mean": 0.09279302427055684,
+    "fraction_polarised_gt_0.8": 1.0,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "big",
+    "group": 5,
+    "given_speed_median": 19.9937923046815,
+    "given_nn_median": 0.792601445741661
+   },
+   "neighbours": {
+    "lag_s": 0.2,
+    "topological": {
+     "1": {
+      "r2_test": 0.0027796590669088017,
+      "coef_align_centre": [
+       0.08832604111000612,
+       0.0027095884528154763
+      ]
+     },
+     "2": {
+      "r2_test": -0.0028801163078071568,
+      "coef_align_centre": [
+       0.10620578638778588,
+       0.006633547522427396
+      ]
+     },
+     "3": {
+      "r2_test": -0.02560796492687767,
+      "coef_align_centre": [
+       0.10360233677505777,
+       0.010394177256464958
+      ]
+     },
+     "4": {
+      "r2_test": -0.01063717717415491,
+      "coef_align_centre": [
+       0.10516040500480121,
+       0.009361738766107328
+      ]
+     },
+     "5": {
+      "r2_test": -0.027387946110015493,
+      "coef_align_centre": [
+       0.11190246052196733,
+       0.010553017541529828
+      ]
+     },
+     "6": {
+      "r2_test": -0.06253044056985502,
+      "coef_align_centre": [
+       0.11085510131427319,
+       0.013466430150170334
+      ]
+     },
+     "7": {
+      "r2_test": -0.0923953198485985,
+      "coef_align_centre": [
+       0.11530942426536318,
+       0.014984169358800146
+      ]
+     },
+     "8": {
+      "r2_test": -0.06292505027933681,
+      "coef_align_centre": [
+       0.10672385935652451,
+       0.01180954676170045
+      ]
+     },
+     "10": {
+      "r2_test": -0.010785308737745414,
+      "coef_align_centre": [
+       0.10643465486588206,
+       0.010440919797235104
+      ]
+     },
+     "12": {
+      "r2_test": -0.01773167531603481,
+      "coef_align_centre": [
+       0.10013123226203739,
+       0.009845742977836342
+      ]
+     },
+     "15": {
+      "r2_test": -0.02131337297435376,
+      "coef_align_centre": [
+       0.07738677979861226,
+       0.0091786054372878
+      ]
+     },
+     "20": {
+      "r2_test": -0.10321453406643544,
+      "coef_align_centre": [
+       0.05927393815538491,
+       0.01332465191697306
+      ]
+     }
+    },
+    "metric_bl": {
+     "1": {
+      "r2_test": -0.11587161850968997,
+      "coef_align_centre": [
+       0.03185970326638715,
+       -0.013526344144460642
+      ]
+     },
+     "1.5": {
+      "r2_test": -0.03852453525467947,
+      "coef_align_centre": [
+       0.06114633383194424,
+       -0.003023148329596986
+      ]
+     },
+     "2": {
+      "r2_test": -0.010967125584379733,
+      "coef_align_centre": [
+       0.07872380202324206,
+       -0.0030947469770503944
+      ]
+     },
+     "3": {
+      "r2_test": -0.012260994766138955,
+      "coef_align_centre": [
+       0.05625448200817737,
+       0.002956203758230624
+      ]
+     },
+     "4": {
+      "r2_test": -0.008009821163043052,
+      "coef_align_centre": [
+       0.0738372874258654,
+       0.00256444899433747
+      ]
+     },
+     "5": {
+      "r2_test": -0.018736139375978622,
+      "coef_align_centre": [
+       0.053878445749661566,
+       0.0050784705030399975
+      ]
+     },
+     "6": {
+      "r2_test": -0.0592354767854788,
+      "coef_align_centre": [
+       0.0973568961475883,
+       0.010627688592544612
+      ]
+     },
+     "8": {
+      "r2_test": -0.055470188364539874,
+      "coef_align_centre": [
+       0.11117740637046387,
+       0.010725310769690655
+      ]
+     },
+     "10": {
+      "r2_test": -0.028093566055718,
+      "coef_align_centre": [
+       0.12450011310305256,
+       0.00829096427013181
+      ]
+     },
+     "15": {
+      "r2_test": -0.017162467308871054,
+      "coef_align_centre": [
+       0.10452757900713078,
+       0.007234067923044423
+      ]
+     },
+     "20": {
+      "r2_test": -0.017913868046536274,
+      "coef_align_centre": [
+       0.0891236263967833,
+       0.007134848447015645
+      ]
+     }
+    },
+    "best_k": 1,
+    "best_k_r2": 0.0027796590669088017,
+    "best_radius_bl": 4.0,
+    "best_radius_r2": -0.008009821163043052,
+    "winner": "no signal"
+   },
+   "spacing": {
+    "distance_bl": [
+     0.17969004608435368,
+     0.539070138253061,
+     0.8984502304217684,
+     1.257830322590476,
+     1.617210414759183,
+     1.9765905069278906,
+     2.3359705990965978,
+     2.6953506912653054,
+     3.0547307834340125,
+     3.41411087560272,
+     3.7734909677714272,
+     4.132871059940134,
+     4.492251152108842,
+     4.8516312442775495,
+     5.211011336446257,
+     5.570391428614965,
+     5.929771520783671,
+     6.289151612952379,
+     6.648531705121086,
+     7.007911797289793,
+     7.367291889458501,
+     7.7266719816272085,
+     8.086052073795916,
+     8.445432165964622,
+     8.804812258133332,
+     9.164192350302038,
+     9.523572442470744,
+     9.882952534639454,
+     10.24233262680816,
+     10.601712718976867,
+     10.961092811145575,
+     11.320472903314283
+    ],
+    "accel_toward_m_s2": [
+     null,
+     -0.056284734761397726,
+     -0.07563810362632954,
+     0.12644994292055148,
+     0.10203730384699419,
+     -0.08856462567243192,
+     0.0648873455851122,
+     0.002903094150389404,
+     0.08166146024335404,
+     0.2036243792931996,
+     0.18515833487630726,
+     0.17992803868189536,
+     0.08512100937384216,
+     0.09236492337605165,
+     0.18952196445842007,
+     0.2647179299639568,
+     0.2621567310401282,
+     0.3734018970026664,
+     0.30593196884425194,
+     0.23654227417344317,
+     0.12339122035379094,
+     0.31457000146555497,
+     0.6750185713886976,
+     0.16431950027481157,
+     0.20106667399611966,
+     0.5946844350257898,
+     0.34480137212533146,
+     0.40172916969143085,
+     0.3558682659337372,
+     0.8308333852106453,
+     0.9980198808865198,
+     0.7889374416203155
+    ],
+    "counts": [
+     36,
+     110,
+     230,
+     310,
+     392,
+     452,
+     570,
+     699,
+     790,
+     733,
+     753,
+     799,
+     948,
+     985,
+     1055,
+     959,
+     906,
+     912,
+     896,
+     833,
+     811,
+     645,
+     617,
+     527,
+     504,
+     479,
+     352,
+     338,
+     277,
+     256,
+     241,
+     214
+    ],
+    "preferred_spacing_bl": 1.0329600597618753
+   }
+  },
+  {
+   "recording": "pigeon_flight_27",
+   "summary": {
+    "frames": 174,
+    "animals": 31,
+    "dims": 2,
+    "duration_s": 34.800000000000004,
+    "missing_fraction": 0.35836114200964037,
+    "mean_speed_m_s": 18.760646308999064,
+    "median_speed_m_s": 18.807150622868804,
+    "mean_nn_distance_m": 1.5950884787436828,
+    "median_nn_distance_m": 1.1904623493519084,
+    "mean_speed_bl_s": 58.627019715622076,
+    "mean_nn_distance_bl": 4.984651496074009,
+    "polarisation_mean": 0.9885017159730463,
+    "milling_mean": 0.12272977457500303,
+    "fraction_polarised_gt_0.8": 1.0,
+    "fraction_milling_gt_0.5": 0.022988505747126436
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "big",
+    "group": 5,
+    "given_speed_median": 17.280886189840203,
+    "given_nn_median": 1.05912418462183
+   },
+   "neighbours": {
+    "lag_s": 0.2,
+    "topological": {
+     "1": {
+      "r2_test": 0.01339859595766435,
+      "coef_align_centre": [
+       0.06993959745194636,
+       0.004583514254488653
+      ]
+     },
+     "2": {
+      "r2_test": 0.021467961848361083,
+      "coef_align_centre": [
+       0.161866058720315,
+       0.009113527606419678
+      ]
+     },
+     "3": {
+      "r2_test": 0.026461067376847724,
+      "coef_align_centre": [
+       0.20832172968751148,
+       0.004350450239942916
+      ]
+     },
+     "4": {
+      "r2_test": 0.028990880875593983,
+      "coef_align_centre": [
+       0.22776059848875588,
+       0.0026651845331732344
+      ]
+     },
+     "5": {
+      "r2_test": 0.03624243602320032,
+      "coef_align_centre": [
+       0.2257545582842162,
+       0.005200991987669489
+      ]
+     },
+     "6": {
+      "r2_test": 0.03640311444370181,
+      "coef_align_centre": [
+       0.23939872642231516,
+       0.006863796138067578
+      ]
+     },
+     "7": {
+      "r2_test": 0.041196246732743025,
+      "coef_align_centre": [
+       0.23481047313461015,
+       0.0037520160957498273
+      ]
+     },
+     "8": {
+      "r2_test": 0.037372251369089615,
+      "coef_align_centre": [
+       0.2278963811744362,
+       0.004390995221533592
+      ]
+     },
+     "10": {
+      "r2_test": 0.0376624806501592,
+      "coef_align_centre": [
+       0.2030188606301801,
+       0.00668153820212924
+      ]
+     },
+     "12": {
+      "r2_test": 0.027005313210170745,
+      "coef_align_centre": [
+       0.14487467952821892,
+       0.018316512319298796
+      ]
+     },
+     "15": {
+      "r2_test": 0.018465916606647426,
+      "coef_align_centre": [
+       0.10400887692972594,
+       0.019364231885608544
+      ]
+     },
+     "20": {
+      "r2_test": 0.013462510335353284,
+      "coef_align_centre": [
+       0.09963287747106388,
+       0.02548844593793842
+      ]
+     }
+    },
+    "metric_bl": {
+     "1": {
+      "r2_test": NaN,
+      "coef_align_centre": [
+       NaN,
+       NaN
+      ]
+     },
+     "1.5": {
+      "r2_test": -0.15057534785647353,
+      "coef_align_centre": [
+       0.17968277937736798,
+       0.001116012111575684
+      ]
+     },
+     "2": {
+      "r2_test": -0.08019004797872209,
+      "coef_align_centre": [
+       0.11214206690736872,
+       0.0006327145978613684
+      ]
+     },
+     "3": {
+      "r2_test": -0.03169631497505754,
+      "coef_align_centre": [
+       0.06966768072881149,
+       0.0027533533270429843
+      ]
+     },
+     "4": {
+      "r2_test": -0.03502084562754204,
+      "coef_align_centre": [
+       0.06677699466500313,
+       0.00089064224468274
+      ]
+     },
+     "5": {
+      "r2_test": -0.02444644585179412,
+      "coef_align_centre": [
+       0.07031299529200055,
+       0.0015094196617716365
+      ]
+     },
+     "6": {
+      "r2_test": -0.01610355908236083,
+      "coef_align_centre": [
+       0.04139559651919805,
+       0.0011709386105493188
+      ]
+     },
+     "8": {
+      "r2_test": 0.012318173967417523,
+      "coef_align_centre": [
+       0.09307820898511002,
+       0.004815806116808532
+      ]
+     },
+     "10": {
+      "r2_test": 0.013413429619492434,
+      "coef_align_centre": [
+       0.06837993834378928,
+       0.004512713981443809
+      ]
+     },
+     "15": {
+      "r2_test": 0.018416754847253802,
+      "coef_align_centre": [
+       0.0962120737581988,
+       0.004071470301252054
+      ]
+     },
+     "20": {
+      "r2_test": 0.014717026048776338,
+      "coef_align_centre": [
+       0.08278999718131033,
+       0.009406872691051473
+      ]
+     }
+    },
+    "best_k": 7,
+    "best_k_r2": 0.041196246732743025,
+    "best_radius_bl": 15.0,
+    "best_radius_r2": 0.018416754847253802,
+    "winner": "topological"
+   },
+   "spacing": {
+    "distance_bl": [
+     0.2325121776077946,
+     0.6975365328233838,
+     1.162560888038973,
+     1.627585243254562,
+     2.0926095984701516,
+     2.5576339536857406,
+     3.02265830890133,
+     3.487682664116919,
+     3.9527070193325082,
+     4.417731374548097,
+     4.882755729763687,
+     5.347780084979275,
+     5.812804440194865,
+     6.277828795410454,
+     6.742853150626043,
+     7.207877505841633,
+     7.6729018610572215,
+     8.137926216272811,
+     8.6029505714884,
+     9.06797492670399,
+     9.53299928191958,
+     9.998023637135168,
+     10.463047992350758,
+     10.928072347566346,
+     11.393096702781936,
+     11.858121057997526,
+     12.323145413213114,
+     12.788169768428704,
+     13.253194123644292,
+     13.718218478859882,
+     14.183242834075472,
+     14.64826718929106
+    ],
+    "accel_toward_m_s2": [
+     null,
+     0.03948283259086291,
+     0.02749416658377185,
+     0.007515200592940161,
+     0.11598486274637053,
+     -0.08616784699967672,
+     0.21020640293072337,
+     0.027783000277430903,
+     -0.08175841977822973,
+     0.005149819933374288,
+     -0.02659646589544725,
+     0.009680543138396768,
+     0.11917047877190115,
+     0.16166223637571572,
+     0.062354415642908646,
+     0.05361284993675738,
+     0.15152345750012222,
+     -0.0352114656908974,
+     -0.06612760134142802,
+     0.22833535801575866,
+     0.3369452752427732,
+     0.39767706795987307,
+     0.6778628042613716,
+     0.58111420170533,
+     0.32281757555056384,
+     0.34107186446902604,
+     0.6464323094362007,
+     0.5474042722222572,
+     0.9483382781689468,
+     -0.2746068489647458,
+     1.0249768276777964,
+     0.35956082008608303
+    ],
+    "counts": [
+     50,
+     162,
+     240,
+     346,
+     444,
+     556,
+     606,
+     718,
+     751,
+     794,
+     848,
+     955,
+     861,
+     830,
+     816,
+     814,
+     763,
+     714,
+     594,
+     546,
+     513,
+     457,
+     441,
+     403,
+     358,
+     320,
+     288,
+     287,
+     262,
+     235,
+     219,
+     203
+    ],
+    "preferred_spacing_bl": 2.6928351309160505
+   }
+  },
+  {
+   "recording": "pigeon_flight_28",
+   "summary": {
+    "frames": 169,
+    "animals": 10,
+    "dims": 2,
+    "duration_s": 33.800000000000004,
+    "missing_fraction": 0.007100591715976331,
+    "mean_speed_m_s": 20.100650253624753,
+    "median_speed_m_s": 20.27951994198353,
+    "mean_nn_distance_m": 1.5281010834072393,
+    "median_nn_distance_m": 1.2921618858962034,
+    "mean_speed_bl_s": 62.814532042577355,
+    "mean_nn_distance_bl": 4.775315885647623,
+    "polarisation_mean": 0.9913244153536688,
+    "milling_mean": 0.08251415453645265,
+    "fraction_polarised_gt_0.8": 0.9940828402366864,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 1,
+    "given_speed_median": 18.4149561174188,
+    "given_nn_median": 1.09372241568534
+   }
+  },
+  {
+   "recording": "pigeon_flight_29",
+   "summary": {
+    "frames": 162,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 32.4,
+    "missing_fraction": 0.031635802469135804,
+    "mean_speed_m_s": 20.969016940658395,
+    "median_speed_m_s": 22.267934295542283,
+    "mean_nn_distance_m": 1.437679685856997,
+    "median_nn_distance_m": 1.2728343274477198,
+    "mean_speed_bl_s": 65.52817793955748,
+    "mean_nn_distance_bl": 4.492749018303115,
+    "polarisation_mean": 0.9917796918158704,
+    "milling_mean": 0.09913062920408107,
+    "fraction_polarised_gt_0.8": 0.9938271604938271,
+    "fraction_milling_gt_0.5": 0.018518518518518517
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "control",
+    "flock_size": "small",
+    "group": 2,
+    "given_speed_median": 21.350101052676052,
+    "given_nn_median": 1.11240404496408
+   }
+  },
+  {
+   "recording": "pigeon_flight_30",
+   "summary": {
+    "frames": 163,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 32.6,
+    "missing_fraction": 0.0015337423312883436,
+    "mean_speed_m_s": 20.766676928314297,
+    "median_speed_m_s": 21.509674515832245,
+    "mean_nn_distance_m": 1.6361934485117267,
+    "median_nn_distance_m": 1.3103101867878832,
+    "mean_speed_bl_s": 64.89586540098217,
+    "mean_nn_distance_bl": 5.1131045265991455,
+    "polarisation_mean": 0.9912194285090639,
+    "milling_mean": 0.10026793638735432,
+    "fraction_polarised_gt_0.8": 0.9938650306748467,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 3,
+    "given_speed_median": 18.2047177671295,
+    "given_nn_median": 1.119497824762135
+   }
+  },
+  {
+   "recording": "pigeon_flight_31",
+   "summary": {
+    "frames": 154,
+    "animals": 7,
+    "dims": 2,
+    "duration_s": 30.8,
+    "missing_fraction": 0.22448979591836735,
+    "mean_speed_m_s": 20.349248394768022,
+    "median_speed_m_s": 22.307873957987052,
+    "mean_nn_distance_m": 2.1531629798967007,
+    "median_nn_distance_m": 1.4935386996885402,
+    "mean_speed_bl_s": 63.59140123365007,
+    "mean_nn_distance_bl": 6.728634312177189,
+    "polarisation_mean": 0.9837116989256547,
+    "milling_mean": 0.19400147353692346,
+    "fraction_polarised_gt_0.8": 0.9935064935064936,
+    "fraction_milling_gt_0.5": 0.07142857142857142
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 4,
+    "given_speed_median": 21.6830106962507,
+    "given_nn_median": 1.338054260749355
+   }
+  },
+  {
+   "recording": "pigeon_flight_32",
+   "summary": {
+    "frames": 175,
+    "animals": 34,
+    "dims": 2,
+    "duration_s": 35.0,
+    "missing_fraction": 0.22823529411764706,
+    "mean_speed_m_s": 17.8395233249498,
+    "median_speed_m_s": 18.02760498001707,
+    "mean_nn_distance_m": 1.0202913079199156,
+    "median_nn_distance_m": 0.8185318043013916,
+    "mean_speed_bl_s": 55.74851039046812,
+    "mean_nn_distance_bl": 3.1884103372497363,
+    "polarisation_mean": 0.993602305376917,
+    "milling_mean": 0.06907039994851012,
+    "fraction_polarised_gt_0.8": 1.0,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "big",
+    "group": 5,
+    "given_speed_median": 17.336892475626,
+    "given_nn_median": 0.7092256436783745
+   },
+   "neighbours": {
+    "lag_s": 0.2,
+    "topological": {
+     "1": {
+      "r2_test": -0.027419824906504298,
+      "coef_align_centre": [
+       0.16619958690540193,
+       0.006355986809377917
+      ]
+     },
+     "2": {
+      "r2_test": -0.01589704399923808,
+      "coef_align_centre": [
+       0.23007457001386297,
+       0.006961824991772191
+      ]
+     },
+     "3": {
+      "r2_test": -0.012567879297171292,
+      "coef_align_centre": [
+       0.25101904353275767,
+       0.003465886866696233
+      ]
+     },
+     "4": {
+      "r2_test": -0.027484959128013964,
+      "coef_align_centre": [
+       0.24979863147476364,
+       0.009810904071991072
+      ]
+     },
+     "5": {
+      "r2_test": -0.04657138661492066,
+      "coef_align_centre": [
+       0.2599052874788764,
+       0.013331443487469617
+      ]
+     },
+     "6": {
+      "r2_test": -0.03427860438456887,
+      "coef_align_centre": [
+       0.2622038909705873,
+       0.013294326103707794
+      ]
+     },
+     "7": {
+      "r2_test": -0.04918958081584934,
+      "coef_align_centre": [
+       0.26043596622008336,
+       0.016172935163656522
+      ]
+     },
+     "8": {
+      "r2_test": -0.04717043774975904,
+      "coef_align_centre": [
+       0.2588286925538093,
+       0.016609280275510136
+      ]
+     },
+     "10": {
+      "r2_test": -0.057608027567733755,
+      "coef_align_centre": [
+       0.24515564744876353,
+       0.017370302469227755
+      ]
+     },
+     "12": {
+      "r2_test": -0.042685259184032764,
+      "coef_align_centre": [
+       0.22961907045565796,
+       0.015290060616677344
+      ]
+     },
+     "15": {
+      "r2_test": -0.027850675489818233,
+      "coef_align_centre": [
+       0.2083545565787374,
+       0.012060398252591564
+      ]
+     },
+     "20": {
+      "r2_test": 0.0009299134063670556,
+      "coef_align_centre": [
+       0.1732148069264057,
+       0.0038715070233860237
+      ]
+     }
+    },
+    "metric_bl": {
+     "1": {
+      "r2_test": -0.007714676574006596,
+      "coef_align_centre": [
+       0.16433717688049995,
+       -0.0020456673362101267
+      ]
+     },
+     "1.5": {
+      "r2_test": -0.024512748910375803,
+      "coef_align_centre": [
+       0.2084956847135359,
+       0.004096686367229414
+      ]
+     },
+     "2": {
+      "r2_test": -0.020502890117811923,
+      "coef_align_centre": [
+       0.14087404002067647,
+       0.006154935571934462
+      ]
+     },
+     "3": {
+      "r2_test": -0.017394170068694814,
+      "coef_align_centre": [
+       0.15966562275544155,
+       0.002450368771012744
+      ]
+     },
+     "4": {
+      "r2_test": -0.022996755331312846,
+      "coef_align_centre": [
+       0.15923329565512706,
+       0.002866088130231019
+      ]
+     },
+     "5": {
+      "r2_test": -0.024348143312901804,
+      "coef_align_centre": [
+       0.1758444315363028,
+       0.0026348050480805305
+      ]
+     },
+     "6": {
+      "r2_test": -0.027810111704558382,
+      "coef_align_centre": [
+       0.19310126834516017,
+       0.005610297898419176
+      ]
+     },
+     "8": {
+      "r2_test": -0.02699562728722138,
+      "coef_align_centre": [
+       0.23155968305309685,
+       0.006779588802832785
+      ]
+     },
+     "10": {
+      "r2_test": -0.02601631119748027,
+      "coef_align_centre": [
+       0.21002871945499718,
+       0.008828734634446616
+      ]
+     },
+     "15": {
+      "r2_test": -0.00804227821789727,
+      "coef_align_centre": [
+       0.2149999760323943,
+       0.0024617023672724027
+      ]
+     },
+     "20": {
+      "r2_test": -0.0037774772375014365,
+      "coef_align_centre": [
+       0.18622868248420646,
+       0.004398417021333773
+      ]
+     }
+    },
+    "best_k": 20,
+    "best_k_r2": 0.0009299134063670556,
+    "best_radius_bl": 20.0,
+    "best_radius_r2": -0.0037774772375014365,
+    "winner": "no signal"
+   },
+   "spacing": {
+    "distance_bl": [
+     0.15986949302761555,
+     0.47960847908284665,
+     0.7993474651380778,
+     1.1190864511933087,
+     1.43882543724854,
+     1.758564423303771,
+     2.078303409359002,
+     2.398042395414233,
+     2.7177813814694645,
+     3.037520367524696,
+     3.357259353579926,
+     3.6769983396351575,
+     3.996737325690389,
+     4.316476311745619,
+     4.636215297800851,
+     4.955954283856082,
+     5.275693269911313,
+     5.595432255966545,
+     5.915171242021776,
+     6.234910228077006,
+     6.554649214132238,
+     6.874388200187468,
+     7.194127186242699,
+     7.513866172297931,
+     7.833605158353162,
+     8.153344144408393,
+     8.473083130463625,
+     8.792822116518856,
+     9.112561102574086,
+     9.432300088629317,
+     9.752039074684548,
+     10.07177806073978
+    ],
+    "accel_toward_m_s2": [
+     -0.33700410885045395,
+     -0.003957998343376064,
+     0.07925888134345607,
+     0.004730798686140328,
+     0.054009793260612095,
+     0.06329868634820443,
+     0.026037493397627967,
+     -0.05402318016720426,
+     0.051595449997168356,
+     0.04001976248919045,
+     0.17688565107832585,
+     0.12368680705143971,
+     0.10011244072506706,
+     0.03432580808952348,
+     -0.006158337424834214,
+     0.007201490426146907,
+     -0.17246881305572423,
+     0.20979691528239458,
+     0.2565241588722449,
+     0.34288851467616877,
+     0.01788235686095593,
+     0.31522499880495425,
+     0.3984828455344613,
+     0.5751876719227037,
+     0.7469237712358792,
+     0.5785920340194808,
+     1.1185937676996522,
+     0.619655363691404,
+     0.820738261484459,
+     0.25706076613727535,
+     0.5642371109467423,
+     -0.09255550216084335
+    ],
+    "counts": [
+     68,
+     170,
+     284,
+     378,
+     504,
+     580,
+     728,
+     890,
+     928,
+     1121,
+     1244,
+     1212,
+     1328,
+     1246,
+     1316,
+     1284,
+     1229,
+     1075,
+     1015,
+     954,
+     840,
+     744,
+     675,
+     642,
+     567,
+     499,
+     459,
+     380,
+     371,
+     382,
+     326,
+     314
+    ],
+    "preferred_spacing_bl": 0.49481604732959983
+   }
+  },
+  {
+   "recording": "pigeon_flight_33",
+   "summary": {
+    "frames": 118,
+    "animals": 28,
+    "dims": 2,
+    "duration_s": 23.6,
+    "missing_fraction": 0.5493341404358354,
+    "mean_speed_m_s": 22.13781286355453,
+    "median_speed_m_s": 22.15847822834128,
+    "mean_nn_distance_m": 2.2003152794371523,
+    "median_nn_distance_m": 1.897714208175512,
+    "mean_speed_bl_s": 69.1806651986079,
+    "mean_nn_distance_bl": 6.875985248241101,
+    "polarisation_mean": 0.996581716245571,
+    "milling_mean": 0.12493626183977564,
+    "fraction_polarised_gt_0.8": 1.0,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "big",
+    "group": 5,
+    "given_speed_median": 21.6936236935531,
+    "given_nn_median": 1.56904926746198
+   },
+   "neighbours": {
+    "lag_s": 0.2,
+    "topological": {
+     "1": {
+      "r2_test": 0.02702257107122641,
+      "coef_align_centre": [
+       0.05586697912902883,
+       -0.00015273576643218956
+      ]
+     },
+     "2": {
+      "r2_test": 0.041059053895538655,
+      "coef_align_centre": [
+       0.08477463410922038,
+       0.003083290143392857
+      ]
+     },
+     "3": {
+      "r2_test": 0.0630773586742881,
+      "coef_align_centre": [
+       0.10883124392850894,
+       0.005159239419523838
+      ]
+     },
+     "4": {
+      "r2_test": 0.053712130955936854,
+      "coef_align_centre": [
+       0.12863572092343745,
+       0.00838753174187408
+      ]
+     },
+     "5": {
+      "r2_test": 0.05532536576673275,
+      "coef_align_centre": [
+       0.14044077914294037,
+       0.010648526632086312
+      ]
+     },
+     "6": {
+      "r2_test": 0.0702804333416629,
+      "coef_align_centre": [
+       0.1373963110747894,
+       0.010510231248160425
+      ]
+     },
+     "7": {
+      "r2_test": 0.07550400308533212,
+      "coef_align_centre": [
+       0.1306436349129565,
+       0.009990449209832785
+      ]
+     },
+     "8": {
+      "r2_test": 0.0620595079410422,
+      "coef_align_centre": [
+       0.12708881541949268,
+       0.0111553971925318
+      ]
+     },
+     "10": {
+      "r2_test": 0.043512946741689706,
+      "coef_align_centre": [
+       0.11879882040379038,
+       0.013667260236791328
+      ]
+     },
+     "12": {
+      "r2_test": -0.002829866118900126,
+      "coef_align_centre": [
+       0.11208083905212395,
+       0.013735731085396361
+      ]
+     },
+     "15": {
+      "r2_test": 0.002160177565022625,
+      "coef_align_centre": [
+       0.11208083905212395,
+       0.013735731085396361
+      ]
+     },
+     "20": {
+      "r2_test": 0.002160177565022625,
+      "coef_align_centre": [
+       0.11208083905212395,
+       0.013735731085396361
+      ]
+     }
+    },
+    "metric_bl": {
+     "1": {
+      "r2_test": NaN,
+      "coef_align_centre": [
+       NaN,
+       NaN
+      ]
+     },
+     "1.5": {
+      "r2_test": NaN,
+      "coef_align_centre": [
+       NaN,
+       NaN
+      ]
+     },
+     "2": {
+      "r2_test": NaN,
+      "coef_align_centre": [
+       NaN,
+       NaN
+      ]
+     },
+     "3": {
+      "r2_test": NaN,
+      "coef_align_centre": [
+       NaN,
+       NaN
+      ]
+     },
+     "4": {
+      "r2_test": -0.005512706773664222,
+      "coef_align_centre": [
+       0.047340178636397535,
+       -0.0017930687627909473
+      ]
+     },
+     "5": {
+      "r2_test": -0.0009018891830456788,
+      "coef_align_centre": [
+       0.04031606306503307,
+       -0.0038455752697806986
+      ]
+     },
+     "6": {
+      "r2_test": 0.003449273635629524,
+      "coef_align_centre": [
+       0.04077395800349497,
+       -0.004725828533883962
+      ]
+     },
+     "8": {
+      "r2_test": 0.009711481679827605,
+      "coef_align_centre": [
+       0.05925441075031783,
+       -0.0026711637220857187
+      ]
+     },
+     "10": {
+      "r2_test": 0.013344469833030614,
+      "coef_align_centre": [
+       0.06851288620730922,
+       -0.0017729942781711952
+      ]
+     },
+     "15": {
+      "r2_test": 0.02286174784329087,
+      "coef_align_centre": [
+       0.10337037100834048,
+       0.009535513274046347
+      ]
+     },
+     "20": {
+      "r2_test": 0.04042794029535113,
+      "coef_align_centre": [
+       0.11232115853283198,
+       0.009988206316467664
+      ]
+     }
+    },
+    "best_k": 7,
+    "best_k_r2": 0.07550400308533212,
+    "best_radius_bl": 20.0,
+    "best_radius_r2": 0.04042794029535113,
+    "winner": "topological"
+   },
+   "spacing": {
+    "distance_bl": [
+     0.37064730628427967,
+     1.111941918852839,
+     1.8532365314213983,
+     2.5945311439899577,
+     3.335825756558517,
+     4.077120369127076,
+     4.818414981695636,
+     5.559709594264195,
+     6.301004206832754,
+     7.042298819401314,
+     7.783593431969873,
+     8.524888044538432,
+     9.266182657106992,
+     10.007477269675551,
+     10.74877188224411,
+     11.49006649481267,
+     12.231361107381229,
+     12.972655719949788,
+     13.713950332518348,
+     14.455244945086907,
+     15.196539557655466,
+     15.937834170224026,
+     16.679128782792585,
+     17.420423395361144,
+     18.161718007929704,
+     18.903012620498263,
+     19.644307233066822,
+     20.38560184563538,
+     21.12689645820394,
+     21.8681910707725,
+     22.60948568334106,
+     23.35078029590962
+    ],
+    "accel_toward_m_s2": [
+     null,
+     0.20550634652359298,
+     0.11722415617506902,
+     -0.09807392420101486,
+     0.016333179170896814,
+     -0.11915761527339208,
+     0.09008703600290932,
+     -0.11631232108633215,
+     -0.11439732736603207,
+     -0.1697201515623802,
+     -0.18755054817546554,
+     0.048887578022709835,
+     0.16987294375792544,
+     0.022201207555729602,
+     0.1338764742253035,
+     0.26418809898351,
+     0.1810640241826526,
+     0.6121168120225301,
+     0.10191614480249192,
+     0.44984568486165905,
+     0.3986253752707919,
+     -0.0448459078177891,
+     -0.030643645481494654,
+     -0.020919194002062158,
+     -0.1319182510619198,
+     0.16140257876398792,
+     0.3531816180050112,
+     0.6524753649426865,
+     0.17537938350440518,
+     0.0021851032075083108,
+     0.7034102222847988,
+     0.9239918424278626
+    ],
+    "counts": [
+     22,
+     80,
+     104,
+     194,
+     176,
+     246,
+     312,
+     348,
+     318,
+     299,
+     359,
+     463,
+     443,
+     440,
+     388,
+     368,
+     369,
+     340,
+     329,
+     292,
+     312,
+     344,
+     295,
+     222,
+     199,
+     192,
+     161,
+     120,
+     131,
+     111,
+     76,
+     74
+    ],
+    "preferred_spacing_bl": 3.2299958092156196
+   }
+  },
+  {
+   "recording": "pigeon_flight_34",
+   "summary": {
+    "frames": 203,
+    "animals": 10,
+    "dims": 2,
+    "duration_s": 40.6,
+    "missing_fraction": 0.4600985221674877,
+    "mean_speed_m_s": 20.350819978430966,
+    "median_speed_m_s": 22.162049690822407,
+    "mean_nn_distance_m": 1.727181622066075,
+    "median_nn_distance_m": 1.342668339988086,
+    "mean_speed_bl_s": 63.59631243259677,
+    "mean_nn_distance_bl": 5.397442568956484,
+    "polarisation_mean": 0.9830324130825958,
+    "milling_mean": 0.14984048597992927,
+    "fraction_polarised_gt_0.8": 0.9408866995073891,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 1,
+    "given_speed_median": 16.7754278056669,
+    "given_nn_median": 1.14082565621916
+   }
+  },
+  {
+   "recording": "pigeon_flight_35",
+   "summary": {
+    "frames": 192,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 38.400000000000006,
+    "missing_fraction": 0.011067708333333334,
+    "mean_speed_m_s": 18.335213228556213,
+    "median_speed_m_s": 18.130601020312955,
+    "mean_nn_distance_m": 1.4444278768014835,
+    "median_nn_distance_m": 1.0796282017159138,
+    "mean_speed_bl_s": 57.297541339238165,
+    "mean_nn_distance_bl": 4.513837115004636,
+    "polarisation_mean": 0.9894248132471843,
+    "milling_mean": 0.14307592743060368,
+    "fraction_polarised_gt_0.8": 0.9947916666666666,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 2,
+    "given_speed_median": 16.66685329472595,
+    "given_nn_median": 0.926173581955781
+   }
+  },
+  {
+   "recording": "pigeon_flight_36",
+   "summary": {
+    "frames": 118,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 23.6,
+    "missing_fraction": 0.0,
+    "mean_speed_m_s": 22.70149619033023,
+    "median_speed_m_s": 24.77548169790839,
+    "mean_nn_distance_m": 1.672465975128972,
+    "median_nn_distance_m": 1.4803472524292438,
+    "mean_speed_bl_s": 70.94217559478196,
+    "mean_nn_distance_bl": 5.226456172278038,
+    "polarisation_mean": 0.9927787991441396,
+    "milling_mean": 0.06725270432423017,
+    "fraction_polarised_gt_0.8": 0.9915254237288136,
+    "fraction_milling_gt_0.5": 0.00847457627118644
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "control",
+    "flock_size": "small",
+    "group": 3,
+    "given_speed_median": 24.8653316030453,
+    "given_nn_median": 1.1622257007441
+   }
+  },
+  {
+   "recording": "pigeon_flight_37",
+   "summary": {
+    "frames": 125,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 25.0,
+    "missing_fraction": 0.105,
+    "mean_speed_m_s": 21.506215976392735,
+    "median_speed_m_s": 23.541974266862546,
+    "mean_nn_distance_m": 1.9121158143615642,
+    "median_nn_distance_m": 1.7247261942782168,
+    "mean_speed_bl_s": 67.20692492622729,
+    "mean_nn_distance_bl": 5.975361919879888,
+    "polarisation_mean": 0.9926949381206895,
+    "milling_mean": 0.08459883060778522,
+    "fraction_polarised_gt_0.8": 0.992,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "small",
+    "group": 4,
+    "given_speed_median": 23.341466287987,
+    "given_nn_median": 1.42385102945158
+   }
+  },
+  {
+   "recording": "pigeon_flight_38",
+   "summary": {
+    "frames": 139,
+    "animals": 34,
+    "dims": 2,
+    "duration_s": 27.8,
+    "missing_fraction": 0.28840457046127804,
+    "mean_speed_m_s": 22.135215489038924,
+    "median_speed_m_s": 24.562818806727382,
+    "mean_nn_distance_m": 1.647726988627486,
+    "median_nn_distance_m": 1.2889272145075423,
+    "mean_speed_bl_s": 69.17254840324664,
+    "mean_nn_distance_bl": 5.149146839460894,
+    "polarisation_mean": 0.9924749493295167,
+    "milling_mean": 0.05877151193699055,
+    "fraction_polarised_gt_0.8": 1.0,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "control",
+    "flock_size": "big",
+    "group": 5,
+    "given_speed_median": 24.287629182552,
+    "given_nn_median": 1.12192023916345
+   },
+   "neighbours": {
+    "lag_s": 0.2,
+    "topological": {
+     "1": {
+      "r2_test": -0.013185606309422893,
+      "coef_align_centre": [
+       0.05506234054016317,
+       0.0062761907017423926
+      ]
+     },
+     "2": {
+      "r2_test": 0.011255647449098571,
+      "coef_align_centre": [
+       0.10037619735845302,
+       0.002789484353632082
+      ]
+     },
+     "3": {
+      "r2_test": 0.002118642313831187,
+      "coef_align_centre": [
+       0.11206054904135344,
+       0.00739682678986517
+      ]
+     },
+     "4": {
+      "r2_test": -0.05618489653521319,
+      "coef_align_centre": [
+       0.11389856494500424,
+       0.014986702049128067
+      ]
+     },
+     "5": {
+      "r2_test": -0.039859897453967896,
+      "coef_align_centre": [
+       0.11651502002615272,
+       0.014497090936613418
+      ]
+     },
+     "6": {
+      "r2_test": -0.027280603069481213,
+      "coef_align_centre": [
+       0.12189859457452265,
+       0.014026768380193799
+      ]
+     },
+     "7": {
+      "r2_test": -0.07063485614252385,
+      "coef_align_centre": [
+       0.11660957938083387,
+       0.016078632849425806
+      ]
+     },
+     "8": {
+      "r2_test": -0.038059184757994746,
+      "coef_align_centre": [
+       0.11560814986313765,
+       0.013006864404348926
+      ]
+     },
+     "10": {
+      "r2_test": -0.06273258126641101,
+      "coef_align_centre": [
+       0.1196435731290888,
+       0.01466596965546702
+      ]
+     },
+     "12": {
+      "r2_test": -0.04042188791638668,
+      "coef_align_centre": [
+       0.11587231242318313,
+       0.014177587362837672
+      ]
+     },
+     "15": {
+      "r2_test": -0.029123464637328622,
+      "coef_align_centre": [
+       0.10866276715159091,
+       0.013764958792790424
+      ]
+     },
+     "20": {
+      "r2_test": -0.04450120827244741,
+      "coef_align_centre": [
+       0.07766348669775096,
+       0.014546485970748648
+      ]
+     }
+    },
+    "metric_bl": {
+     "1": {
+      "r2_test": NaN,
+      "coef_align_centre": [
+       NaN,
+       NaN
+      ]
+     },
+     "1.5": {
+      "r2_test": -0.0450837121512373,
+      "coef_align_centre": [
+       0.05171150658710674,
+       0.006046827074928554
+      ]
+     },
+     "2": {
+      "r2_test": -0.05838817553323983,
+      "coef_align_centre": [
+       0.05170104701302268,
+       0.009933867949552524
+      ]
+     },
+     "3": {
+      "r2_test": 0.007518212266006463,
+      "coef_align_centre": [
+       0.07177186745726577,
+       0.002680908082820852
+      ]
+     },
+     "4": {
+      "r2_test": 0.019818476048045874,
+      "coef_align_centre": [
+       0.07170226772691261,
+       0.00011510345877185984
+      ]
+     },
+     "5": {
+      "r2_test": 0.0024137002705122423,
+      "coef_align_centre": [
+       0.06398665443847588,
+       0.003963450188798748
+      ]
+     },
+     "6": {
+      "r2_test": -0.03242493999305984,
+      "coef_align_centre": [
+       0.04991983469211079,
+       0.009730560583070216
+      ]
+     },
+     "8": {
+      "r2_test": 0.002224680704461468,
+      "coef_align_centre": [
+       0.06861109165388568,
+       0.0036932422609127417
+      ]
+     },
+     "10": {
+      "r2_test": -0.010467757773158004,
+      "coef_align_centre": [
+       0.07011149085855499,
+       0.006419899158389354
+      ]
+     },
+     "15": {
+      "r2_test": -0.1302189586521525,
+      "coef_align_centre": [
+       0.08269935548617732,
+       0.017175629472895176
+      ]
+     },
+     "20": {
+      "r2_test": -0.0773723209939916,
+      "coef_align_centre": [
+       0.06645478778410546,
+       0.015553000688491003
+      ]
+     }
+    },
+    "best_k": 2,
+    "best_k_r2": 0.011255647449098571,
+    "best_radius_bl": 4.0,
+    "best_radius_r2": 0.019818476048045874,
+    "winner": "metric"
+   },
+   "spacing": {
+    "distance_bl": [
+     0.25174359658350437,
+     0.755230789750513,
+     1.258717982917522,
+     1.7622051760845305,
+     2.265692369251539,
+     2.769179562418548,
+     3.272666755585557,
+     3.7761539487525653,
+     4.279641141919575,
+     4.783128335086583,
+     5.286615528253591,
+     5.790102721420601,
+     6.293589914587609,
+     6.7970771077546175,
+     7.300564300921627,
+     7.804051494088636,
+     8.307538687255644,
+     8.811025880422653,
+     9.314513073589662,
+     9.81800026675667,
+     10.321487459923679,
+     10.824974653090688,
+     11.328461846257696,
+     11.831949039424705,
+     12.335436232591714,
+     12.838923425758722,
+     13.342410618925733,
+     13.84589781209274,
+     14.349385005259748,
+     14.852872198426759,
+     15.356359391593767,
+     15.859846584760774
+    ],
+    "accel_toward_m_s2": [
+     null,
+     -0.2933003472791253,
+     -0.0801594760340209,
+     -0.07879600386412651,
+     -0.05046849024761429,
+     0.2977949526445774,
+     -0.0257806902651667,
+     0.17489218599667372,
+     0.155461512428623,
+     0.2848639708484585,
+     0.20576591406189737,
+     0.1608739002474977,
+     0.136363147237603,
+     0.036071461239156596,
+     0.2211773350965638,
+     0.11415664091345032,
+     0.17790710711685948,
+     -0.08917960997583739,
+     0.2179445329442972,
+     0.30502594009427375,
+     0.38389434722903715,
+     0.7524637360091706,
+     0.6664332567298108,
+     0.4625155389663444,
+     0.23567015362536167,
+     0.528404476869192,
+     0.9428723610443006,
+     0.45631537857952137,
+     0.19510808668109042,
+     0.26375943233173876,
+     0.4126687166980857,
+     0.5546574808941704
+    ],
+    "counts": [
+     32,
+     104,
+     188,
+     326,
+     352,
+     384,
+     510,
+     574,
+     754,
+     711,
+     808,
+     900,
+     968,
+     977,
+     1025,
+     1021,
+     984,
+     945,
+     877,
+     698,
+     695,
+     581,
+     574,
+     441,
+     397,
+     342,
+     321,
+     280,
+     269,
+     269,
+     267,
+     198
+    ],
+    "preferred_spacing_bl": 2.3386550617670836
+   }
+  },
+  {
+   "recording": "pigeon_flight_39",
+   "summary": {
+    "frames": 136,
+    "animals": 34,
+    "dims": 2,
+    "duration_s": 27.200000000000003,
+    "missing_fraction": 0.12673010380622837,
+    "mean_speed_m_s": 22.550595117179604,
+    "median_speed_m_s": 23.595077799145155,
+    "mean_nn_distance_m": 1.0872553247053862,
+    "median_nn_distance_m": 0.8391589169192483,
+    "mean_speed_bl_s": 70.47060974118627,
+    "mean_nn_distance_bl": 3.397672889704332,
+    "polarisation_mean": 0.9951379942157655,
+    "milling_mean": 0.056473742466592924,
+    "fraction_polarised_gt_0.8": 1.0,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "big",
+    "group": 5,
+    "given_speed_median": 20.998951725198353,
+    "given_nn_median": 0.7069850184218265
+   },
+   "neighbours": {
+    "lag_s": 0.2,
+    "topological": {
+     "1": {
+      "r2_test": -0.005109196245310477,
+      "coef_align_centre": [
+       0.12654259531192152,
+       0.006108386068538278
+      ]
+     },
+     "2": {
+      "r2_test": 0.008880266983844143,
+      "coef_align_centre": [
+       0.22872678068973953,
+       0.0052246105431747345
+      ]
+     },
+     "3": {
+      "r2_test": 0.0129339874093638,
+      "coef_align_centre": [
+       0.2551990616106032,
+       0.008245382742929904
+      ]
+     },
+     "4": {
+      "r2_test": 0.024533069492644,
+      "coef_align_centre": [
+       0.26669250931892835,
+       0.007538573873819382
+      ]
+     },
+     "5": {
+      "r2_test": 0.02764056891731581,
+      "coef_align_centre": [
+       0.2753186296285031,
+       0.007128955651505033
+      ]
+     },
+     "6": {
+      "r2_test": 0.018849430228751296,
+      "coef_align_centre": [
+       0.281772800561307,
+       0.009129068550236546
+      ]
+     },
+     "7": {
+      "r2_test": 0.028278310618082947,
+      "coef_align_centre": [
+       0.2954785783236549,
+       0.0086938020192395
+      ]
+     },
+     "8": {
+      "r2_test": 0.032621680793498586,
+      "coef_align_centre": [
+       0.3064239037545674,
+       0.008222340314233146
+      ]
+     },
+     "10": {
+      "r2_test": 0.0290472091279379,
+      "coef_align_centre": [
+       0.33231769250228166,
+       0.00779238452840836
+      ]
+     },
+     "12": {
+      "r2_test": 0.03669147161239239,
+      "coef_align_centre": [
+       0.34155035478986984,
+       0.004623044830623769
+      ]
+     },
+     "15": {
+      "r2_test": 0.031958577679303546,
+      "coef_align_centre": [
+       0.33890850003156875,
+       0.004676750524318124
+      ]
+     },
+     "20": {
+      "r2_test": -0.003472379688403082,
+      "coef_align_centre": [
+       0.326548050013266,
+       0.00937794033429768
+      ]
+     }
+    },
+    "metric_bl": {
+     "1": {
+      "r2_test": -0.00543437850612527,
+      "coef_align_centre": [
+       0.20638475649299695,
+       0.006977470484393033
+      ]
+     },
+     "1.5": {
+      "r2_test": -0.041651498199417825,
+      "coef_align_centre": [
+       0.19726348503312197,
+       0.012281310368057267
+      ]
+     },
+     "2": {
+      "r2_test": 0.0014013383411062286,
+      "coef_align_centre": [
+       0.18348871164655345,
+       0.006253014275053726
+      ]
+     },
+     "3": {
+      "r2_test": 0.0023679846272576244,
+      "coef_align_centre": [
+       0.16843927651987586,
+       0.0043324751624381624
+      ]
+     },
+     "4": {
+      "r2_test": -0.020651475034588973,
+      "coef_align_centre": [
+       0.23563274167725595,
+       0.0028187274430464585
+      ]
+     },
+     "5": {
+      "r2_test": -0.018410451572069997,
+      "coef_align_centre": [
+       0.2541734200801995,
+       0.008755921758259108
+      ]
+     },
+     "6": {
+      "r2_test": -0.014493870406813603,
+      "coef_align_centre": [
+       0.2602083608272548,
+       0.009807603072455883
+      ]
+     },
+     "8": {
+      "r2_test": 0.00872050478406361,
+      "coef_align_centre": [
+       0.2811383109286354,
+       0.007484841745321968
+      ]
+     },
+     "10": {
+      "r2_test": 0.025732184351775045,
+      "coef_align_centre": [
+       0.32698099053769764,
+       0.005486211800314299
+      ]
+     },
+     "15": {
+      "r2_test": 0.020886226646300243,
+      "coef_align_centre": [
+       0.3304319267366563,
+       0.005059691627432285
+      ]
+     },
+     "20": {
+      "r2_test": 0.0030343982946268167,
+      "coef_align_centre": [
+       0.3116220992580797,
+       0.008202468950791571
+      ]
+     }
+    },
+    "best_k": 12,
+    "best_k_r2": 0.03669147161239239,
+    "best_radius_bl": 10.0,
+    "best_radius_r2": 0.025732184351775045,
+    "winner": "topological"
+   },
+   "spacing": {
+    "distance_bl": [
+     0.16389822596079068,
+     0.49169467788237203,
+     0.8194911298039533,
+     1.1472875817255348,
+     1.475084033647116,
+     1.8028804855686973,
+     2.130676937490279,
+     2.45847338941186,
+     2.7862698413334415,
+     3.1140662932550227,
+     3.4418627451766044,
+     3.7696591970981856,
+     4.097455649019767,
+     4.425252100941348,
+     4.75304855286293,
+     5.080845004784511,
+     5.408641456706093,
+     5.736437908627673,
+     6.064234360549255,
+     6.392030812470836,
+     6.719827264392418,
+     7.047623716314,
+     7.37542016823558,
+     7.703216620157162,
+     8.031013072078743,
+     8.358809524000325,
+     8.686605975921907,
+     9.014402427843487,
+     9.342198879765068,
+     9.66999533168665,
+     9.997791783608232,
+     10.325588235529812
+    ],
+    "accel_toward_m_s2": [
+     null,
+     0.16928184728933754,
+     -0.01622025319306758,
+     0.14029844585157572,
+     0.17685503193816143,
+     0.09264272967135537,
+     0.02467933740924527,
+     0.1322239674010589,
+     -0.06365425896600241,
+     0.0673243991069215,
+     -0.008733817641453926,
+     -0.054997485832376375,
+     0.08574440986422296,
+     0.09863244639362417,
+     0.05526272638131669,
+     0.16276753226589258,
+     0.17310077548838254,
+     -0.12404214069415098,
+     0.32694250068021125,
+     0.06905043641536839,
+     0.07256446213017963,
+     -0.12045718947064732,
+     -0.0032280360808425498,
+     0.06521304361587923,
+     0.14461435932723377,
+     0.23628374783008133,
+     0.026586547537131595,
+     0.12225872936149443,
+     0.03903097842633595,
+     0.6290461310625471,
+     0.1334904077875321,
+     -0.04765849379714151
+    ],
+    "counts": [
+     38,
+     152,
+     228,
+     340,
+     432,
+     590,
+     592,
+     654,
+     770,
+     759,
+     854,
+     861,
+     1006,
+     1042,
+     1115,
+     1045,
+     971,
+     969,
+     756,
+     768,
+     750,
+     741,
+     712,
+     653,
+     621,
+     523,
+     481,
+     481,
+     403,
+     357,
+     372,
+     276
+    ],
+    "preferred_spacing_bl": 0.8534611377225645
+   }
+  },
+  {
+   "recording": "pigeon_flight_40",
+   "summary": {
+    "frames": 119,
+    "animals": 30,
+    "dims": 2,
+    "duration_s": 23.8,
+    "missing_fraction": 0.40756302521008403,
+    "mean_speed_m_s": 22.77030464910417,
+    "median_speed_m_s": 24.634563121961325,
+    "mean_nn_distance_m": 2.0156992462131735,
+    "median_nn_distance_m": 1.5079756276840361,
+    "mean_speed_bl_s": 71.15720202845053,
+    "mean_nn_distance_bl": 6.299060144416167,
+    "polarisation_mean": 0.9902616598219227,
+    "milling_mean": 0.1097179673127591,
+    "fraction_polarised_gt_0.8": 1.0,
+    "fraction_milling_gt_0.5": 0.008403361344537815
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "control",
+    "flock_size": "big",
+    "group": 5,
+    "given_speed_median": 23.40066401074495,
+    "given_nn_median": 1.33527060283365
+   },
+   "neighbours": {
+    "lag_s": 0.2,
+    "topological": {
+     "1": {
+      "r2_test": 0.004656239446790278,
+      "coef_align_centre": [
+       0.073119047620369,
+       0.003696989493316422
+      ]
+     },
+     "2": {
+      "r2_test": 0.03808666207333611,
+      "coef_align_centre": [
+       0.1064172497170729,
+       -0.0019825779463340763
+      ]
+     },
+     "3": {
+      "r2_test": 0.04780988254355445,
+      "coef_align_centre": [
+       0.14811795093020225,
+       -0.005908291784217189
+      ]
+     },
+     "4": {
+      "r2_test": 0.06478266527931686,
+      "coef_align_centre": [
+       0.15677336652818574,
+       -0.003293884135801841
+      ]
+     },
+     "5": {
+      "r2_test": 0.07244145199230612,
+      "coef_align_centre": [
+       0.15159393910473198,
+       -0.005020569101946676
+      ]
+     },
+     "6": {
+      "r2_test": 0.07570811598808269,
+      "coef_align_centre": [
+       0.14469701521723327,
+       -0.0066155880696446585
+      ]
+     },
+     "7": {
+      "r2_test": 0.08067391299258297,
+      "coef_align_centre": [
+       0.14381544991440864,
+       -0.0057183542341287304
+      ]
+     },
+     "8": {
+      "r2_test": 0.07857147412801446,
+      "coef_align_centre": [
+       0.13132879370925904,
+       -0.004271262888978416
+      ]
+     },
+     "10": {
+      "r2_test": 0.06768356940076814,
+      "coef_align_centre": [
+       0.1194501274007129,
+       -0.001583578629763143
+      ]
+     },
+     "12": {
+      "r2_test": 0.03751913045780231,
+      "coef_align_centre": [
+       0.11491114088654555,
+       -0.006332120449781032
+      ]
+     },
+     "15": {
+      "r2_test": 0.018368980264048207,
+      "coef_align_centre": [
+       0.11303744904790301,
+       -0.005066720962953695
+      ]
+     },
+     "20": {
+      "r2_test": 0.017557246036036145,
+      "coef_align_centre": [
+       0.09201081537412092,
+       0.0004139172002890683
+      ]
+     }
+    },
+    "metric_bl": {
+     "1": {
+      "r2_test": NaN,
+      "coef_align_centre": [
+       NaN,
+       NaN
+      ]
+     },
+     "1.5": {
+      "r2_test": NaN,
+      "coef_align_centre": [
+       NaN,
+       NaN
+      ]
+     },
+     "2": {
+      "r2_test": -0.008266266436884218,
+      "coef_align_centre": [
+       0.05554315339152162,
+       -0.000273103045651231
+      ]
+     },
+     "3": {
+      "r2_test": 0.003999939219983872,
+      "coef_align_centre": [
+       0.024234243983901442,
+       0.0002364346469562195
+      ]
+     },
+     "4": {
+      "r2_test": 0.0044668427148701895,
+      "coef_align_centre": [
+       0.050847538586597345,
+       0.0026489596293644358
+      ]
+     },
+     "5": {
+      "r2_test": 0.0007228707690969394,
+      "coef_align_centre": [
+       0.09232699806782775,
+       0.0011078263284462603
+      ]
+     },
+     "6": {
+      "r2_test": 0.007061625494591883,
+      "coef_align_centre": [
+       0.07909738204186612,
+       0.0009458898008252741
+      ]
+     },
+     "8": {
+      "r2_test": 0.0036370388430317924,
+      "coef_align_centre": [
+       0.11599644108103341,
+       0.0021614405053185333
+      ]
+     },
+     "10": {
+      "r2_test": 0.005943519385180562,
+      "coef_align_centre": [
+       0.13543951016651673,
+       0.0023992135949516976
+      ]
+     },
+     "15": {
+      "r2_test": 0.02272727865989277,
+      "coef_align_centre": [
+       0.13558746488664986,
+       0.0022420230742342517
+      ]
+     },
+     "20": {
+      "r2_test": 0.02647406919690798,
+      "coef_align_centre": [
+       0.1450711367545057,
+       -0.00042468477394450504
+      ]
+     }
+    },
+    "best_k": 7,
+    "best_k_r2": 0.08067391299258297,
+    "best_radius_bl": 20.0,
+    "best_radius_r2": 0.02647406919690798,
+    "winner": "topological"
+   },
+   "spacing": {
+    "distance_bl": [
+     0.2945264897820383,
+     0.883579469346115,
+     1.4726324489101916,
+     2.0616854284742683,
+     2.650738408038345,
+     3.2397913876024216,
+     3.8288443671664982,
+     4.417897346730575,
+     5.0069503262946515,
+     5.596003305858728,
+     6.185056285422805,
+     6.7741092649868815,
+     7.363162244550958,
+     7.952215224115035,
+     8.541268203679111,
+     9.130321183243188,
+     9.719374162807265,
+     10.308427142371341,
+     10.897480121935418,
+     11.486533101499495,
+     12.075586081063571,
+     12.664639060627648,
+     13.253692040191725,
+     13.842745019755801,
+     14.431797999319878,
+     15.020850978883955,
+     15.609903958448031,
+     16.19895693801211,
+     16.788009917576183,
+     17.377062897140263,
+     17.966115876704336,
+     18.555168856268416
+    ],
+    "accel_toward_m_s2": [
+     null,
+     0.14420005142554182,
+     0.21467722158377983,
+     0.012080791539048888,
+     -0.13101274578734912,
+     0.12727247550117718,
+     0.1671324843224129,
+     0.04695807431198404,
+     0.05824494691710372,
+     0.09631644906866305,
+     -0.0936263128299523,
+     0.14502246524899098,
+     0.1456921212283874,
+     0.3639301765359565,
+     -0.053097907197581645,
+     0.17325279800250004,
+     0.21255419476908982,
+     0.3082268750472161,
+     0.4319439358516385,
+     0.2376659454113243,
+     0.10737142164087837,
+     -0.18119543071142474,
+     0.43826118563345606,
+     0.850558434949871,
+     -0.11105521950222592,
+     0.29093985683702983,
+     -0.26162896951192227,
+     0.44098754471490875,
+     -0.7609175877719846,
+     1.0693559972458049,
+     -0.13774762284352743,
+     0.423873511991108
+    ],
+    "counts": [
+     32,
+     108,
+     156,
+     154,
+     216,
+     306,
+     332,
+     414,
+     456,
+     431,
+     442,
+     537,
+     522,
+     450,
+     452,
+     450,
+     392,
+     441,
+     412,
+     343,
+     399,
+     353,
+     314,
+     289,
+     245,
+     259,
+     217,
+     214,
+     173,
+     134,
+     147,
+     161
+    ],
+    "preferred_spacing_bl": 2.949529983808372
+   }
+  },
+  {
+   "recording": "pigeon_flight_41",
+   "summary": {
+    "frames": 131,
+    "animals": 34,
+    "dims": 2,
+    "duration_s": 26.200000000000003,
+    "missing_fraction": 0.17759317467444993,
+    "mean_speed_m_s": 21.295697046907836,
+    "median_speed_m_s": 23.006743512699693,
+    "mean_nn_distance_m": 0.9837621332999027,
+    "median_nn_distance_m": 0.7329882392375215,
+    "mean_speed_bl_s": 66.54905327158698,
+    "mean_nn_distance_bl": 3.0742566665621958,
+    "polarisation_mean": 0.9922744018926967,
+    "milling_mean": 0.060079037603423965,
+    "fraction_polarised_gt_0.8": 0.9923664122137404,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "predator",
+    "flock_size": "big",
+    "group": 5,
+    "given_speed_median": 21.2421464139535,
+    "given_nn_median": 0.631934622142076
+   },
+   "neighbours": {
+    "lag_s": 0.2,
+    "topological": {
+     "1": {
+      "r2_test": 0.006416777479093194,
+      "coef_align_centre": [
+       0.09579269896030183,
+       0.004519087837848678
+      ]
+     },
+     "2": {
+      "r2_test": 0.007297286939528802,
+      "coef_align_centre": [
+       0.15334101921610038,
+       0.007459103207790426
+      ]
+     },
+     "3": {
+      "r2_test": 0.023709855567348836,
+      "coef_align_centre": [
+       0.18761863712449123,
+       0.002960951723232975
+      ]
+     },
+     "4": {
+      "r2_test": 0.01817093654904245,
+      "coef_align_centre": [
+       0.19825342765874326,
+       0.0014786308402969961
+      ]
+     },
+     "5": {
+      "r2_test": 0.02029532742560558,
+      "coef_align_centre": [
+       0.19887728835912483,
+       0.0004836480716548029
+      ]
+     },
+     "6": {
+      "r2_test": 0.022401234892831856,
+      "coef_align_centre": [
+       0.20051957706003917,
+       0.005504092940325778
+      ]
+     },
+     "7": {
+      "r2_test": 0.018878287814158012,
+      "coef_align_centre": [
+       0.20031159262099468,
+       0.0065864458154755905
+      ]
+     },
+     "8": {
+      "r2_test": 0.004020029117487112,
+      "coef_align_centre": [
+       0.19170021660010056,
+       0.009548015073099698
+      ]
+     },
+     "10": {
+      "r2_test": -0.016685230406530582,
+      "coef_align_centre": [
+       0.1793600716527558,
+       0.012376737715125262
+      ]
+     },
+     "12": {
+      "r2_test": -0.033001227520814025,
+      "coef_align_centre": [
+       0.18171068582777677,
+       0.015686320362915403
+      ]
+     },
+     "15": {
+      "r2_test": -0.07908593493980143,
+      "coef_align_centre": [
+       0.17836475543494093,
+       0.02017386903436072
+      ]
+     },
+     "20": {
+      "r2_test": -0.029519942326444504,
+      "coef_align_centre": [
+       0.1661191007984307,
+       0.015157517221328775
+      ]
+     }
+    },
+    "metric_bl": {
+     "1": {
+      "r2_test": -0.00303548677582155,
+      "coef_align_centre": [
+       0.09976525301313358,
+       0.004777479809667891
+      ]
+     },
+     "1.5": {
+      "r2_test": 0.0012811590616189639,
+      "coef_align_centre": [
+       0.18055406282974845,
+       0.006009694281185769
+      ]
+     },
+     "2": {
+      "r2_test": 0.014497583115219315,
+      "coef_align_centre": [
+       0.13029096382536187,
+       0.0026894022774645618
+      ]
+     },
+     "3": {
+      "r2_test": 0.013244127146521345,
+      "coef_align_centre": [
+       0.1365143139770003,
+       0.0012541344798110631
+      ]
+     },
+     "4": {
+      "r2_test": 0.009918968878037004,
+      "coef_align_centre": [
+       0.15075046669044997,
+       0.0025532263367416493
+      ]
+     },
+     "5": {
+      "r2_test": 0.011482357288311817,
+      "coef_align_centre": [
+       0.15745885194869114,
+       0.0027705137460755235
+      ]
+     },
+     "6": {
+      "r2_test": 0.0100586603674242,
+      "coef_align_centre": [
+       0.1675928200720715,
+       0.003843007637423848
+      ]
+     },
+     "8": {
+      "r2_test": 0.00815581866469195,
+      "coef_align_centre": [
+       0.172297259353999,
+       0.007354216868307266
+      ]
+     },
+     "10": {
+      "r2_test": 0.01054176794526196,
+      "coef_align_centre": [
+       0.18056282812155616,
+       0.010861279250581338
+      ]
+     },
+     "15": {
+      "r2_test": -0.0090825931101981,
+      "coef_align_centre": [
+       0.16263750770692328,
+       0.013417824805331411
+      ]
+     },
+     "20": {
+      "r2_test": 0.002683778357983835,
+      "coef_align_centre": [
+       0.15248244273913572,
+       0.010239011382066386
+      ]
+     }
+    },
+    "best_k": 3,
+    "best_k_r2": 0.023709855567348836,
+    "best_radius_bl": 2.0,
+    "best_radius_r2": 0.014497583115219315,
+    "winner": "topological"
+   },
+   "spacing": {
+    "distance_bl": [
+     0.14316176547607842,
+     0.4294852964282353,
+     0.7158088273803922,
+     1.002132358332549,
+     1.2884558892847058,
+     1.5747794202368626,
+     1.8611029511890196,
+     2.147426482141176,
+     2.4337500130933334,
+     2.7200735440454897,
+     3.006397074997647,
+     3.2927206059498038,
+     3.5790441369019605,
+     3.865367667854118,
+     4.151691198806274,
+     4.4380147297584305,
+     4.724338260710589,
+     5.010661791662745,
+     5.296985322614901,
+     5.5833088535670585,
+     5.869632384519216,
+     6.155955915471372,
+     6.4422794464235285,
+     6.728602977375687,
+     7.014926508327843,
+     7.301250039279999,
+     7.5875735702321565,
+     7.873897101184314,
+     8.16022063213647,
+     8.446544163088626,
+     8.732867694040785,
+     9.019191224992941
+    ],
+    "accel_toward_m_s2": [
+     null,
+     -0.014572110522387289,
+     -0.07237547870338927,
+     0.1978945167104465,
+     0.053592364865650256,
+     0.10130244065788957,
+     0.07336820568877643,
+     0.21623627332744727,
+     0.036722098877471,
+     -0.01648582788469631,
+     0.2081389850826281,
+     0.02498862748373191,
+     0.25672369107764165,
+     0.06492814177290507,
+     0.02811154946450701,
+     0.027962777576566032,
+     -0.029572700950455527,
+     0.0013484967108529388,
+     -0.03544907762855984,
+     -0.06618288029903602,
+     -0.09990874935900704,
+     -0.05531028423643328,
+     0.15092068746364787,
+     0.2771044774752657,
+     0.3122959621501536,
+     0.22749601073056508,
+     0.3438941473613927,
+     0.03690029508488148,
+     -0.17450316814699993,
+     0.0836413167414775,
+     0.772818108144446,
+     -0.06582955570952095
+    ],
+    "counts": [
+     40,
+     148,
+     268,
+     278,
+     358,
+     504,
+     546,
+     689,
+     687,
+     740,
+     833,
+     931,
+     833,
+     880,
+     994,
+     999,
+     930,
+     876,
+     833,
+     741,
+     662,
+     580,
+     608,
+     543,
+     484,
+     460,
+     465,
+     402,
+     323,
+     335,
+     289,
+     277
+    ],
+    "preferred_spacing_bl": 0.7924832750377299
+   }
+  },
+  {
+   "recording": "pigeon_flight_42",
+   "summary": {
+    "frames": 146,
+    "animals": 10,
+    "dims": 2,
+    "duration_s": 29.200000000000003,
+    "missing_fraction": 0.0,
+    "mean_speed_m_s": 20.798160082269458,
+    "median_speed_m_s": 22.792071185300728,
+    "mean_nn_distance_m": 1.7190203606450993,
+    "median_nn_distance_m": 1.4578462974086681,
+    "mean_speed_bl_s": 64.99425025709205,
+    "mean_nn_distance_bl": 5.371938627015935,
+    "polarisation_mean": 0.9872544549258888,
+    "milling_mean": 0.1382573529454555,
+    "fraction_polarised_gt_0.8": 0.9794520547945206,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "control",
+    "flock_size": "small",
+    "group": 1,
+    "given_speed_median": 21.421098339653298,
+    "given_nn_median": 1.24539999517926
+   }
+  },
+  {
+   "recording": "pigeon_flight_43",
+   "summary": {
+    "frames": 214,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 42.800000000000004,
+    "missing_fraction": 0.0,
+    "mean_speed_m_s": 20.503363536336916,
+    "median_speed_m_s": 22.620201319326465,
+    "mean_nn_distance_m": 1.3295430297707744,
+    "median_nn_distance_m": 0.8512091445138686,
+    "mean_speed_bl_s": 64.07301105105286,
+    "mean_nn_distance_bl": 4.15482196803367,
+    "polarisation_mean": 0.9937875381265855,
+    "milling_mean": 0.10621731284301139,
+    "fraction_polarised_gt_0.8": 0.9906542056074766,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "control",
+    "flock_size": "small",
+    "group": 2,
+    "given_speed_median": 19.1296284190691,
+    "given_nn_median": 0.752032655479994
+   }
+  },
+  {
+   "recording": "pigeon_flight_44",
+   "summary": {
+    "frames": 124,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 24.8,
+    "missing_fraction": 0.11491935483870967,
+    "mean_speed_m_s": 21.528004181694055,
+    "median_speed_m_s": 23.417923128172696,
+    "mean_nn_distance_m": 1.6801059642701581,
+    "median_nn_distance_m": 1.6193944321148854,
+    "mean_speed_bl_s": 67.27501306779392,
+    "mean_nn_distance_bl": 5.250331138344244,
+    "polarisation_mean": 0.9931073444073304,
+    "milling_mean": 0.1366840532831249,
+    "fraction_polarised_gt_0.8": 0.9919354838709677,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "control",
+    "flock_size": "small",
+    "group": 3,
+    "given_speed_median": 23.4356984060991,
+    "given_nn_median": 1.34169575885563
+   }
+  },
+  {
+   "recording": "pigeon_flight_45",
+   "summary": {
+    "frames": 148,
+    "animals": 7,
+    "dims": 2,
+    "duration_s": 29.6,
+    "missing_fraction": 0.11969111969111969,
+    "mean_speed_m_s": 19.16553867428313,
+    "median_speed_m_s": 21.040090582062632,
+    "mean_nn_distance_m": 1.8775222538199494,
+    "median_nn_distance_m": 1.542802672415889,
+    "mean_speed_bl_s": 59.89230835713478,
+    "mean_nn_distance_bl": 5.867257043187342,
+    "polarisation_mean": 0.9874461444499126,
+    "milling_mean": 0.10251622638246274,
+    "fraction_polarised_gt_0.8": 0.9932432432432432,
+    "fraction_milling_gt_0.5": 0.006756756756756757
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "control",
+    "flock_size": "small",
+    "group": 4,
+    "given_speed_median": 19.0799189802795,
+    "given_nn_median": 1.2627431122506652
+   }
+  },
+  {
+   "recording": "pigeon_flight_46",
+   "summary": {
+    "frames": 236,
+    "animals": 33,
+    "dims": 2,
+    "duration_s": 47.2,
+    "missing_fraction": 0.07691319979455573,
+    "mean_speed_m_s": 17.838502986442762,
+    "median_speed_m_s": 18.409143980653724,
+    "mean_nn_distance_m": 1.1819645755577077,
+    "median_nn_distance_m": 0.9651681506419227,
+    "mean_speed_bl_s": 55.74532183263363,
+    "mean_nn_distance_bl": 3.693639298617837,
+    "polarisation_mean": 0.9928674315112679,
+    "milling_mean": 0.0676289825410693,
+    "fraction_polarised_gt_0.8": 0.9957627118644068,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "control",
+    "flock_size": "big",
+    "group": 5,
+    "given_speed_median": 16.13096745295115,
+    "given_nn_median": 0.828309922439516
+   },
+   "neighbours": {
+    "lag_s": 0.2,
+    "topological": {
+     "1": {
+      "r2_test": -0.006875550477597248,
+      "coef_align_centre": [
+       0.13588575952717077,
+       0.00010712130422843706
+      ]
+     },
+     "2": {
+      "r2_test": 0.0017613536587729461,
+      "coef_align_centre": [
+       0.16885495431450762,
+       -0.0016889686162985145
+      ]
+     },
+     "3": {
+      "r2_test": 0.0023095023928954017,
+      "coef_align_centre": [
+       0.19349748177821366,
+       -0.0033409212171102054
+      ]
+     },
+     "4": {
+      "r2_test": 0.0016540542829314164,
+      "coef_align_centre": [
+       0.2127690895452968,
+       -0.0028598771522419806
+      ]
+     },
+     "5": {
+      "r2_test": 0.002290206691899277,
+      "coef_align_centre": [
+       0.2210917515346126,
+       -0.0024215258944410415
+      ]
+     },
+     "6": {
+      "r2_test": 0.004891340768991559,
+      "coef_align_centre": [
+       0.2333122327441369,
+       -0.0015473800884490878
+      ]
+     },
+     "7": {
+      "r2_test": 0.005621990025431289,
+      "coef_align_centre": [
+       0.24516327602587246,
+       -0.0015091313484407402
+      ]
+     },
+     "8": {
+      "r2_test": 0.0010590256997069503,
+      "coef_align_centre": [
+       0.2499382876053533,
+       -0.003975305863464754
+      ]
+     },
+     "10": {
+      "r2_test": -0.002445138285079196,
+      "coef_align_centre": [
+       0.25581316553373656,
+       -0.004539366194409322
+      ]
+     },
+     "12": {
+      "r2_test": 0.0011416394948117192,
+      "coef_align_centre": [
+       0.2590763207457322,
+       -0.004595553635174682
+      ]
+     },
+     "15": {
+      "r2_test": 0.00894849911276785,
+      "coef_align_centre": [
+       0.2505012549080001,
+       -0.0031233894951866194
+      ]
+     },
+     "20": {
+      "r2_test": 0.01489620866313024,
+      "coef_align_centre": [
+       0.23565853678070878,
+       0.0019090068138378935
+      ]
+     }
+    },
+    "metric_bl": {
+     "1": {
+      "r2_test": -0.0011183627864983503,
+      "coef_align_centre": [
+       0.1589512014932603,
+       -0.0039408511685042795
+      ]
+     },
+     "1.5": {
+      "r2_test": 0.0030375785257235055,
+      "coef_align_centre": [
+       0.10724270356537781,
+       -0.0008545750904059436
+      ]
+     },
+     "2": {
+      "r2_test": 0.0017692363906259834,
+      "coef_align_centre": [
+       0.13876274180235063,
+       0.0016019285709481714
+      ]
+     },
+     "3": {
+      "r2_test": -0.01565656720603603,
+      "coef_align_centre": [
+       0.19836303226615237,
+       -0.0013802518271555512
+      ]
+     },
+     "4": {
+      "r2_test": -0.010380060017585846,
+      "coef_align_centre": [
+       0.18550649355971496,
+       -0.00122236096815372
+      ]
+     },
+     "5": {
+      "r2_test": -0.013313084978878731,
+      "coef_align_centre": [
+       0.19257764264538182,
+       -0.00308148683510014
+      ]
+     },
+     "6": {
+      "r2_test": -0.02532268010297334,
+      "coef_align_centre": [
+       0.2188590552845454,
+       -0.002646413437992436
+      ]
+     },
+     "8": {
+      "r2_test": -0.017528446456340996,
+      "coef_align_centre": [
+       0.25947544225261376,
+       -0.00044607115466680733
+      ]
+     },
+     "10": {
+      "r2_test": -0.02110172754479467,
+      "coef_align_centre": [
+       0.27110239550635523,
+       -0.003200265520087852
+      ]
+     },
+     "15": {
+      "r2_test": -0.005735051911732292,
+      "coef_align_centre": [
+       0.2694106930629115,
+       -0.0014965368145157855
+      ]
+     },
+     "20": {
+      "r2_test": 0.004663991548943924,
+      "coef_align_centre": [
+       0.2608902406242727,
+       0.002189621989888086
+      ]
+     }
+    },
+    "best_k": 20,
+    "best_k_r2": 0.01489620866313024,
+    "best_radius_bl": 20.0,
+    "best_radius_r2": 0.004663991548943924,
+    "winner": "topological"
+   },
+   "spacing": {
+    "distance_bl": [
+     0.18850940442225053,
+     0.5655282132667516,
+     0.9425470221112526,
+     1.3195658309557539,
+     1.6965846398002546,
+     2.073603448644756,
+     2.4506222574892567,
+     2.827641066333758,
+     3.204659875178259,
+     3.5816786840227604,
+     3.958697492867261,
+     4.335716301711763,
+     4.712735110556263,
+     5.089753919400764,
+     5.466772728245266,
+     5.843791537089766,
+     6.220810345934268,
+     6.597829154778768,
+     6.97484796362327,
+     7.351866772467771,
+     7.728885581312271,
+     8.105904390156773,
+     8.482923199001274,
+     8.859942007845774,
+     9.236960816690276,
+     9.613979625534778,
+     9.990998434379279,
+     10.368017243223779,
+     10.74503605206828,
+     11.122054860912781,
+     11.499073669757284,
+     11.876092478601784
+    ],
+    "accel_toward_m_s2": [
+     -0.20029370551030812,
+     -0.12876231640906943,
+     -0.2153721141163936,
+     0.03565377472320074,
+     -0.04842718342242398,
+     -0.010022131176672803,
+     -0.013036960193699284,
+     -0.07574265281387983,
+     -0.01515911430282738,
+     -0.0366990212012459,
+     -0.10036307903172373,
+     -0.007139744749504143,
+     -0.1351006184655778,
+     0.06258704085859443,
+     0.05805707258263727,
+     0.11999566299511394,
+     -0.08890498722013356,
+     -0.07010936976217934,
+     0.12444715360922363,
+     0.01036428112878733,
+     0.23129179537047867,
+     -0.007114802448826673,
+     0.07028864751571251,
+     0.2563057734481431,
+     0.11764848078604768,
+     0.24135919040355733,
+     -0.18425543111604367,
+     0.17236028719203436,
+     0.05714493207002723,
+     0.5712708833973353,
+     0.24528883441129953,
+     0.33279516965704065
+    ],
+    "counts": [
+     88,
+     290,
+     412,
+     612,
+     800,
+     1065,
+     1171,
+     1283,
+     1414,
+     1596,
+     1710,
+     1783,
+     1912,
+     1999,
+     1981,
+     2055,
+     1903,
+     1816,
+     1792,
+     1702,
+     1388,
+     1339,
+     1146,
+     1125,
+     914,
+     875,
+     738,
+     651,
+     658,
+     620,
+     571,
+     549
+    ],
+    "preferred_spacing_bl": 1.2660169968530655
+   }
+  },
+  {
+   "recording": "pigeon_flight_47",
+   "summary": {
+    "frames": 174,
+    "animals": 10,
+    "dims": 2,
+    "duration_s": 34.800000000000004,
+    "missing_fraction": 0.0,
+    "mean_speed_m_s": 17.960129258370454,
+    "median_speed_m_s": 19.1507761319953,
+    "mean_nn_distance_m": 1.1221784780867705,
+    "median_nn_distance_m": 0.789956193461606,
+    "mean_speed_bl_s": 56.12540393240767,
+    "mean_nn_distance_bl": 3.506807744021158,
+    "polarisation_mean": 0.9926374557684149,
+    "milling_mean": 0.1445253710014649,
+    "fraction_polarised_gt_0.8": 0.9885057471264368,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "control",
+    "flock_size": "small",
+    "group": 1,
+    "given_speed_median": 17.935011477701998,
+    "given_nn_median": 0.6414785798017866
+   }
+  },
+  {
+   "recording": "pigeon_flight_48",
+   "summary": {
+    "frames": 157,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 31.400000000000002,
+    "missing_fraction": 0.0031847133757961785,
+    "mean_speed_m_s": 19.22981000569059,
+    "median_speed_m_s": 20.64656625559219,
+    "mean_nn_distance_m": 1.910505756096204,
+    "median_nn_distance_m": 1.5812480366901074,
+    "mean_speed_bl_s": 60.0931562677831,
+    "mean_nn_distance_bl": 5.970330487800637,
+    "polarisation_mean": 0.9923000515769845,
+    "milling_mean": 0.16449602153813073,
+    "fraction_polarised_gt_0.8": 0.9936305732484076,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "control",
+    "flock_size": "small",
+    "group": 2,
+    "given_speed_median": 19.467278992797652,
+    "given_nn_median": 1.33104500075179
+   }
+  },
+  {
+   "recording": "pigeon_flight_49",
+   "summary": {
+    "frames": 173,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 34.6,
+    "missing_fraction": 0.01083815028901734,
+    "mean_speed_m_s": 18.716620085071632,
+    "median_speed_m_s": 19.762405049100003,
+    "mean_nn_distance_m": 1.7252228227539177,
+    "median_nn_distance_m": 1.2293595969056346,
+    "mean_speed_bl_s": 58.48943776584885,
+    "mean_nn_distance_bl": 5.391321321105993,
+    "polarisation_mean": 0.9949592854746083,
+    "milling_mean": 0.09584767022733151,
+    "fraction_polarised_gt_0.8": 1.0,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "control",
+    "flock_size": "small",
+    "group": 3,
+    "given_speed_median": 17.6629105174044,
+    "given_nn_median": 1.07008457197777
+   }
+  },
+  {
+   "recording": "pigeon_flight_50",
+   "summary": {
+    "frames": 198,
+    "animals": 8,
+    "dims": 2,
+    "duration_s": 39.6,
+    "missing_fraction": 0.07323232323232323,
+    "mean_speed_m_s": 16.916667388005084,
+    "median_speed_m_s": 17.74900144808249,
+    "mean_nn_distance_m": 1.3059784945099924,
+    "median_nn_distance_m": 1.0712600017128102,
+    "mean_speed_bl_s": 52.86458558751589,
+    "mean_nn_distance_bl": 4.081182795343726,
+    "polarisation_mean": 0.9930051064256903,
+    "milling_mean": 0.09277224525237682,
+    "fraction_polarised_gt_0.8": 0.9949494949494949,
+    "fraction_milling_gt_0.5": 0.005050505050505051
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "control",
+    "flock_size": "small",
+    "group": 4,
+    "given_speed_median": 17.104946918667203,
+    "given_nn_median": 0.9531916863273651
+   }
+  },
+  {
+   "recording": "pigeon_flight_51",
+   "summary": {
+    "frames": 270,
+    "animals": 32,
+    "dims": 2,
+    "duration_s": 54.0,
+    "missing_fraction": 0.0894675925925926,
+    "mean_speed_m_s": 19.181556061360524,
+    "median_speed_m_s": 19.40193412134129,
+    "mean_nn_distance_m": 1.1334686546026342,
+    "median_nn_distance_m": 0.8036370122075132,
+    "mean_speed_bl_s": 59.94236269175164,
+    "mean_nn_distance_bl": 3.5420895456332318,
+    "polarisation_mean": 0.997704933735403,
+    "milling_mean": 0.08381761507169487,
+    "fraction_polarised_gt_0.8": 1.0,
+    "fraction_milling_gt_0.5": 0.0
+   },
+   "meta": {
+    "species": "homing pigeon",
+    "source": "pigeon-predation-2022",
+    "condition": "control",
+    "flock_size": "big",
+    "group": 5,
+    "given_speed_median": 17.6335556672893,
+    "given_nn_median": 0.682948371182818
+   },
+   "neighbours": {
+    "lag_s": 0.2,
+    "topological": {
+     "1": {
+      "r2_test": -0.0016437969041156464,
+      "coef_align_centre": [
+       0.07665073434316769,
+       -0.0003454899557505971
+      ]
+     },
+     "2": {
+      "r2_test": 0.006226912481601454,
+      "coef_align_centre": [
+       0.12661665060819471,
+       -0.0005109545308985646
+      ]
+     },
+     "3": {
+      "r2_test": 0.009636987022140664,
+      "coef_align_centre": [
+       0.1569873270469665,
+       -0.0036489564935181067
+      ]
+     },
+     "4": {
+      "r2_test": 0.01782901871583642,
+      "coef_align_centre": [
+       0.16590198950418114,
+       -0.0018867824358930199
+      ]
+     },
+     "5": {
+      "r2_test": 0.023975612093982135,
+      "coef_align_centre": [
+       0.18658464212145487,
+       -0.0036944936062769653
+      ]
+     },
+     "6": {
+      "r2_test": 0.02473322952353252,
+      "coef_align_centre": [
+       0.19351518674172474,
+       -0.001663207790557502
+      ]
+     },
+     "7": {
+      "r2_test": 0.026259494914493087,
+      "coef_align_centre": [
+       0.20177072515640496,
+       -0.001480311951745798
+      ]
+     },
+     "8": {
+      "r2_test": 0.027037400841678605,
+      "coef_align_centre": [
+       0.2089661417972277,
+       -0.0010753438393990991
+      ]
+     },
+     "10": {
+      "r2_test": 0.024026129764384674,
+      "coef_align_centre": [
+       0.22111650503995137,
+       0.0007235180394166225
+      ]
+     },
+     "12": {
+      "r2_test": 0.018835812048054623,
+      "coef_align_centre": [
+       0.23803148942896202,
+       0.0021230369652663348
+      ]
+     },
+     "15": {
+      "r2_test": 0.014963386973039228,
+      "coef_align_centre": [
+       0.25444563343661336,
+       0.0020131880978316407
+      ]
+     },
+     "20": {
+      "r2_test": 0.003633625524540718,
+      "coef_align_centre": [
+       0.23089856718672938,
+       0.00421182256248198
+      ]
+     }
+    },
+    "metric_bl": {
+     "1": {
+      "r2_test": 0.009736724418328513,
+      "coef_align_centre": [
+       0.07824927257025273,
+       -0.0009470321373658029
+      ]
+     },
+     "1.5": {
+      "r2_test": 0.00010854215863587147,
+      "coef_align_centre": [
+       0.09446987184679499,
+       -2.60683082564713e-06
+      ]
+     },
+     "2": {
+      "r2_test": -0.0013676534233142412,
+      "coef_align_centre": [
+       0.10748611366443508,
+       -0.0012735604560768221
+      ]
+     },
+     "3": {
+      "r2_test": -0.003349769634684252,
+      "coef_align_centre": [
+       0.14187071165753262,
+       0.00027095373098397283
+      ]
+     },
+     "4": {
+      "r2_test": -0.008568543622021751,
+      "coef_align_centre": [
+       0.15143862386659132,
+       0.0015779637678112642
+      ]
+     },
+     "5": {
+      "r2_test": -0.010051085636935575,
+      "coef_align_centre": [
+       0.1699196538471941,
+       0.0015280244861582653
+      ]
+     },
+     "6": {
+      "r2_test": -0.0025827472178727717,
+      "coef_align_centre": [
+       0.12783403446396313,
+       0.0005324303339925132
+      ]
+     },
+     "8": {
+      "r2_test": -0.004062748199085808,
+      "coef_align_centre": [
+       0.10718500550496339,
+       0.0007330654875774341
+      ]
+     },
+     "10": {
+      "r2_test": -0.009806676280901705,
+      "coef_align_centre": [
+       0.13806910826972324,
+       0.004568543652077516
+      ]
+     },
+     "15": {
+      "r2_test": 0.0038236067028295517,
+      "coef_align_centre": [
+       0.16849808183139905,
+       0.0031678492013809106
+      ]
+     },
+     "20": {
+      "r2_test": 0.0016035234008003885,
+      "coef_align_centre": [
+       0.1703426769402803,
+       0.004997910710204355
+      ]
+     }
+    },
+    "best_k": 8,
+    "best_k_r2": 0.027037400841678605,
+    "best_radius_bl": 1.0,
+    "best_radius_r2": 0.009736724418328513,
+    "winner": "topological"
+   },
+   "spacing": {
+    "distance_bl": [
+     0.1569603539467799,
+     0.47088106184033973,
+     0.7848017697338996,
+     1.0987224776274593,
+     1.412643185521019,
+     1.7265638934145788,
+     2.0404846013081386,
+     2.3544053092016988,
+     2.668326017095258,
+     2.9822467249888183,
+     3.2961674328823776,
+     3.6100881407759378,
+     3.9240088486694975,
+     4.237929556563057,
+     4.551850264456617,
+     4.865770972350177,
+     5.179691680243737,
+     5.493612388137297,
+     5.807533096030856,
+     6.121453803924416,
+     6.435374511817976,
+     6.749295219711536,
+     7.063215927605095,
+     7.377136635498656,
+     7.691057343392215,
+     8.004978051285775,
+     8.318898759179334,
+     8.632819467072895,
+     8.946740174966454,
+     9.260660882860014,
+     9.574581590753574,
+     9.888502298647133
+    ],
+    "accel_toward_m_s2": [
+     -0.21546036785620745,
+     0.008902911230795271,
+     0.044852758749448725,
+     -0.012009060106804827,
+     0.048690911444796814,
+     -0.0004629243161826791,
+     -0.027279733802590335,
+     0.02386860951232043,
+     0.04479383989169231,
+     0.0671294946727868,
+     0.07852654666833774,
+     0.08188827000302008,
+     0.07485086266713525,
+     0.06382086484079097,
+     -0.15815971237723575,
+     -0.019060710069101525,
+     0.05697690929055923,
+     0.11369695938599808,
+     0.11895383786094048,
+     0.13432487685009334,
+     0.06370193544703905,
+     0.16573683202206133,
+     -0.023042215877743927,
+     0.018169404714373484,
+     -0.05602437335861866,
+     -0.09355444381118351,
+     -0.22246356339080844,
+     -0.06827947817928358,
+     -0.12121250802309229,
+     -0.03176295348818774,
+     -0.21248247759567596,
+     -0.04792105678251041
+    ],
+    "counts": [
+     92,
+     294,
+     530,
+     782,
+     870,
+     1194,
+     1462,
+     1566,
+     1819,
+     1848,
+     1952,
+     2177,
+     2092,
+     2033,
+     1865,
+     1899,
+     1871,
+     1825,
+     1709,
+     1561,
+     1413,
+     1282,
+     1159,
+     961,
+     918,
+     783,
+     706,
+     694,
+     648,
+     554,
+     547,
+     456
+    ],
+    "preferred_spacing_bl": 0.45842444145549943
+   }
+  }
+ ],
+ "predator": {
+  "by_condition": {
+   "predator/small": {
+    "flights": 20,
+    "speed": 19.407178531364877,
+    "turn_deg_s": 12.677129908105627,
+    "nn": 1.335174971157697,
+    "polarisation": 0.9988676664651681,
+    "spread": 2.5240003623628757
+   },
+   "predator/big": {
+    "flights": 7,
+    "speed": 20.962317853604752,
+    "turn_deg_s": 12.547857271900513,
+    "nn": 0.8568299759253519,
+    "polarisation": 0.9982492473296923,
+    "spread": 3.5709026484027255
+   },
+   "control/small": {
+    "flights": 12,
+    "speed": 20.882172216017654,
+    "turn_deg_s": 9.220590720006959,
+    "nn": 1.2793625876100916,
+    "polarisation": 0.9993337197773222,
+    "spread": 2.288779651435397
+   },
+   "control/big": {
+    "flights": 4,
+    "speed": 22.01157093307745,
+    "turn_deg_s": 11.012853764994663,
+    "nn": 1.1341885154721603,
+    "polarisation": 0.9980194145224678,
+    "spread": 4.008295215095931
+   }
+  },
+  "by_falcon_distance": {
+   "0-30 m": {
+    "frames": 1122,
+    "speed": 17.277308468838527,
+    "turn_deg_s": 27.11700028709201,
+    "nn": 1.352521314546988,
+    "polarisation": 0.9956660924962515,
+    "spread": 2.8744012764567
+   },
+   "30-100 m": {
+    "frames": 1969,
+    "speed": 19.12988195529377,
+    "turn_deg_s": 13.187002862034376,
+    "nn": 1.1720878690107148,
+    "polarisation": 0.998691875007275,
+    "spread": 2.5683883247115107
+   },
+   "100-inf m": {
+    "frames": 2018,
+    "speed": 20.79859591818139,
+    "turn_deg_s": 9.553140155438069,
+    "nn": 1.3130968180046327,
+    "polarisation": 0.9990306669115503,
+    "spread": 2.9187099421981646
+   }
+  }
+ }
+}

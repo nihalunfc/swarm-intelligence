@@ -1,6 +1,6 @@
 # Real (not simulated) collective-motion datasets for the Bird Flock study.
 # Raw files are downloaded into nature/data/raw/<id>/ and are never committed.
-# fetch: zenodo = downloaded automatically by fetch.py
+# fetch: zenodo = downloaded automatically by fetch.py (Dryad datasets via their Zenodo mirrors)
 #        manual = download in a browser and place the files in nature/data/raw/<id>/
 #                 (Dryad's file API needs a login token; its website download works in a browser)
 
@@ -33,7 +33,10 @@ datasets:
     url: https://datadryad.org/stash/dataset/doi:10.5061/dryad.kb8js06
     license: CC0-1.0
     dims: 3
-    fetch: manual
+    fps: 60
+    body_length_m: 0.34       # approximate adult jackdaw length (field-guide value, not from the paper)
+    fetch: zenodo             # Zenodo mirror of the Dryad files (same names and sizes)
+    zenodo_record: "5007024"
     files: [DataS1.txt, DataS2.txt]
 
   - id: swift-2017
@@ -43,8 +46,10 @@ datasets:
     url: https://datadryad.org/dataset/doi:10.5061/dryad.p68f8
     license: CC0-1.0
     dims: 3
-    fetch: manual
-    files: [A_nodes.hdf5, B_nodes.hdf5, C_nodes.hdf5]
+    fps: 29.97
+    fetch: zenodo             # Zenodo mirror of the Dryad files (track files only; videos are 12 GB more)
+    zenodo_record: "5082229"
+    files: [A_nodes.hdf5, B_nodes.hdf5, C_nodes.hdf5, README_for_A_nodes.rtf]
 
   - id: pigeon-predation-2022
     title: "Emergence of splits and collective turns in pigeon flocks under predation"
@@ -53,5 +58,9 @@ datasets:
     url: https://datadryad.org/stash/dataset/doi:10.5061/dryad.905qfttkc
     license: CC0-1.0
     dims: 2
-    fetch: manual
-    files: [all_emp_data.csv, maneuver_outcomes.csv, README.txt]
+    fps: 5
+    body_length_m: 0.32       # approximate homing pigeon length (field-guide value, not from the paper)
+    fetch: zenodo             # Zenodo mirror of the Dryad files
+    zenodo_record: "6027115"
+    # maneuver_outcomes.csv in the same record is SIMULATED (model output), so it is not used
+    files: [all_emp_data.csv, README.txt]

@@ -18,7 +18,12 @@ from __future__ import annotations
 import numpy as np
 
 from .io import Tracks
-from .kinematics import derivatives, unit
+from .kinematics import derivatives, nearest_neighbour_distance, unit
+
+
+def _chunk(N: int, D: int, budget: float = 2e7) -> int:
+    """Frames per batch so the (frames, N, N, D) pair arrays stay around 160 MB."""
+    return max(1, int(budget / (N * N * D)))
 
 
 def _perp(vec: np.ndarray, u: np.ndarray) -> np.ndarray:
@@ -33,9 +38,10 @@ def _features(x, u, lag, mask_fn):
     """
     T, N, D = x.shape
     T = T - lag
+    chunk = _chunk(N, D)
     feats, targets = [], []
-    for t0 in range(0, T, 500):
-        t1 = min(T, t0 + 500)
+    for t0 in range(0, T, chunk):
+        t1 = min(T, t0 + chunk)
         xs, us, uf = x[t0:t1], u[t0:t1], u[t0 + lag:t1 + lag]
         off = xs[:, None, :, :] - xs[:, :, None, :]          # off[t,i,j] = x_j - x_i
         dist = np.linalg.norm(off, axis=-1)
@@ -61,15 +67,23 @@ def _fit_score(x, u, lag, mask_fn):
     h = x.shape[0] // 2
     Ftr, Ytr = _features(x[:h], u[:h], lag, mask_fn)
     Fte, Yte = _features(x[h:], u[h:], lag, mask_fn)
+    if len(Ytr) < 200 or len(Yte) < 200:      # too few animals with neighbours in range
+        return float("nan"), [float("nan"), float("nan")]
     coef, *_ = np.linalg.lstsq(Ftr, Ytr, rcond=None)
     res = Yte - Fte @ coef
     r2 = 1.0 - np.sum(res ** 2) / np.sum((Yte - Yte.mean()) ** 2)
     return float(r2), [float(c) for c in coef]
 
 
-def topological_vs_metric(tr: Tracks, stride: int = 5, lag_s: float = 0.3,
+def auto_stride(tr: Tracks, target_dt: float = 0.1) -> int:
+    """Subsample to about 10 frames per second (no subsampling for slower data)."""
+    return max(1, int(round(target_dt / tr.dt)))
+
+
+def topological_vs_metric(tr: Tracks, stride: int | None = None, lag_s: float = 0.3,
                           ks=(1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 15, 20),
-                          radii_bl=(1, 1.5, 2, 3, 4, 5, 6, 8, 10)) -> dict:
+                          radii_bl=(1, 1.5, 2, 3, 4, 5, 6, 8, 10, 15, 20)) -> dict:
+    stride = stride or auto_stride(tr)
     x, v, _ = derivatives(tr)
     x, u = x[::stride], unit(v[::stride])
     lag = max(1, int(round(lag_s / (tr.dt * stride))))
@@ -86,29 +100,37 @@ def topological_vs_metric(tr: Tracks, stride: int = 5, lag_s: float = 0.3,
     metric = {}
     for r in radii_bl:
         metric[r] = _fit_score(x, u, lag, lambda dist, rr=r * bl: dist <= rr)
-    best_k = max(topo, key=lambda k: topo[k][0])
-    best_r = max(metric, key=lambda r: metric[r][0])
+    def score(d, key):
+        return d[key][0] if np.isfinite(d[key][0]) else -np.inf
+    best_k = max(topo, key=lambda k: score(topo, k))
+    best_r = max(metric, key=lambda r: score(metric, r))
     return {
         "lag_s": lag * tr.dt * stride,
         "topological": {str(k): {"r2_test": s, "coef_align_centre": c} for k, (s, c) in topo.items()},
         "metric_bl": {str(r): {"r2_test": s, "coef_align_centre": c} for r, (s, c) in metric.items()},
         "best_k": int(best_k), "best_k_r2": topo[best_k][0],
         "best_radius_bl": float(best_r), "best_radius_r2": metric[best_r][0],
-        "winner": "topological" if topo[best_k][0] > metric[best_r][0] else "metric",
+        "winner": ("no signal" if max(topo[best_k][0], metric[best_r][0]) < 0.01
+                   else "topological" if topo[best_k][0] > metric[best_r][0] else "metric"),
     }
 
 
-def distance_response(tr: Tracks, stride: int = 5, max_bl: float = 8.0, bins: int = 32, k: int = 6) -> dict:
+def distance_response(tr: Tracks, stride: int | None = None, max_bl: float | None = None, bins: int = 32,
+                      k: int = 6) -> dict:
     """Mean acceleration toward each of the k nearest neighbours, binned by distance."""
+    stride = stride or auto_stride(tr)
     x, v, a = derivatives(tr)
     x, a = x[::stride], a[::stride]
     bl = tr.body_length or 1.0
+    if max_bl is None:   # cover about 4 typical nearest-neighbour distances
+        max_bl = max(8.0, 4 * float(np.nanmedian(nearest_neighbour_distance(x))) / bl)
     edges = np.linspace(0, max_bl, bins + 1)
     s = np.zeros(bins)
     n = np.zeros(bins)
     N = tr.N
-    for t0 in range(0, x.shape[0], 500):
-        xs, as_ = x[t0:t0 + 500], a[t0:t0 + 500]
+    chunk = _chunk(N, tr.D)
+    for t0 in range(0, x.shape[0], chunk):
+        xs, as_ = x[t0:t0 + chunk], a[t0:t0 + chunk]
         off = xs[:, None, :, :] - xs[:, :, None, :]
         dist = np.linalg.norm(off, axis=-1)
         idx = np.arange(N)
