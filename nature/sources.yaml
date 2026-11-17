@@ -64,3 +64,28 @@ datasets:
     zenodo_record: "6027115"
     # maneuver_outcomes.csv in the same record is SIMULATED (model output), so it is not used
     files: [all_emp_data.csv, README.txt]
+
+  # ---- applied test: real human bottlenecks
+  - id: ped-bottleneck-2009
+    title: "Pedestrian trajectories in a corridor and bottleneck (HERMES, Duesseldorf 2009)"
+    species: humans, 150-220 people leaving a 1.8 m corridor through an exit of 0.7 to 1.8 m
+    citation: "Juelich pedestrian database, Zenodo 1054017"
+    url: https://zenodo.org/records/1054017
+    license: CC-BY-4.0
+    dims: 2
+    fps: 16
+    fetch: zenodo
+    zenodo_record: "1054017"
+    files: [Pedestrian_Trajectories.zip, README.txt]   # unzip, then unzip Bottleneck_Data.zip into bn/
+
+  - id: highway-merge-drat
+    title: "DRaT: drone and radar trajectories at a highway merge (4 to 3 lanes), Fort Worth"
+    species: vehicles, free flow and congested
+    citation: "Zhu et al. 2026, ITSC; Zenodo 20171110"
+    url: https://zenodo.org/records/20171110
+    license: CC-BY-4.0
+    dims: 2
+    fps: 8
+    fetch: zenodo
+    zenodo_record: "20171110"
+    files: [drone_GT.csv, README.md, LICENSE]

@@ -1,5 +1,16 @@
 # Findings so far
 
+## 2026-11-17 (later): swifts in 3D, and two real human bottlenecks
+
+Tables: [`results/nature/swift-2017-3d.md`](../results/nature/swift-2017-3d.md), [`results/nature/bottlenecks.md`](../results/nature/bottlenecks.md).
+
+1. **In 3D the swift flock is almost one term.** On a 3D grid with vertical motion included, the fit explains 83% of held-out acceleration (85% with all terms). The sparse fit keeps only self-advection, (v.grad)v, with coefficient 0.93. In plain words, each bird's acceleration is mostly the bend of a smooth, nearly steady flow that circles the roost. Pressure-like and viscosity-like forces are small at this scale. A constant vertical pull (gravity or the descent into the chimney) was tested and not needed. **Caveat:** a high R^2 from (v.grad)v says the flow is smooth and steady. It is not yet a force law that predicts how the flock reacts to something new.
+2. **Flock rules help describe drivers at a lane drop.** At a real highway merge (four lanes to three, about 5,000 vehicles), a standard car-following rule explains 32.3% of the next-second speed change in congestion. Adding the two bird rules (match the 6 nearest vehicles' speed, move toward their centre) raises it to 35.5%. In free flow it goes from 7.2% to 10.1%. Drivers react to the group, not only to the car ahead, and most of the gain comes from cohesion. Densities match the dataset's own figures (108 vs 123 and 37 vs 41 veh/km, depending on how the periods are split).
+3. **A crowd at an exit is not a fluid at 150 to 220 people.** Flow rises with exit width (1.6 to 2.8 people/s; 1.6 to 2.3 per metre of width). People keep a very steady personal space: the push-to-pull switch is 0.57 to 0.61 m at every width. Neighbour rules explain about 20% of turns, more than in any animal group, but the fluid fit explains only 1 to 10%, like the fish. Crowd order before the exit does not predict flow just after (r between -0.17 and 0.39), so "more aligned means more flow" is not supported here.
+
+**What this means for nihal's bottleneck goal:** the evidence so far points to group-aware rules (cohesion with the k nearest) as the useful ingredient for vehicles. It does not point to a fluid equation, which only clearly fits the large, smoothly circling swift flock. The next test is a control experiment: give a share of the vehicles a cohesion rule in a model calibrated on DRaT, and measure throughput at the merge.
+
+
 ## 2026-11-17: four species (fish, jackdaws, pigeons, chimney swifts)
 
 Full tables: [`results/nature/comparison.md`](../results/nature/comparison.md), plus one file per dataset in `results/nature/`. All data are real recordings: Dryad datasets were fetched from their Zenodo mirrors.

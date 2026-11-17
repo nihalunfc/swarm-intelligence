@@ -1,0 +1,54 @@
+{
+ "dataset": "swift-2017",
+ "median_nn_m": 2.444545308258727,
+ "fit_3d": {
+  "samples": 2027556,
+  "sigma_m": 4.889090616517454,
+  "cell_m": 2.444545308258727,
+  "grid": [
+   38,
+   36,
+   21
+  ],
+  "terms": [
+   "v",
+   "|v|^2 v",
+   "(v.grad)v",
+   "(div v) v",
+   "grad |v|^2",
+   "grad rho",
+   "rho grad rho",
+   "grad div v",
+   "lap v",
+   "rho v",
+   "z-hat"
+  ],
+  "term_meaning": {
+   "v": "alpha: drive to cruise",
+   "|v|^2 v": "beta: speed saturation",
+   "(v.grad)v": "lambda1: self-advection",
+   "(div v) v": "lambda2",
+   "grad |v|^2": "lambda3",
+   "grad rho": "pressure, P ~ rho",
+   "rho grad rho": "pressure, P ~ rho^2",
+   "grad div v": "D_L: bulk viscosity",
+   "lap v": "D_1: shear viscosity",
+   "rho v": "density-dependent alignment",
+   "z-hat": "new: constant vertical pull (gravity, descent to roost)"
+  },
+  "without z-hat": {
+   "r2_test_full": 0.8528465274597603,
+   "r2_test_sparse": 0.8294153367246455,
+   "coef_sparse": {
+    "(v.grad)v": 0.9259183497245733
+   }
+  },
+  "with z-hat": {
+   "r2_test_full": 0.8527538602390954,
+   "r2_test_sparse": 0.8294153367246455,
+   "coef_sparse": {
+    "(v.grad)v": 0.9259183497245733
+   }
+  }
+ }
+}
