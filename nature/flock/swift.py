@@ -146,3 +146,111 @@ def fit_equation_swifts(frames, sigma: float, cell: float, rho_min: float, thres
             "r2_test_full": r2(full, te_m), "r2_test_sparse": r2(sparse, te_m),
             "coef_sparse": {t: float(c) for (t, _), c in zip(names, sparse) if c != 0},
             "single_term_r2_test": single}
+
+
+# ---------------------------------------------------------------- 3D fit
+
+TERMS_3D = [
+    ("v", "alpha: drive to cruise"),
+    ("|v|^2 v", "beta: speed saturation"),
+    ("(v.grad)v", "lambda1: self-advection"),
+    ("(div v) v", "lambda2"),
+    ("grad |v|^2", "lambda3"),
+    ("grad rho", "pressure, P ~ rho"),
+    ("rho grad rho", "pressure, P ~ rho^2"),
+    ("grad div v", "D_L: bulk viscosity"),
+    ("lap v", "D_1: shear viscosity"),
+    ("rho v", "density-dependent alignment"),
+    ("z-hat", "new: constant vertical pull (gravity, descent to roost)"),
+]
+
+
+def coarse_grain_nd(x, v, grids, sigma):
+    """Gaussian coarse-graining in any dimension. x, v: (N, D); grids: list of D arrays of the same shape."""
+    D = x.shape[1]
+    shape = grids[0].shape
+    rho = np.zeros(shape)
+    p = np.zeros(shape + (D,))
+    norm = (2 * np.pi * sigma ** 2) ** (D / 2)
+    for xi, vi in zip(x, v):
+        r2 = sum((g - c) ** 2 for g, c in zip(grids, xi))
+        k = np.exp(-r2 / (2 * sigma ** 2)) / norm
+        rho += k
+        p += k[..., None] * vi
+    return rho, p
+
+
+def library_nd(rho, vel, h):
+    D = vel.shape[-1]
+    ax = range(D)
+    grad = lambda f: np.stack([np.gradient(f, h, axis=a) for a in ax], -1)  # noqa: E731
+    J = np.stack([grad(vel[..., i]) for i in ax], -2)            # J[..., i, j] = d v_i / d x_j
+    div = np.trace(J, axis1=-2, axis2=-1)
+    sp2 = np.sum(vel ** 2, -1)
+    adv = np.einsum("...ij,...j->...i", J, vel)
+    lap = np.stack([sum(np.gradient(J[..., i, j], h, axis=j) for j in ax) for i in ax], -1)
+    zhat = np.zeros_like(vel)
+    zhat[..., -1] = 1.0
+    terms = [vel, sp2[..., None] * vel, adv, div[..., None] * vel, grad(sp2), grad(rho),
+             rho[..., None] * grad(rho), grad(div), lap, rho[..., None] * vel, zhat]
+    return np.stack(terms, -1)                                     # (..., D, n_terms)
+
+
+def fit_equation_swifts_3d(frames, sigma, cell, rho_min, threshold=0.1, max_frames=1200):
+    allx = np.concatenate([f[0] for f in frames])
+    lo = np.percentile(allx, 2, axis=0) - sigma
+    hi = np.percentile(allx, 98, axis=0) + sigma
+    axes = [np.arange(lo[d], hi[d], cell) for d in range(3)]
+    grids = np.meshgrid(*axes, indexing="ij")
+    idx = np.linspace(0, len(frames) - 1, min(max_frames, len(frames))).astype(int)
+    A_rows, b_rows, t_rows = [], [], []
+    for i in idx:
+        x, v, a = frames[i]
+        ok = np.isfinite(a).all(-1)
+        inside = ((x >= lo) & (x <= hi)).all(-1)
+        x3, v3, a3 = x[ok & inside], v[ok & inside], a[ok & inside]
+        if len(x3) < 20:
+            continue
+        rho, p = coarse_grain_nd(x3, v3, grids, sigma)
+        _, pa = coarse_grain_nd(x3, a3, grids, sigma)
+        with np.errstate(invalid="ignore", divide="ignore"):
+            vel = p / rho[..., None]
+            acc = pa / rho[..., None]
+        lib = library_nd(rho, np.nan_to_num(vel), cell)
+        dense = rho > rho_min
+        m = dense.copy()
+        for d in range(3):
+            sl = [slice(None)] * 3
+            sl[d] = slice(0, 2)
+            m[tuple(sl)] = False
+            sl[d] = slice(-2, None)
+            m[tuple(sl)] = False
+            for s in (1, -1, 2, -2):
+                m &= np.roll(dense, s, axis=d)
+        if not m.any():
+            continue
+        A_rows.append(lib[m].reshape(-1, lib.shape[-1]))
+        b_rows.append(acc[m].reshape(-1))
+        t_rows.append(np.full(m.sum() * 3, i))
+    A, b, tt = np.concatenate(A_rows), np.concatenate(b_rows), np.concatenate(t_rows)
+    ok = np.isfinite(A).all(1) & np.isfinite(b)
+    A, b, tt = A[ok], b[ok], tt[ok]
+    split = np.median(tt)
+    tr_m, te_m = tt <= split, tt > split
+
+    def r2(c, m):
+        res = b[m] - A[m] @ c
+        return float(1 - np.sum(res ** 2) / np.sum((b[m] - b[m].mean()) ** 2))
+
+    out = {"samples": int(len(b)), "sigma_m": sigma, "cell_m": cell, "grid": [len(a_) for a_ in axes],
+           "terms": [t for t, _ in TERMS_3D], "term_meaning": dict(TERMS_3D)}
+    for name, cols in (("without z-hat", list(range(len(TERMS_3D) - 1))), ("with z-hat", list(range(len(TERMS_3D))))):
+        As = A[:, cols]
+        full, *_ = np.linalg.lstsq(As[tr_m], b[tr_m], rcond=None)
+        sp = stlsq(As[tr_m], b[tr_m], threshold=threshold)
+        cf = np.zeros(A.shape[1])
+        cs = np.zeros(A.shape[1])
+        cf[cols], cs[cols] = full, sp
+        out[name] = {"r2_test_full": r2(cf, te_m), "r2_test_sparse": r2(cs, te_m),
+                     "coef_sparse": {TERMS_3D[j][0]: float(cs[j]) for j in cols if cs[j] != 0}}
+    return out

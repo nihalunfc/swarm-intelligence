@@ -212,10 +212,95 @@ def write_swift_markdown(src: dict, res: dict, path: Path) -> None:
     path.write_text("\n".join(L) + "\n")
 
 
+def run_swifts_3d(src: dict) -> dict:
+    from nature.flock.swift import fit_equation_swifts_3d, summary_and_samples
+    raw = RAW_DIR / "swift-2017"
+    files = [raw / f for f in src["files"] if f.endswith(".hdf5") and (raw / f).exists()]
+    rows, frames = summary_and_samples(files, every=30)
+    nn = float(np.median([r["nn"] for r in rows]))
+    return {"dataset": "swift-2017", "median_nn_m": nn,
+            "fit_3d": fit_equation_swifts_3d(frames, sigma=2 * nn, cell=nn, rho_min=0.05 / nn ** 3, max_frames=600)}
+
+
+def write_swift3d_markdown(res: dict, path: Path) -> None:
+    f = res["fit_3d"]
+    L = ["# Chimney swifts: fluid equation in 3D", "",
+         f"Same method as the horizontal fit, on a 3D grid ({' x '.join(map(str, f['grid']))} cells of "
+         f"{f['cell_m']:.1f} m, kernel {f['sigma_m']:.1f} m). Includes vertical motion. 'z-hat' is a candidate new "
+         "term: a constant vertical pull (gravity, or the descent into the chimney).", "",
+         "| Library | Samples | Held-out R^2 (all terms) | Held-out R^2 (sparse) | Kept terms |",
+         "| --- | --- | --- | --- | --- |"]
+    for name in ("without z-hat", "with z-hat"):
+        r = f[name]
+        kept = ", ".join(f"`{t.replace('|', '¦')}` {c:.3g}" for t, c in r["coef_sparse"].items())
+        L.append(f"| {name} | {f['samples']} | {r['r2_test_full']:.3f} | {r['r2_test_sparse']:.3f} | {kept} |")
+    path.write_text("\n".join(L) + "\n")
+
+
+def run_bottlenecks() -> dict:
+    import zipfile
+
+    from nature.flock.bottleneck import run_cars, run_pedestrians
+    ped = RAW_DIR / "ped-bottleneck-2009"
+    if not (ped / "bn").exists():
+        with zipfile.ZipFile(ped / "Pedestrian_Trajectories.zip") as z:
+            z.extractall(ped / "x")
+        with zipfile.ZipFile(ped / "x" / "Bottleneck_Data.zip") as z:
+            z.extractall(ped / "bn")
+    return {"pedestrians": run_pedestrians(ped), "cars": run_cars(RAW_DIR / "highway-merge-drat")}
+
+
+def write_bottleneck_markdown(res: dict, path: Path) -> None:
+    L = ["# Applied test: real human bottlenecks", "",
+         "Real data only. Pedestrians: Juelich HERMES 2009 bottleneck runs (Zenodo 1054017, CC BY 4.0). "
+         "Vehicles: DRaT highway merge, four lanes to three, Fort Worth (Zenodo 20171110, CC BY 4.0).", "",
+         "## 1. A crowd leaving through an exit", "",
+         "| Exit width (m) | People | Flow (people/s) | Flow per metre (1/m/s) | Speed (m/s) | Nearest neighbour (m) "
+         "| Polarisation | Push-to-pull switch (m) | Neighbour rule R^2 (k / radius) | Order before exit vs flow after (r) "
+         "| Fluid fit R^2 |",
+         "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
+    for r in res["pedestrians"]:
+        s, n = r["summary"], r["neighbours"]
+        sw = r["spacing"]["preferred_spacing_bl"]
+        L.append(f"| {r['exit_width_m']:.2f} | {r['flow']['people_through']} | {r['flow']['flow_per_s']:.2f} "
+                 f"| {r['flow']['specific_flow_per_m_s']:.2f} | {s['median_speed_m_s']:.2f} "
+                 f"| {s['median_nn_distance_m']:.2f} | {s['polarisation_mean']:.2f} | {fmt(None if sw is None else sw * 0.45, 2)} "
+                 f"| {n['best_k_r2']:.3f} / {n['best_radius_r2']:.3f} "
+                 f"| {fmt(r['order_vs_flow']['corr_polarisation_next_flow'], 2)} "
+                 f"| {r['equation_2nn']['r2_test_sparse']:.3f} |")
+    L += ["", "## 2. Drivers at a lane drop: car-following vs flock rules", "",
+          "Held-out R^2 for each driver's speed change over the next second. Car-following looks only at the car "
+          "ahead (gap, own speed, speed difference). Flock terms add the two bird rules: match the mean speed of the "
+          "6 nearest vehicles in any lane (alignment) and move toward their centre (cohesion).", "",
+          "| Period | Minutes | Vehicles | Median speed (m/s) | Density (veh/km, all lanes) | Car-following "
+          "| + alignment | + alignment + cohesion |", "| --- | --- | --- | --- | --- | --- | --- | --- |"]
+    for k, v in res["cars"].items():
+        L.append(f"| {k} | {v['minutes']} | {v['vehicles']} | {v['median_speed_m_s']:.1f} "
+                 f"| {v['density_veh_per_km_all_lanes']:.0f} | {v['car_following']['r2_test']:.3f} "
+                 f"| {v['plus_alignment']['r2_test']:.3f} | {v['plus_alignment_and_cohesion']['r2_test']:.3f} |")
+    path.write_text("\n".join(L) + "\n")
+
+
 def main(argv):
     ids = [a for a in argv if not a.startswith("--")]
     dataset_id = ids[0] if ids else "fish-tetra-2024"
+    if dataset_id == "bottlenecks":
+        OUT.mkdir(parents=True, exist_ok=True)
+        js = OUT / "bottlenecks.json"
+        res = json.loads(js.read_text()) if "--md-only" in argv else run_bottlenecks()
+        js.write_text(json.dumps(res, indent=1))
+        write_bottleneck_markdown(res, OUT / "bottlenecks.md")
+        print(f"wrote {OUT / 'bottlenecks'}.md")
+        return
     src = load_sources()[dataset_id]
+    if dataset_id == "swift-2017" and "--3d" in argv:
+        OUT.mkdir(parents=True, exist_ok=True)
+        js = OUT / "swift-2017-3d.json"
+        res = json.loads(js.read_text()) if "--md-only" in argv else run_swifts_3d(src)
+        js.write_text(json.dumps(res, indent=1))
+        write_swift3d_markdown(res, OUT / "swift-2017-3d.md")
+        print(f"wrote {OUT / 'swift-2017-3d'}.md")
+        return
     if dataset_id == "swift-2017":
         OUT.mkdir(parents=True, exist_ok=True)
         js = OUT / "swift-2017.json"
