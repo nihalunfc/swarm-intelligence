@@ -44,6 +44,7 @@ swarm benchmark                                   # every app, one results table
 swarm seeds --config configs/energy.yaml --seeds 0 1 2 3 4   # several seeds, CIs and paired tests
 swarm robustness runs/seeds-energy-* --output results/robustness-energy
 make reproduce                                    # every table in results/ (hours on a CPU)
+swarm board watch && swarm board crew             # flag where the swarm is behind the rule, propose fixes
 swarm replay --run runs/wildfire/<id> --output apps/wildfire/docs/data/replay.json
 pytest
 ```
@@ -57,6 +58,8 @@ Each agent runs the **same** small neural network on its **own** local observati
 All agents are evaluated **in parallel**: every agent in every environment copy goes through the network in one batched pass (on a GPU when available), and `train.num_envs` environment copies collect experience side by side.
 
 Agents learn together from one team reward with **Value Decomposition Networks** (VDN): the team's value is the sum of each agent's value, so each agent gets credit for its share of the result. `agent.mixer: independent` switches to independent Q-learning. Double-DQN targets, a soft-updated target network and action masks (no charging a full battery, no dropping with an empty tank) are used throughout.
+
+The [shared board and LLM crew](docs/board/README.md) watch results, flag where the swarm is behind the simple rule and propose dev-only config changes; a change stays only if it beats the rule on held-out data.
 
 A new application implements one interface, [`swarm.env.SwarmEnv`](core/swarm/env.py) (`reset`, `step`, `action_mask`, `episode_metrics`), plus a few baseline rules, and registers in [`swarm.registry`](core/swarm/registry.py).
 
