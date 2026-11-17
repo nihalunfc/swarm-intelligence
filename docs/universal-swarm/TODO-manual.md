@@ -13,7 +13,7 @@ download, put the files in `data/universal/raw/<key>/` and run `python -m univer
 | 3 | Tetra school with 39 fish | Zenodo 10890112, files `Experimental_school_N=39_*` (261 MB each) | `data/universal/raw/fish/` | Larger school for the fish fit; scriptable but large: `python -m universal.fetch --only fish` after adding the files to `sources.yaml` |
 | 4 | Locust hopper bands | Zenodo 10463065 (940 MB) | `data/universal/raw/locust/` | Insect marching swarm; needs a loader once the format is known |
 | 5 | Honeybee swarm 3D assembly | Zenodo 18992443 (132 MB) | `data/universal/raw/honeybee/` | Self-assembly and disassembly (growth and decay of a swarm) |
-| 6 | Ontario grid (IESO hourly demand, files `PUB_Demand_<year>.csv`) | reports-public.ieso.ca/public/Demand/ | `data/universal/raw/ieso/` | Runs the mixed-role energy swarm on Ontario (`python -m universal.applications.run_demos`) |
+| 6 | ~~Ontario grid (IESO hourly demand)~~ | Done 2026-11-16: the cloud runner can now reach reports-public.ieso.ca; 2024-2025 demand and solar are in `apps/energy/data/sample/ieso_ontario_2024_2025.csv` | | `python -m universal.applications.ontario_fleet` |
 | 7 | Alberta grid (AESO pool price and load) | aeso.ca market data | `data/universal/raw/aeso/` | Second Canadian grid |
 | 8 | Canadian National Fire Database (points and perimeters) | cwfis.cfs.nrcan.gc.ca/datamart | `data/universal/raw/cwfis/` | Full Canadian wildfire record for the wildfire framework |
 | 9 | USGS global earthquake catalog | earthquake.usgs.gov/earthquakes/search (CSV, M ≥ 2.5) | `data/universal/raw/comcat/` | Global Gutenberg-Richter and Omori tests |
