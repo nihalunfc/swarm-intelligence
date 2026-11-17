@@ -1,0 +1,251 @@
+{
+ "dataset": "swift-2017",
+ "body_length_m": 0.13,
+ "median_nn_m": 2.444545308258727,
+ "per_file": {
+  "A_nodes.hdf5": {
+   "frames": 1020,
+   "birds": 320.0,
+   "speed": 5.990571347150134,
+   "nn": 3.8832462341926393,
+   "polarisation": 0.5896433849788623,
+   "milling_about_chimney": 0.19792255531725672
+  },
+  "B_nodes.hdf5": {
+   "frames": 1131,
+   "birds": 940.0,
+   "speed": 6.532325396361713,
+   "nn": 2.2789607136927934,
+   "polarisation": 0.3614745980491584,
+   "milling_about_chimney": -0.10299429763654654
+  },
+  "C_nodes.hdf5": {
+   "frames": 908,
+   "birds": 236.5,
+   "speed": 6.320375658979815,
+   "nn": 1.4010024175779336,
+   "polarisation": 0.38371038484958964,
+   "milling_about_chimney": 0.20058445250264062
+  }
+ },
+ "fits": {
+  "sigma=2nn": {
+   "samples": 4050276,
+   "sigma_m": 4.889090616517454,
+   "cell_m": 2.444545308258727,
+   "terms": [
+    "v",
+    "|v|^2 v",
+    "(v.grad)v",
+    "(div v) v",
+    "grad |v|^2",
+    "grad rho",
+    "rho grad rho",
+    "grad div v",
+    "lap v",
+    "rho v"
+   ],
+   "term_meaning": {
+    "v": "alpha: drive to cruise",
+    "|v|^2 v": "beta: speed saturation",
+    "(v.grad)v": "lambda1: self-advection",
+    "(div v) v": "lambda2",
+    "grad |v|^2": "lambda3",
+    "grad rho": "pressure, P ~ rho",
+    "rho grad rho": "pressure, P ~ rho^2",
+    "grad div v": "D_L: bulk viscosity",
+    "lap v": "D_1: shear viscosity",
+    "rho v": "density-dependent alignment"
+   },
+   "r2_test_full": 0.651855099653327,
+   "r2_test_sparse": 0.6583214020140618,
+   "coef_sparse": {
+    "v": 0.02608519008713977,
+    "|v|^2 v": -0.0003884723183574264,
+    "(v.grad)v": 0.625116748556848,
+    "(div v) v": -0.12091966678720896,
+    "grad |v|^2": -0.1431192842477232,
+    "grad rho": 12.701975941501926
+   },
+   "single_term_r2_test": {
+    "v": -0.029331873164862854,
+    "|v|^2 v": -0.02917772293990173,
+    "(v.grad)v": 0.5493431989843359,
+    "(div v) v": -0.029405084766812584,
+    "grad |v|^2": -0.0010246830109721383,
+    "grad rho": 0.08937592971116193,
+    "rho grad rho": -0.2214177312949388,
+    "grad div v": -0.030021716861249326,
+    "lap v": -0.029693977789615023,
+    "rho v": -0.03969502496773902
+   }
+  },
+  "sigma=2nn +roost": {
+   "samples": 4050276,
+   "sigma_m": 4.889090616517454,
+   "cell_m": 2.444545308258727,
+   "terms": [
+    "v",
+    "|v|^2 v",
+    "(v.grad)v",
+    "(div v) v",
+    "grad |v|^2",
+    "grad rho",
+    "rho grad rho",
+    "grad div v",
+    "lap v",
+    "rho v",
+    "toward roost",
+    "around roost"
+   ],
+   "term_meaning": {
+    "v": "alpha: drive to cruise",
+    "|v|^2 v": "beta: speed saturation",
+    "(v.grad)v": "lambda1: self-advection",
+    "(div v) v": "lambda2",
+    "grad |v|^2": "lambda3",
+    "grad rho": "pressure, P ~ rho",
+    "rho grad rho": "pressure, P ~ rho^2",
+    "grad div v": "D_L: bulk viscosity",
+    "lap v": "D_1: shear viscosity",
+    "rho v": "density-dependent alignment",
+    "toward roost": "new: pull toward the chimney (horizontal unit vector)",
+    "around roost": "new: circling around the chimney (tangential unit vector)"
+   },
+   "r2_test_full": 0.6449568536991857,
+   "r2_test_sparse": 0.6557482541157942,
+   "coef_sparse": {
+    "v": 0.04514721793173271,
+    "|v|^2 v": -0.0008612965867698572,
+    "(v.grad)v": 0.6164724486824894,
+    "(div v) v": -0.09731018817957345,
+    "grad |v|^2": -0.1412373421112773,
+    "toward roost": 0.18208627467565036,
+    "around roost": 0.08707672069795952
+   },
+   "single_term_r2_test": {
+    "v": -0.029331873164862854,
+    "|v|^2 v": -0.02917772293990173,
+    "(v.grad)v": 0.5493431989843359,
+    "(div v) v": -0.029405084766812584,
+    "grad |v|^2": -0.0010246830109721383,
+    "grad rho": 0.08937592971116193,
+    "rho grad rho": -0.2214177312949388,
+    "grad div v": -0.030021716861249326,
+    "lap v": -0.029693977789615023,
+    "rho v": -0.03969502496773902,
+    "toward roost": 0.09560868396148003,
+    "around roost": -0.027725310353690524
+   }
+  },
+  "sigma=4nn": {
+   "samples": 5530798,
+   "sigma_m": 9.778181233034909,
+   "cell_m": 2.444545308258727,
+   "terms": [
+    "v",
+    "|v|^2 v",
+    "(v.grad)v",
+    "(div v) v",
+    "grad |v|^2",
+    "grad rho",
+    "rho grad rho",
+    "grad div v",
+    "lap v",
+    "rho v"
+   ],
+   "term_meaning": {
+    "v": "alpha: drive to cruise",
+    "|v|^2 v": "beta: speed saturation",
+    "(v.grad)v": "lambda1: self-advection",
+    "(div v) v": "lambda2",
+    "grad |v|^2": "lambda3",
+    "grad rho": "pressure, P ~ rho",
+    "rho grad rho": "pressure, P ~ rho^2",
+    "grad div v": "D_L: bulk viscosity",
+    "lap v": "D_1: shear viscosity",
+    "rho v": "density-dependent alignment"
+   },
+   "r2_test_full": 0.6980956407410761,
+   "r2_test_sparse": 0.7095926902975371,
+   "coef_sparse": {
+    "(v.grad)v": 1.202520178547986,
+    "(div v) v": -0.3377878945554459,
+    "grad |v|^2": -0.2021650639950368,
+    "grad rho": 21.87684490438808,
+    "grad div v": -11.241771611886504
+   },
+   "single_term_r2_test": {
+    "v": -0.044639427432641376,
+    "|v|^2 v": -0.04473765259800233,
+    "(v.grad)v": 0.6163494676551393,
+    "(div v) v": -0.04400643861329945,
+    "grad |v|^2": 0.04825637496987678,
+    "grad rho": 0.2983514009358421,
+    "rho grad rho": -0.11340782992786891,
+    "grad div v": -0.05159200114113971,
+    "lap v": -0.047087586038256246,
+    "rho v": -0.05212987808180891
+   }
+  },
+  "sigma=4nn +roost": {
+   "samples": 5530798,
+   "sigma_m": 9.778181233034909,
+   "cell_m": 2.444545308258727,
+   "terms": [
+    "v",
+    "|v|^2 v",
+    "(v.grad)v",
+    "(div v) v",
+    "grad |v|^2",
+    "grad rho",
+    "rho grad rho",
+    "grad div v",
+    "lap v",
+    "rho v",
+    "toward roost",
+    "around roost"
+   ],
+   "term_meaning": {
+    "v": "alpha: drive to cruise",
+    "|v|^2 v": "beta: speed saturation",
+    "(v.grad)v": "lambda1: self-advection",
+    "(div v) v": "lambda2",
+    "grad |v|^2": "lambda3",
+    "grad rho": "pressure, P ~ rho",
+    "rho grad rho": "pressure, P ~ rho^2",
+    "grad div v": "D_L: bulk viscosity",
+    "lap v": "D_1: shear viscosity",
+    "rho v": "density-dependent alignment",
+    "toward roost": "new: pull toward the chimney (horizontal unit vector)",
+    "around roost": "new: circling around the chimney (tangential unit vector)"
+   },
+   "r2_test_full": 0.7042624457975029,
+   "r2_test_sparse": 0.7076951906421391,
+   "coef_sparse": {
+    "v": 0.04497415742837327,
+    "|v|^2 v": -0.0009025956134022251,
+    "(v.grad)v": 1.2051408159437753,
+    "(div v) v": -0.26358755884922547,
+    "grad |v|^2": -0.2048086502231245,
+    "grad div v": -9.737328609410572,
+    "toward roost": 0.14026267979455184,
+    "around roost": 0.09176907726576934
+   },
+   "single_term_r2_test": {
+    "v": -0.044639427432641376,
+    "|v|^2 v": -0.04473765259800233,
+    "(v.grad)v": 0.6163494676551393,
+    "(div v) v": -0.04400643861329945,
+    "grad |v|^2": 0.04825637496987678,
+    "grad rho": 0.2983514009358421,
+    "rho grad rho": -0.11340782992786891,
+    "grad div v": -0.05159200114113971,
+    "lap v": -0.047087586038256246,
+    "rho v": -0.05212987808180891,
+    "toward roost": 0.12882441049158855,
+    "around roost": -0.043792469644233334
+   }
+  }
+ }
+}

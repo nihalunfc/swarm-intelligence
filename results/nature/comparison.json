@@ -1,0 +1,62 @@
+[
+ {
+  "species": "Black neon tetra (fish, 39)",
+  "setting": "lab tank, 2D",
+  "groups": 2,
+  "speed_bl_s": 4.6508316061633606,
+  "nn_bl": 1.7905433050139938,
+  "switch_bl": 3.4197323819998,
+  "polarisation": 0.8422495823250645,
+  "topo_wins": "2/2",
+  "best_k": 9.5,
+  "fluid_r2": 0.12597052488447352
+ },
+ {
+  "species": "Black neon tetra (fish, 8)",
+  "setting": "lab tank, 2D",
+  "groups": 1,
+  "speed_bl_s": 6.250544817226841,
+  "nn_bl": 1.3253492037115326,
+  "switch_bl": 1.6078550349941283,
+  "polarisation": 0.9462760247803582,
+  "topo_wins": "1/1",
+  "best_k": 5.0,
+  "fluid_r2": null
+ },
+ {
+  "species": "Jackdaw",
+  "setting": "wild, 3D stereo",
+  "groups": 6,
+  "speed_bl_s": 35.4133384225881,
+  "nn_bl": 5.069919749200489,
+  "switch_bl": 2.6971131583306236,
+  "polarisation": 0.984100591879393,
+  "topo_wins": "2/6",
+  "best_k": 10.0,
+  "fluid_r2": null
+ },
+ {
+  "species": "Homing pigeon",
+  "setting": "GPS 5 Hz, 2D",
+  "groups": 43,
+  "speed_bl_s": 63.325443290387604,
+  "nn_bl": 4.038005893425636,
+  "switch_bl": 1.0380749554065472,
+  "polarisation": 0.9927787991441396,
+  "topo_wins": "7/8",
+  "best_k": 7.0,
+  "fluid_r2": null
+ },
+ {
+  "species": "Chimney swift",
+  "setting": "wild, 3D, at roost",
+  "groups": 3,
+  "speed_bl_s": 48.61827429984473,
+  "nn_bl": 17.530467028406104,
+  "switch_bl": null,
+  "polarisation": 0.38371038484958964,
+  "topo_wins": "not run",
+  "best_k": null,
+  "fluid_r2": 0.6583214020140618
+ }
+]

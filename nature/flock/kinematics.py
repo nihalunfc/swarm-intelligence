@@ -28,6 +28,12 @@ def fill_short_gaps(pos: np.ndarray, max_gap: int) -> np.ndarray:
     return out
 
 
+import warnings  # noqa: E402
+
+warnings.filterwarnings("ignore", message="Mean of empty slice")
+warnings.filterwarnings("ignore", message="All-NaN slice encountered")
+
+
 def derivatives(tr: Tracks, window_s: float = 0.2, poly: int = 3, max_gap_s: float = 0.2):
     """Smoothed position, velocity and acceleration (Savitzky-Golay), NaN where data are missing."""
     pos = fill_short_gaps(tr.pos, int(round(max_gap_s / tr.dt)))
@@ -56,7 +62,7 @@ def unit(v: np.ndarray) -> np.ndarray:
 
 
 def group_order(x: np.ndarray, v: np.ndarray) -> dict:
-    """Polarisation P (1 = all aligned) and milling M (1 = all circling) per frame."""
+    """Polarisation P (1 = all aligned) and milling M (1 = all circling) per frame (NaN if nobody tracked)."""
     u = unit(v)
     P = np.linalg.norm(np.nanmean(u, axis=1), axis=-1)
     c = np.nanmean(x, axis=1, keepdims=True)
@@ -85,7 +91,8 @@ def nearest_neighbour_distance(x: np.ndarray) -> np.ndarray:
     return np.where(np.isfinite(nn), nn, np.nan)
 
 
-def summary(tr: Tracks, stride: int = 5) -> dict:
+def summary(tr: Tracks, stride: int | None = None) -> dict:
+    stride = stride or max(1, int(round(0.1 / tr.dt)))
     x, v, _ = derivatives(tr)
     x, v = x[::stride], v[::stride]
     speed = np.linalg.norm(v, axis=-1)
