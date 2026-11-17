@@ -25,7 +25,7 @@ Fleet sizes and their sources are in FLEETS. Run:  python -m universal.applicati
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
