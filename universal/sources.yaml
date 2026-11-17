@@ -221,7 +221,7 @@ placeholders:
   - {key: locust, category: "Locust hopper bands", source: "Zenodo 10463065 (940 MB) - scriptable but large; run fetch.py --only locust"}
   - {key: honeybee, category: "Honeybee swarm 3D assembly", source: "Zenodo 18992443 (132 MB)"}
   - {key: fish39, category: "Tetra school, 39 fish", source: "Zenodo 10890112 N=39 files (261 MB each)"}
-  - {key: ieso, category: "Ontario grid (IESO hourly demand)", source: "reports-public.ieso.ca (blocked from the cloud runner)"}
+  - {key: ieso, category: "Ontario grid (IESO hourly demand + solar output by fuel)", source: "reports-public.ieso.ca (reachable since 2026-11-16; 2024-2025 kept in apps/energy/data/sample/ieso_ontario_2024_2025.csv)"}
   - {key: aeso, category: "Alberta grid (AESO pool price and load)", source: "aeso.ca (blocked from the cloud runner)"}
   - {key: cwfis, category: "Canadian National Fire Database (points, perimeters)", source: "cwfis.cfs.nrcan.gc.ca (blocked from the cloud runner)"}
   - {key: comcat, category: "USGS global earthquake catalog", source: "earthquake.usgs.gov (blocked from the cloud runner)"}

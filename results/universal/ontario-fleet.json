@@ -1,0 +1,248 @@
+{
+ "2025": {
+  "fleet": {
+   "name": "Ontario 2025 (in service)",
+   "n_batt": 15,
+   "batt_mw": 1217.0,
+   "hours": 4.0,
+   "solar_scale": 1.0,
+   "n_dr": 50,
+   "dr_mw": 516.0,
+   "dr_hours": 4.0,
+   "note": "Storage: IESO expected at least 1,217 MW on its system by end of 2025 (energy-storage.news, Expedited LT1 awards), 4 h (LT1 rule). Solar: real transmission-connected output (peak 432 MW in 2025). DR: 316 MW Capacity Auction DR delivered at the 2025 peak + 200 MW Peak Perks (IESO 2025 Year in Review)."
+  },
+  "train": "2024 (8,784 h)",
+  "test": "2025 (8,760 h, held out)",
+  "raw_2025": {
+   "peak_MW": 24823.0,
+   "std_MW": 2444.641706500053
+  },
+  "controllers": {
+   "none": {
+    "params": {},
+    "annual_peak_MW": 24823.0,
+    "annual_peak_cut_MW": 0.0,
+    "mean_daily_peak_cut_MW": 0.0,
+    "top50_hours_cut_MW": 0.0,
+    "swing_cut_pct": 0.0,
+    "std_cut_pct": 0.0,
+    "battery_cycles": 0.0
+   },
+   "time-of-day": {
+    "params": {
+     "dr_hot": 19000
+    },
+    "annual_peak_MW": 24433.0,
+    "annual_peak_cut_MW": 390.0,
+    "mean_daily_peak_cut_MW": 712.786387322052,
+    "top50_hours_cut_MW": 881.103999999999,
+    "swing_cut_pct": 9.19214360272036,
+    "std_cut_pct": 13.288080080872566,
+    "battery_cycles": 396.9117647058888
+   },
+   "threshold": {
+    "params": {
+     "band": 0.08,
+     "gain": 0.5
+    },
+    "annual_peak_MW": 24823.0,
+    "annual_peak_cut_MW": 0.0,
+    "mean_daily_peak_cut_MW": 593.8897952876713,
+    "top50_hours_cut_MW": 360.13928000000027,
+    "swing_cut_pct": 27.776839429454846,
+    "std_cut_pct": 10.583023138559222,
+    "battery_cycles": 343.35100243469765
+   },
+   "swarm": {
+    "params": {
+     "w": 0.85,
+     "decay": 0.9,
+     "res": 0.0,
+     "dr_res": 0.0,
+     "gap": 0.0
+    },
+    "annual_peak_MW": 24136.0,
+    "annual_peak_cut_MW": 687.0,
+    "mean_daily_peak_cut_MW": 691.6035750495349,
+    "top50_hours_cut_MW": 496.31476660798455,
+    "swing_cut_pct": 22.114732366455858,
+    "std_cut_pct": 7.639907326447348,
+    "battery_cycles": 110.5433485476963
+   },
+   "bound (perfect daily foresight)": {
+    "annual_peak_cut_MW": 1366.899999993373,
+    "mean_daily_peak_cut_MW": 1471.008590945883
+   }
+  },
+  "failure_30pct": {
+   "alive_units": 10,
+   "threshold": {
+    "annual_peak_MW": 24823.0,
+    "annual_peak_cut_MW": 0.0,
+    "mean_daily_peak_cut_MW": 459.0011587579908,
+    "top50_hours_cut_MW": 225.29918400000017,
+    "swing_cut_pct": 19.949565705323337,
+    "std_cut_pct": 8.232019728944874
+   },
+   "swarm": {
+    "annual_peak_MW": 24136.0,
+    "annual_peak_cut_MW": 687.0,
+    "mean_daily_peak_cut_MW": 599.8201362050451,
+    "top50_hours_cut_MW": 406.340085401848,
+    "swing_cut_pct": 18.259802039164462,
+    "std_cut_pct": 5.9888726533586905
+   },
+   "time-of-day": {
+    "annual_peak_MW": 24433.0,
+    "annual_peak_cut_MW": 390.0,
+    "mean_daily_peak_cut_MW": 614.5415525114153,
+    "top50_hours_cut_MW": 673.402666666666,
+    "swing_cut_pct": 13.911846917604143,
+    "std_cut_pct": 10.444657633962729
+   }
+  },
+  "verdict": {
+   "best_rule_on_2025": "time-of-day",
+   "metric_by_metric_vs_each_rule": {
+    "time-of-day": {
+     "annual_peak_cut_MW": true,
+     "mean_daily_peak_cut_MW": false,
+     "top50_hours_cut_MW": false,
+     "swing_cut_pct": true
+    },
+    "threshold": {
+     "annual_peak_cut_MW": true,
+     "mean_daily_peak_cut_MW": true,
+     "top50_hours_cut_MW": true,
+     "swing_cut_pct": false
+    }
+   },
+   "swarm_beats_best_rule": false,
+   "swarm_minus_rule_daily_peak_cut_MW": -21.182812272517026,
+   "swarm_minus_rule_annual_peak_cut_MW": 297.0
+  }
+ },
+ "2028": {
+  "fleet": {
+   "name": "Ontario 2028 (contracted)",
+   "n_batt": 30,
+   "batt_mw": 3001.0,
+   "hours": 4.0,
+   "solar_scale": 2.914225941422594,
+   "n_dr": 50,
+   "dr_mw": 516.0,
+   "dr_hours": 4.0,
+   "note": "Storage: 1,217 MW + 1,784 MW LT1 batteries due 2026-2028 (IESO, May 2024), 4 h. Solar: real profile scaled from ~478 MW to ~1,393 MW for the 915 MW of solar backed in April 2026 (pv-magazine). DR kept at 2025 level (conservative)."
+  },
+  "train": "2024 (8,784 h)",
+  "test": "2025 (8,760 h, held out)",
+  "raw_2025": {
+   "peak_MW": 24748.34518828452,
+   "std_MW": 2438.5039150582083
+  },
+  "controllers": {
+   "none": {
+    "params": {},
+    "annual_peak_MW": 24748.34518828452,
+    "annual_peak_cut_MW": 0.0,
+    "mean_daily_peak_cut_MW": 0.0,
+    "top50_hours_cut_MW": 0.0,
+    "swing_cut_pct": 0.0,
+    "std_cut_pct": 0.0,
+    "battery_cycles": 0.0
+   },
+   "time-of-day": {
+    "params": {
+     "dr_hot": 21000
+    },
+    "annual_peak_MW": 24021.441422594144,
+    "annual_peak_cut_MW": 726.9037656903747,
+    "mean_daily_peak_cut_MW": 555.0963516397566,
+    "top50_hours_cut_MW": 2202.8639999999996,
+    "swing_cut_pct": -33.60441722632403,
+    "std_cut_pct": 14.86929996837938,
+    "battery_cycles": 396.9117647058616
+   },
+   "threshold": {
+    "params": {
+     "band": 0.08,
+     "gain": 0.5
+    },
+    "annual_peak_MW": 24618.744769874476,
+    "annual_peak_cut_MW": 129.60041841004204,
+    "mean_daily_peak_cut_MW": 954.2183462333928,
+    "top50_hours_cut_MW": 802.4125566359834,
+    "swing_cut_pct": 43.07825739615602,
+    "std_cut_pct": 14.058145358714535,
+    "battery_cycles": 189.30226375973731
+   },
+   "swarm": {
+    "params": {
+     "w": 0.85,
+     "decay": 0.9,
+     "res": 0.0,
+     "dr_res": 0.0,
+     "gap": 0.0
+    },
+    "annual_peak_MW": 23515.428353236628,
+    "annual_peak_cut_MW": 1232.9168350478903,
+    "mean_daily_peak_cut_MW": 1065.571707205964,
+    "top50_hours_cut_MW": 1039.5872619902234,
+    "swing_cut_pct": 38.99125291297677,
+    "std_cut_pct": 13.715987165213194,
+    "battery_cycles": 155.49206713280856
+   },
+   "bound (perfect daily foresight)": {
+    "annual_peak_cut_MW": 2358.2269874385165,
+    "mean_daily_peak_cut_MW": 2251.3908900825086
+   }
+  },
+  "failure_30pct": {
+   "alive_units": 21,
+   "threshold": {
+    "annual_peak_MW": 24618.744769874476,
+    "annual_peak_cut_MW": 129.60041841004204,
+    "mean_daily_peak_cut_MW": 832.9154966104202,
+    "top50_hours_cut_MW": 747.9871522426777,
+    "swing_cut_pct": 38.43645036689893,
+    "std_cut_pct": 12.88927441868929
+   },
+   "swarm": {
+    "annual_peak_MW": 23663.305547728123,
+    "annual_peak_cut_MW": 1085.0396405563952,
+    "mean_daily_peak_cut_MW": 917.0186058813305,
+    "top50_hours_cut_MW": 842.1369918796155,
+    "swing_cut_pct": 30.938983202784996,
+    "std_cut_pct": 10.964011186162514
+   },
+   "time-of-day": {
+    "annual_peak_MW": 24021.441422594144,
+    "annual_peak_cut_MW": 726.9037656903747,
+    "mean_daily_peak_cut_MW": 801.4336545841356,
+    "top50_hours_cut_MW": 1641.0768000000012,
+    "swing_cut_pct": -7.981838085454873,
+    "std_cut_pct": 15.768621295824815
+   }
+  },
+  "verdict": {
+   "best_rule_on_2025": "time-of-day",
+   "metric_by_metric_vs_each_rule": {
+    "time-of-day": {
+     "annual_peak_cut_MW": true,
+     "mean_daily_peak_cut_MW": true,
+     "top50_hours_cut_MW": false,
+     "swing_cut_pct": true
+    },
+    "threshold": {
+     "annual_peak_cut_MW": true,
+     "mean_daily_peak_cut_MW": true,
+     "top50_hours_cut_MW": true,
+     "swing_cut_pct": false
+    }
+   },
+   "swarm_beats_best_rule": false,
+   "swarm_minus_rule_daily_peak_cut_MW": 510.47535556620744,
+   "swarm_minus_rule_annual_peak_cut_MW": 506.01306935751563
+  }
+ }
+}

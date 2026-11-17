@@ -78,3 +78,26 @@ def test_mixed_energy_swarm_flattens_load():
     ghi = np.clip(800 * np.sin(2 * np.pi * (hours - 6) / 24), 0, None)
     net, _ = simulate(load, ghi, n_batt=2, p_batt=50, e_batt=200, solar_mw=100, n_dr=2, dr_mw=20)
     assert net.std() < load.std()
+
+
+def test_ontario_fleet_controllers_respect_limits():
+    from universal.applications.ontario_fleet import FLEETS, GRIDS, metrics, run
+
+    hours = np.arange(24 * 21)  # the swarm needs a week of history before it forecasts
+    load = 16000 + 3000 * np.clip(np.sin(2 * np.pi * (hours - 9) / 24), -0.6, None)
+    fl = FLEETS["2025"]
+    for ctrl in ("time-of-day", "threshold", "swarm"):
+        r = run(load, hours % 24, fl, ctrl, GRIDS[ctrl][0])
+        assert (r["soc"] >= -1e-9).all() and (r["soc"] <= 1 + 1e-9).all()
+        # with power limits, no hour can move by more than the fleet's power
+        assert np.abs(r["net"] - load).max() <= fl.batt_mw + fl.dr_mw + 1e-6
+    m = metrics(load, run(load, hours % 24, fl, "swarm", GRIDS["swarm"][0])["net"])
+    assert m["mean_daily_peak_cut_MW"] > 300
+
+
+def test_ontario_ieso_sample_is_real_and_complete():
+    from universal.applications.ontario_fleet import load_data
+
+    d = load_data()
+    assert d.timestamp.dt.year.isin([2024, 2025]).all() and len(d) >= 17540
+    assert int(d.ontario_demand_mw.max()) == 24862  # IESO's published 2025 peak (24 June)
