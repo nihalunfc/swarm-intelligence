@@ -136,6 +136,34 @@ def cmd_robustness(args):
     print(robustness.write(res, metrics, Path(args.output)))
 
 
+def cmd_board(args):
+    """Shared task board and LLM crew: watch results, run the crew, list, verify, gate."""
+    from . import crew
+    from .board import Board
+
+    board = Board(args.board, commit=args.commit)
+    if args.action == "watch":
+        posted = crew.watch(board, args.results)
+        print(f"posted {len(posted)} new gap task(s)")
+        for t in posted:
+            print(f"  {t['id']}  {t['title']}")
+    elif args.action == "crew":
+        client = crew.OfflineClient() if args.offline else None
+        print(crew.Router(board, client=client, max_tasks=args.max_tasks).run())
+    elif args.action == "list":
+        for t in board.tasks(state=args.state):
+            print(f"{t['id']}  {t['state']:<7} {t['kind']:<6} {t['title']}")
+    elif args.action == "verify":
+        problems = board.verify()
+        print("\n".join(problems) if problems else f"ok: {len(board.ledger())} ledger lines, chain intact")
+        if problems:
+            raise SystemExit(1)
+    elif args.action == "gate":
+        if not (args.task and args.results_file):
+            raise SystemExit("gate needs --task and --results-file")
+        print("kept: beats the rule" if crew.gate(board, args.task, args.results_file) else "rejected: rule stays")
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(prog="swarm", description="Swarm intelligence engine")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -199,6 +227,18 @@ def main(argv=None):
     rb.add_argument("--metric", default=None)
     rb.add_argument("--output", required=True)
     rb.set_defaults(fn=cmd_robustness)
+
+    bd = sub.add_parser("board", help="shared task board: watch results, run the LLM crew, list, verify, gate")
+    bd.add_argument("action", choices=["watch", "crew", "list", "verify", "gate"])
+    bd.add_argument("--board", default=str(REPO / "runs" / "board"))
+    bd.add_argument("--results", default=str(REPO / "results"), help="folder of results/*.json to watch")
+    bd.add_argument("--commit", action="store_true", help="git-commit every board step (board must be in a git tree)")
+    bd.add_argument("--offline", action="store_true", help="never call an LLM, even with SWARM_LLM=1")
+    bd.add_argument("--max-tasks", type=int, default=20)
+    bd.add_argument("--state", default=None, choices=["open", "claimed", "closed"])
+    bd.add_argument("--task", default=None, help="gate: the fix task id")
+    bd.add_argument("--results-file", default=None, help="gate: results JSON from the retrained run")
+    bd.set_defaults(fn=cmd_board)
 
     args = p.parse_args(argv)
     args.fn(args)

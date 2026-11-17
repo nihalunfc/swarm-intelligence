@@ -16,6 +16,7 @@ research = ["mlflow>=2.10"]
 universal = ["matplotlib>=3.8", "openpyxl>=3.1"]
 citylearn = ["citylearn==2.3.1"]
 vmas = ["vmas>=1.4"]
+llm = ["anthropic"]           # optional: Claude for the board crew (SWARM_LLM=1)
 
 [project.scripts]
 swarm = "swarm.cli:main"
