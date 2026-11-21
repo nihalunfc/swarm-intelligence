@@ -66,3 +66,9 @@ swarm board gate --task <fix-id> --results-file runs/.../results.json
 On the current `results/` the watcher flags the known gaps: the wildfire swarms behind the
 nearest-fire rule, the paused hotel swarms on some metrics, and one CityLearn ramping metric.
 The energy battery swarm is ahead of every rule and is not flagged.
+
+## Gate log
+
+| date | task | proposal | held-out result (3 seeds x 50 fires) | verdict |
+| :-- | :-- | :-- | :-- | :-- |
+| 2026-11-21 | wildfire gap (offline crew, control) | `train.total_steps` 600k -> 1.2M | forest saved 72.6% [65.1, 79.3] vs rule 90.1% (600k swarm: 79.2%) | rejected: training longer made it worse |

@@ -12,15 +12,10 @@
 # (default 0-4), set (extra KEY=VALUE overrides, as for `swarm train --set`),
 # extras (optional dependency groups from pyproject.toml, e.g. [citylearn]), scale (swarm
 # sizes for a `swarm scale` study after training) and scale_set (overrides for it).
-branch: claude/project-thread-xchy7b
-# Robustness re-tests (item 6) of trained seeds, by label; run_id points at the
-# Actions run that trained them (default: this run). Written to results/robustness-<label>.md.
-robustness:
-  - {label: wildfire-imitate, run_id: 41525733788}
-  - {label: wildfire, run_id: 41525733788}
-  - {label: wildfire-mappo, run_id: 41525733788}
-  - {label: wildfire-residual, run_id: 41538017841}
-  - {label: wildfire-targets, run_id: 41538017841, scenario_set: wildfire}
-experiments: []
-# Already queued in run 41538017841 (wildfire-scale, wildfire-imitate-pads, wildfire-residual,
-# wildfire-targets, hotel-energy, energy-no-val-selection, hotel-housekeeping-independent/-qmix).
+branch: claude/project-thread-u0cdll
+# Robustness re-tests of trained seeds, by label (see git history for earlier entries).
+robustness: []
+# Crew control (2026-11-21): does training the wildfire swarm twice as long close the gap to the
+# nearest-fire rule? This is the offline crew's proposal; LLM proposals are gated against it too.
+experiments:
+  - {config: configs/wildfire.yaml, label: wildfire-crew-control, seeds: [0, 1, 2], set: [train.total_steps=1200000]}
