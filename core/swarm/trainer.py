@@ -196,6 +196,9 @@ def _train_dqn(app, cfg: dict, log=print, agent=None):
                 log(f"pretrain {k + 1:>6,}/{updates:,} | demo loss {loss:.4f}")
         demo_weight = float(pcfg.get("demo_weight", 1.0))
         demo_decay = float(pcfg.get("demo_decay_fraction", 0.5)) * total
+        # demo_floor keeps part of the imitation loss for the whole run: an anchor that keeps a
+        # residual swarm close to the rule, so RL can only learn small corrections.
+        demo_floor = float(pcfg.get("demo_floor", 0.0))
 
     validator = Validator(app, cfg, log)
     obs = np.stack([e.reset(seed=seed + i) for i, e in enumerate(envs)])
@@ -220,7 +223,7 @@ def _train_dqn(app, cfg: dict, log=print, agent=None):
             obs[i] = nxt
         steps += n_envs
         if steps >= learning_starts and len(buf) >= batch_size:
-            w = demo_weight * max(0.0, 1.0 - steps / max(1.0, demo_decay)) if demo_buf is not None else 0.0
+            w = demo_weight * max(demo_floor, 1.0 - steps / max(1.0, demo_decay)) if demo_buf is not None else 0.0
             for _ in range(gradient_steps):
                 loss = agent.update(buf.sample(batch_size), demo_buf.sample(batch_size) if w > 0 else None, w,
                                     margin if demo_buf is not None else 0.8)
