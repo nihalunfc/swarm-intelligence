@@ -55,6 +55,10 @@ SKIP_METRICS = {"return"}  # training reward: scale differs per app, not a deplo
 ALLOWED_PREFIXES = ("train.", "agent.")
 
 MODELS = {"triage": "claude-haiku-5-5", "fix": "claude-sonnet-5-5", "review": "claude-opus-5-5"}
+# USD per million tokens (input, output), first-party API list prices, Nov 2026. Used only to print an estimate.
+PRICES = {"claude-haiku-5-5": (0.10, 0.50), "claude-sonnet-5-5": (2.00, 10.00), "claude-opus-5-5": (4.00, 20.00)}
+# Apps that are paused (hotel work is on hold): the watcher leaves them alone unless asked.
+PAUSED = ("hotel",)
 
 
 # --------------------------------------------------------------------- watcher
@@ -108,27 +112,47 @@ def find_gaps(results: dict, run: str) -> list[Gap]:
     return gaps
 
 
-def watch(board: Board, results_dir: str | Path, actor: str = "watcher") -> list[dict]:
-    """Post one ``gap`` task per new gap found in ``results_dir/*.json``."""
+def _gap_data(g: Gap) -> dict:
+    return {"metric": g.metric, "rule": g.rule, "swarm": list(g.swarm), "rule_score": list(g.rule_score),
+            "lower_is_better": g.lower_is_better, "gap_pct": g.gap_pct}
+
+
+def watch(board: Board, results_dir: str | Path, actor: str = "watcher", skip: tuple[str, ...] = PAUSED) -> list[dict]:
+    """Post one ``gap`` task per results file where the swarm is behind a rule.
+
+    All metrics behind in one run go into one task (``data["metrics"]``), so the fixer
+    proposes one change per config instead of one per metric. The headline metric (the
+    first one the results file lists) is the task's ``metric``. Runs whose file name or
+    app starts with a ``skip`` prefix (paused work) are left alone."""
     posted = []
     for path in sorted(Path(results_dir).glob("*.json")):
+        if path.stem.startswith(skip):
+            continue
         try:
             results = json.loads(path.read_text())
         except (OSError, json.JSONDecodeError):
             continue
-        for g in find_gaps(results, path.stem):
-            if board.find(g.key()):
-                continue
-            direction = "lower" if g.lower_is_better else "higher"
-            task = board.post(
-                actor, f"{g.run}: swarm behind {g.rule} on {g.metric} ({g.gap_pct:.1f}% behind)", kind="gap",
-                body=f"swarm {g.swarm[0]:.4g} [{g.swarm[1]:.4g}, {g.swarm[2]:.4g}] vs {g.rule} "
-                     f"{g.rule_score[0]:.4g} ({direction} is better)",
-                data={"run": g.run, "app": g.app, "metric": g.metric, "rule": g.rule, "swarm": list(g.swarm),
-                      "rule_score": list(g.rule_score), "lower_is_better": g.lower_is_better, "gap_pct": g.gap_pct,
-                      "results": str(path)},
-                key=g.key(), priority=int(min(abs(g.gap_pct), 100)))
-            posted.append(task)
+        gaps = [g for g in find_gaps(results, path.stem) if not g.app.startswith(skip)]
+        if not gaps:
+            continue
+        head = gaps[0]
+        key = f"gap:{head.run}"
+        if board.find(key):
+            continue
+        direction = "lower" if head.lower_is_better else "higher"
+        more = f" (+{len(gaps) - 1} more metric{'s' if len(gaps) > 2 else ''})" if len(gaps) > 1 else ""
+        task = board.post(
+            actor, f"{head.run}: swarm behind {head.rule} on {head.metric} ({head.gap_pct:.1f}% behind){more}",
+            kind="gap",
+            body="; ".join(f"{g.metric}: swarm {g.swarm[0]:.4g} [{g.swarm[1]:.4g}, {g.swarm[2]:.4g}] vs {g.rule} "
+                           f"{g.rule_score[0]:.4g} ({'lower' if g.lower_is_better else 'higher'} is better)"
+                           for g in gaps) if len(gaps) > 1 else
+                 f"swarm {head.swarm[0]:.4g} [{head.swarm[1]:.4g}, {head.swarm[2]:.4g}] vs {head.rule} "
+                 f"{head.rule_score[0]:.4g} ({direction} is better)",
+            data={"run": head.run, "app": head.app, **_gap_data(head), "results": str(path),
+                  "metrics": [_gap_data(g) for g in gaps]},
+            key=key, priority=int(min(max(abs(g.gap_pct) for g in gaps), 100)))
+        posted.append(task)
     return posted
 
 
@@ -163,6 +187,7 @@ class AnthropicClient:
             client = anthropic.Anthropic()
         self.client = client
         self.models = {**MODELS, **(models or {})}
+        self.usage: dict[str, dict] = {}  # model -> {"calls", "input_tokens", "output_tokens"}
 
     def complete(self, role: str, system: str, prompt: str) -> str:
         model = self.models[role]
@@ -174,9 +199,26 @@ class AnthropicClient:
         else:  # Sonnet and Opus: let the API retry on a declined request with a fallback model
             resp = self.client.beta.messages.create(betas=["server-side-fallback-2026-07-01"], fallbacks="default",
                                                     **kwargs)
+        self._count(getattr(resp, "model", None) or model, getattr(resp, "usage", None))
         if resp.stop_reason == "refusal":
             raise RuntimeError(f"{model} declined the request")
         return "".join(b.text for b in resp.content if b.type == "text")
+
+
+    def _count(self, model: str, usage):
+        u = self.usage.setdefault(model, {"calls": 0, "input_tokens": 0, "output_tokens": 0})
+        u["calls"] += 1
+        if usage is not None:
+            u["input_tokens"] += int(getattr(usage, "input_tokens", 0) or 0)
+            u["output_tokens"] += int(getattr(usage, "output_tokens", 0) or 0)
+
+    def cost(self) -> float:
+        """Estimated USD for the calls so far (list prices; unknown models count as Opus)."""
+        total = 0.0
+        for model, u in self.usage.items():
+            pin, pout = PRICES.get(model, PRICES["claude-opus-5-5"])
+            total += (u["input_tokens"] * pin + u["output_tokens"] * pout) / 1e6
+        return round(total, 4)
 
 
 def default_client():
@@ -285,7 +327,7 @@ class Router:
                                 {"decision": decision, "client": self.client.name})
         if decision == "fix":
             self.board.post("triage", f"Fix: {task['title']}", kind="fix", data={**task["data"], "gap_task": task["id"]},
-                            key=f"fix:{task['key']}", priority=task["priority"])
+                            key=f"fix:{task['data'].get('run', task['key'])}", priority=task["priority"])
             self.board.close(task["id"], "triage", "done", "sent to fixer")
         elif decision == "wontfix":
             self.board.close(task["id"], "triage", "wontfix", reply.get("reason", ""))
@@ -325,17 +367,22 @@ def gate(board: Board, task_id: str, results_path: str | Path, actor: str = "gat
     """Rule first: keep a proposal only if the retrained swarm clearly beats the best rule
     on the held-out split in ``results_path``. Closes the task either way."""
     task = board.get(task_id)
-    metric, rule = task["data"]["metric"], task["data"]["rule"]
+    checks = task["data"].get("metrics") or [{"metric": task["data"]["metric"], "rule": task["data"]["rule"]}]
     results = json.loads(Path(results_path).read_text())
     block = next(b for b in results.values() if isinstance(b, dict) and SWARM in b.get("policies", {}))
     if block.get("split", "test") != "test":
         raise ValueError("gate needs results on the held-out test split")
-    sw = _triple(block["policies"][SWARM][metric])
-    rs = _triple(block["policies"][rule][metric])
-    low = metric in LOWER_IS_BETTER
-    wins = sw[2] < rs[0] if low else sw[1] > rs[0]
-    board.add_evidence(task_id, actor, f"held-out {metric}: swarm {sw[0]:.4g} [{sw[1]:.4g}, {sw[2]:.4g}] vs {rule} "
-                                       f"{rs[0]:.4g}", {"wins": wins, "results": str(results_path)})
+    lines, wins = [], True
+    for c in checks:  # every flagged metric must clear its rule; one loss and the rule stays
+        metric, rule = c["metric"], c["rule"]
+        sw = _triple(block["policies"][SWARM][metric])
+        rs = _triple(block["policies"][rule][metric])
+        low = metric in LOWER_IS_BETTER
+        ok = sw[2] < rs[0] if low else sw[1] > rs[0]
+        wins = wins and ok
+        lines.append(f"{metric}: swarm {sw[0]:.4g} [{sw[1]:.4g}, {sw[2]:.4g}] vs {rule} {rs[0]:.4g} "
+                     f"({'clears' if ok else 'does not clear'} the rule)")
+    board.add_evidence(task_id, actor, "held-out " + "; ".join(lines), {"wins": wins, "results": str(results_path)})
     board.close(task_id, actor, "done" if wins else "rejected",
                 "beats the rule on held-out test; ready for owner review" if wins else "does not beat the rule; rule stays")
     return wins

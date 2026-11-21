@@ -198,3 +198,56 @@ def test_real_results_files_parse(tmp_path):
     board = Board(tmp_path)
     crew.watch(board, Path(__file__).resolve().parents[1] / "results")
     assert board.verify() == []
+
+
+def _two_metric_results(saved, burned, split="test"):
+    """Wildfire-shaped results: higher forest_saved_pct and lower burned_cells are better."""
+    return {"wildfire": {"app": "wildfire", "split": split, "metrics": ["forest_saved_pct", "burned_cells"],
+                         "policies": {"swarm (trained)": {"forest_saved_pct": saved, "burned_cells": burned},
+                                      "nearest-fire rule": {"forest_saved_pct": [90, 90, 90],
+                                                            "burned_cells": [25, 25, 25]}}}}
+
+
+def test_watch_groups_metrics_per_run_and_skips_paused(tmp_path):
+    res = tmp_path / "results"
+    res.mkdir()
+    (res / "wildfire.json").write_text(json.dumps(_two_metric_results([80, 75, 85], [50, 40, 60])))
+    (res / "hotel-energy.json").write_text(json.dumps(_two_metric_results([80, 75, 85], [50, 40, 60])))
+    board = Board(tmp_path / "board")
+    posted = crew.watch(board, res)
+    assert len(posted) == 1  # one task for wildfire (both metrics), none for the paused hotel app
+    data = posted[0]["data"]
+    assert data["metric"] == "forest_saved_pct" and [m["metric"] for m in data["metrics"]] == [
+        "forest_saved_pct", "burned_cells"]
+    assert len(crew.watch(Board(tmp_path / "b2"), res, skip=())) == 2
+
+
+def test_gate_needs_every_flagged_metric_to_clear_the_rule(tmp_path):
+    res = tmp_path / "results"
+    res.mkdir()
+    (res / "wildfire.json").write_text(json.dumps(_two_metric_results([80, 75, 85], [50, 40, 60])))
+    board = Board(tmp_path / "board")
+    task = crew.watch(board, res)[0]
+    half = tmp_path / "half.json"  # saves more forest but still burns more cells than the rule
+    half.write_text(json.dumps(_two_metric_results([93, 92, 94], [30, 27, 33])))
+    assert crew.gate(board, task["id"], half) is False
+    task2 = Board(tmp_path / "b2")
+    t2 = crew.watch(task2, res)[0]
+    both = tmp_path / "both.json"
+    both.write_text(json.dumps(_two_metric_results([93, 92, 94], [20, 18, 22])))
+    assert crew.gate(task2, t2["id"], both) is True
+
+
+def test_anthropic_client_counts_tokens_and_cost():
+    def create(**kw):
+        return SimpleNamespace(stop_reason="end_turn", model=kw["model"],
+                               usage=SimpleNamespace(input_tokens=1_000_000, output_tokens=100_000),
+                               content=[SimpleNamespace(type="text", text="{}")])
+
+    sdk = SimpleNamespace(messages=SimpleNamespace(create=create),
+                          beta=SimpleNamespace(messages=SimpleNamespace(create=create)))
+    c = crew.AnthropicClient(client=sdk)
+    c.complete("triage", "s", "{}")
+    c.complete("review", "s", "{}")
+    assert c.usage["claude-haiku-5-5"]["calls"] == 1
+    assert c.cost() == round(0.10 + 0.05 + 4.00 + 2.00, 4)

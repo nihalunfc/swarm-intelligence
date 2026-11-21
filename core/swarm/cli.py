@@ -143,13 +143,18 @@ def cmd_board(args):
 
     board = Board(args.board, commit=args.commit)
     if args.action == "watch":
-        posted = crew.watch(board, args.results)
+        posted = crew.watch(board, args.results, skip=crew.PAUSED if args.skip is None else tuple(args.skip))
         print(f"posted {len(posted)} new gap task(s)")
         for t in posted:
             print(f"  {t['id']}  {t['title']}")
     elif args.action == "crew":
-        client = crew.OfflineClient() if args.offline else None
+        client = crew.OfflineClient() if args.offline else crew.default_client()
+        print(f"crew client: {client.name}")
         print(crew.Router(board, client=client, max_tasks=args.max_tasks).run())
+        if getattr(client, "usage", None):
+            for model, u in client.usage.items():
+                print(f"  {model}: {u['calls']} call(s), {u['input_tokens']} in / {u['output_tokens']} out tokens")
+            print(f"  estimated cost: ${client.cost():.4f}")
     elif args.action == "list":
         for t in board.tasks(state=args.state):
             print(f"{t['id']}  {t['state']:<7} {t['kind']:<6} {t['title']}")
@@ -235,6 +240,8 @@ def main(argv=None):
     bd.add_argument("--commit", action="store_true", help="git-commit every board step (board must be in a git tree)")
     bd.add_argument("--offline", action="store_true", help="never call an LLM, even with SWARM_LLM=1")
     bd.add_argument("--max-tasks", type=int, default=20)
+    bd.add_argument("--skip", nargs="*", default=None,
+                    help="results-file prefixes to ignore (default: paused apps, i.e. hotel)")
     bd.add_argument("--state", default=None, choices=["open", "claimed", "closed"])
     bd.add_argument("--task", default=None, help="gate: the fix task id")
     bd.add_argument("--results-file", default=None, help="gate: results JSON from the retrained run")
