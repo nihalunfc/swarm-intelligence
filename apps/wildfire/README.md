@@ -25,6 +25,10 @@ This folder is a copy of the public `GDGCHackathon2026` repository (history kept
 
 ```bash
 swarm train --config configs/wildfire.yaml
+# rule-led hybrid: train, pick the confidence gate on validation fires (also at 100 drones), test at scale
+swarm train --config configs/wildfire-hybrid.yaml --out runs/hybrid
+swarm residual-gate --run runs/hybrid/wildfire/<run id> --sizes 100
+swarm scale --run runs/hybrid/wildfire/<run id> --sizes 6 100 1000 --noise 0.1
 swarm replay --run runs/wildfire/<run id> --output apps/wildfire/docs/data/replay.json
 ```
 

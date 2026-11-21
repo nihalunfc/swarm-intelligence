@@ -1,0 +1,63 @@
+# Rule-led hybrid drone swarm, built to scale.
+# The nearest-fire rule leads; a small learned correction may override it (core/swarm/residual.py).
+# Two changes against configs/wildfire-residual.yaml, both aimed at the collapse at 1,000 drones:
+#  1. obs_mode: local. Every input is measured in cells and clipped at obs_range, so a drone's
+#     inputs mean the same on a 16-cell forest and a 208-cell one. The old inputs divide by the
+#     forest size: on the 1,000-drone forest the direction to the launch pad shrinks about 30x.
+#  2. A confidence gate, tuned on validation fires after training (`swarm residual-gate`): a drone
+#     leaves the rule only when its best override beats "follow rule" by a margin. An infinite
+#     margin is the rule, so the chosen swarm is never worse than the rule on validation.
+# Trained with 6 drones only; every larger swarm is a zero-shot test.
+app: wildfire
+seed: 0
+env:
+  grid_size: 16
+  n_drones: 6
+  max_payload: 6
+  view_radius: 3
+  max_steps: 300
+  p_spread: 0.12
+  p_wind: 0.30
+  burn_time: [3, 6]
+  n_ignitions: 2
+  fire_every: 3
+  shaping: 0.1
+  pads_per_side: 1
+  scale_pads: true           # larger swarms get a tiled forest, one pad per 16x16 tile, as in training
+  obs_mode: local
+  obs_range: 16
+agent:
+  mixer: independent
+  hidden: [256, 256]
+  lr: 0.0005
+  gamma: 0.98
+  tau: 0.01
+  agent_id: false            # ids do not mean anything in a swarm of another size
+residual:
+  rule: nearest-fire rule
+  override_cost: 0.002
+pretrain:
+  rule: follow rule
+  demo_steps: 100000
+  updates: 20000
+  margin: 0.8
+  demo_weight: 1.0
+  demo_decay_fraction: 0.5
+train:
+  total_steps: 400000
+  n_step: 5
+  num_envs: 8
+  batch_size: 256
+  buffer_size: 200000
+  learning_starts: 2000
+  gradient_steps: 1
+  eps_start: 0.2
+  eps_end: 0.02
+  eps_fraction: 0.3
+  log_every: 20000
+  eval_every: 40000
+eval:
+  episodes: 50
+  val_episodes: 20
+  select_metric: forest_saved_pct
+  seed: 10000

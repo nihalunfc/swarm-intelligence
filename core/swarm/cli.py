@@ -67,10 +67,16 @@ def cmd_replay(args):
     print(f"Wrote {args.output}")
 
 
+def cmd_residual_gate(args):
+    from .residual import tune_gate
+
+    tune_gate(args.run, episodes=args.episodes, sizes=args.sizes)
+
+
 def cmd_scale(args):
     from .scale import scale_study, write
 
-    rows = scale_study(args.run, args.sizes, args.episodes, overrides=args.set)
+    rows = scale_study(args.run, args.sizes, args.episodes, overrides=args.set, noise=args.noise)
     cfg = load_config(Path(args.run) / "config.yaml", [])
     metric = args.metric or get_app(cfg["app"]).KEY_METRICS[0]
     out = Path(args.out) if args.exact_out else Path(args.out) / f"scale-{cfg['app']}-{time.strftime('%Y%m%d-%H%M%S')}"
@@ -206,7 +212,14 @@ def main(argv=None):
     s.add_argument("--exact-out", action="store_true", help="write into --out itself, not a new timestamped folder")
     s.add_argument("--set", nargs="*", default=[], metavar="KEY=VALUE",
                    help="override the run's config, e.g. env.scale_pads=true")
+    s.add_argument("--noise", type=float, default=0.0, help="sensor noise on the agents' observations")
     s.set_defaults(fn=cmd_scale)
+
+    g = sub.add_parser("residual-gate", help="tune how sure a residual swarm must be to leave the rule (validation only)")
+    g.add_argument("--run", required=True)
+    g.add_argument("--episodes", type=int, default=None, help="validation episodes (default: eval.val_episodes)")
+    g.add_argument("--sizes", type=int, nargs="*", default=[], help="also validate at these swarm sizes (worst size counts)")
+    g.set_defaults(fn=cmd_residual_gate)
 
     sd = sub.add_parser("seeds", help="train one config with several seeds and report confidence intervals")
     sd.add_argument("--config", required=True)

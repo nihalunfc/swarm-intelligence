@@ -146,6 +146,7 @@ Every number below is a mean over independently trained seeds and the same held-
 
 - The swarm trained with 6 drones matches the rule at its training size, then falls behind as the swarm grows.
 - Training on 24 drones (the curriculum) made it worse at every size. How to train swarms that grow is still an open question here.
+- **Rule-led hybrid** ([`results/wildfire-hybrid.md`](results/wildfire-hybrid.md)): the rule decides and a learned correction may override it only past a confidence gate picked on validation fires. With the gate validated at 6 *and* 100 drones the hybrid holds the rule's 86.4% at 1,000 drones, but only because it refuses every learned correction. Corrections that looked better at 6 drones lost 19 points at 1,000 drones and up to 50 under sensor noise. Size-invariant drone inputs (`env.obs_mode: local`) did not fix that on their own.
 
 **What is not claimed.** The learned swarms beat the rules on grid energy and CityLearn. They do not beat them on housekeeping, wildfire or hotel peak energy, and on wildfire they do not scale past their training size. Every simulator here is simplified. See the [model card](docs/model-card.md) and the [dataset card](docs/dataset-card.md).
 

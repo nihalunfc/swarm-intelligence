@@ -27,7 +27,7 @@ class WildfireSwarmEnv(SwarmEnv):
     def __init__(self, grid_size=16, n_drones=6, max_payload=6, view_radius=3, max_steps=150,
                  p_spread=0.12, p_wind=0.30, burn_time=(3, 6), n_ignitions=2, wind=None,
                  reward_extinguish=1.0, drop_near_fire_only=True, shaping=0.1, shaping_gamma=0.97, fire_every=1,
-                 base_size=3, comm_radius=4, pads_per_side=1, seed=0):
+                 base_size=3, comm_radius=4, pads_per_side=1, obs_mode="global", obs_range=16, seed=0):
         self.G = int(grid_size)
         self.n_agents = int(n_drones)
         self.max_payload = int(max_payload)
@@ -42,6 +42,13 @@ class WildfireSwarmEnv(SwarmEnv):
         self.shaping, self.shaping_gamma = float(shaping), float(shaping_gamma)
         self.fire_every = int(fire_every)  # drones move this many cells per fire-spread tick
         self.rng = np.random.default_rng(seed)
+        # "global" (the original): positions and vectors are fractions of the forest size, so the
+        # same fire 5 cells away looks 13x closer on a 208-cell forest than on a 16-cell one.
+        # "local": everything is measured in cells, clipped at ``obs_range`` cells, so a drone's
+        # inputs mean the same thing whatever the size of the forest or the swarm.
+        if obs_mode not in ("global", "local"):
+            raise ValueError(f"obs_mode must be 'global' or 'local', not {obs_mode!r}")
+        self.obs_mode, self.obs_range = obs_mode, float(obs_range)
         w = 2 * self.r + 1
         self.obs_dim = 3 * w * w + 3 + 3 + 2 + 2 + 1
         self.base = (0, 0)
@@ -140,6 +147,8 @@ class WildfireSwarmEnv(SwarmEnv):
 
     def comm_spec(self):
         """Position columns of the observation (y/G, x/G) and the radio range in those units."""
+        if self.obs_mode != "global":
+            raise ValueError("message passing needs obs_mode: global (it reads absolute positions)")
         w = 2 * self.r + 1
         return (3 * w * w, 3 * w * w + 1), self.comm_radius / self.G
 
@@ -214,21 +223,47 @@ class WildfireSwarmEnv(SwarmEnv):
         others = win(pad(drones), (w, w))[y, x].copy()
         others[:, r, r] -= 1
         fy, fx = np.nonzero(self.grid == BURNING)
+        n = self.n_agents
+        # Global mode divides by the forest size G; local mode by a fixed range R and clips.
+        R = float(G) if self.obs_mode == "global" else self.obs_range
+        clip = (lambda v: v) if self.obs_mode == "global" else (lambda v: np.clip(v, -1.0, 1.0))
         if len(fy):
             d = np.abs(fy[None] - y[:, None]) + np.abs(fx[None] - x[:, None])
             j = d.argmin(1)
-            near = np.stack([(fy[j] - y) / G, (fx[j] - x) / G, d[np.arange(len(y)), j] / (2 * G)], 1)
+            near = np.stack([clip((fy[j] - y) / R), clip((fx[j] - x) / R),
+                             clip(d[np.arange(len(y)), j] / (2 * R))], 1)
         else:
-            near = np.zeros((self.n_agents, 3))
-        n = self.n_agents
+            near = np.zeros((n, 3))
+        if self.obs_mode == "global":
+            where = np.stack([y / G, x / G], 1)
+            fire_load = np.full((n, 1), len(fy) / G ** 2)
+        else:
+            # Nearest edge on each axis, only once it is inside the view window (sign: which side);
+            # 0 when no edge is in sight, which is what a drone in the middle of any forest sees.
+            r = float(self.r)
+
+            def edge(v):  # +: top/left edge nearer, -: bottom/right; size grows as the edge gets closer
+                e = np.minimum(v, G - 1 - v)
+                return np.where(v <= G - 1 - v, 1.0, -1.0) * np.clip(1 - e / (r + 1), 0.0, 1.0)
+            where = np.stack([edge(y), edge(x)], 1)
+            fire_load = self._local_fire_share(y, x)[:, None]
         return np.concatenate([
             fire.reshape(n, -1), fuel.reshape(n, -1), others.reshape(n, -1),
-            np.stack([y / G, x / G, self.payload / self.max_payload], 1),
+            where, (self.payload / self.max_payload)[:, None],
             near,
-            (self._pad_distance()[1] - self.pos) / G,      # toward the nearest launch pad
+            clip((self._pad_distance()[1] - self.pos) / R),      # toward the nearest launch pad
             np.broadcast_to(np.asarray(self.wind, dtype=np.float32), (n, 2)),
-            np.full((n, 1), len(fy) / G ** 2),
+            fire_load,
         ], axis=1).astype(np.float32)
+
+    def _local_fire_share(self, y, x):
+        """Share of burning cells in the (2R+1)^2 square around each drone (an integral image)."""
+        R = int(self.obs_range)
+        b = np.pad((self.grid == BURNING).astype(np.int32), ((1, 0), (1, 0))).cumsum(0).cumsum(1)
+        y0, y1 = np.clip(y - R, 0, self.G), np.clip(y + R + 1, 0, self.G)
+        x0, x1 = np.clip(x - R, 0, self.G), np.clip(x + R + 1, 0, self.G)
+        count = b[y1, x1] - b[y0, x1] - b[y1, x0] + b[y0, x0]
+        return count / float((2 * R + 1) ** 2)
 
 
 def make_env(env_cfg: dict, split: str, seed: int) -> WildfireSwarmEnv:

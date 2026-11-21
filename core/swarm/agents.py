@@ -181,6 +181,17 @@ class SwarmAgent:
         q = self.q(torch.as_tensor(obs, dtype=torch.float32, device=self.device))
         q = q.masked_fill(~torch.as_tensor(mask, device=self.device), -1e9)
         actions = q.argmax(-1).cpu().numpy()
+        gate = self.cfg.get("gate_margin")
+        if gate is not None and epsilon == 0:
+            # Rule-led residual swarm (swarm.residual): an agent leaves the rule only when its best
+            # override beats "follow rule" by more than the margin; an infinite margin is the rule.
+            f = int(self.cfg["gate_follow"])
+            q_follow = q[..., f]
+            q_other = torch.cat([q[..., :f], q[..., f + 1:]], -1)
+            best = q_other.max(-1)
+            idx = best.indices + (best.indices >= f).long()
+            take = (best.values - q_follow > float(gate)).cpu().numpy()
+            actions = np.where(take, idx.cpu().numpy(), f)
         if epsilon > 0:
             rng = rng or np.random.default_rng()
             explore = rng.random(actions.shape) < epsilon
@@ -285,6 +296,6 @@ def make_agent(env, cfg: dict, device: str = "cpu") -> SwarmAgent:
     agent hears every other (fine for batteries on one grid).
     """
     agent = SwarmAgent(env.obs_dim, env.n_actions, env.n_agents, cfg, device=device)
-    if hasattr(env, "comm_spec"):
+    if hasattr(env, "comm_spec") and (cfg.get("comm") or {}).get("enabled"):
         agent.set_neighbours(radius_neighbours(*env.comm_spec()))
     return agent

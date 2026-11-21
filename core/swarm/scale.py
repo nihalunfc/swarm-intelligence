@@ -35,7 +35,9 @@ def _time(fn, repeats: int) -> float:
 
 
 def scale_study(run: str | Path, sizes: list[int], episodes: int = 5, batch_size: int = 32, log=print,
-                overrides: list[str] | None = None) -> list[dict]:
+                overrides: list[str] | None = None, noise: float = 0.0) -> list[dict]:
+    """``noise`` adds Gaussian sensor noise to the agents' observations (as in ``swarm robustness``);
+    the rules read the true state."""
     import torch
 
     from .agents import make_agent
@@ -43,14 +45,26 @@ def scale_study(run: str | Path, sizes: list[int], episodes: int = 5, batch_size
     run = Path(run)
     cfg = load_config(run / "config.yaml", list(overrides or []))
     app = get_app(cfg["app"])
+    if cfg.get("residual"):
+        from .residual import wrap
+
+        scaled = getattr(app, "scaled_env_cfg", None)
+        app = wrap(app, cfg["residual"])
+        if scaled:
+            app.scaled_env_cfg = scaled
     if not hasattr(app, "scaled_env_cfg"):
         raise SystemExit(f"App '{cfg['app']}' does not define scaled_env_cfg")
+    scaled_env_cfg = app.scaled_env_cfg
+    if noise > 0:
+        from .robustness import scenario_app
+
+        app = scenario_app(app, {"noise": noise})
     state = torch.load(run / "model.pt", map_location="cpu", weights_only=False)
     trained_n = app.make_env(final_cfg(cfg)["env"], "train", 0).n_agents  # a curriculum ends at its last stage
     seed = int(cfg.get("eval", {}).get("seed", 10_000))
     rows = []
     for n in sizes:
-        ecfg = app.scaled_env_cfg(eval_env_cfg(cfg), n)
+        ecfg = scaled_env_cfg(eval_env_cfg(cfg), n)
         env = app.make_env(ecfg, "test", seed)
         acfg = dict(state["cfg"])
         if acfg.get("agent_id") and not acfg.get("agent_id_count"):
@@ -84,10 +98,12 @@ def scale_study(run: str | Path, sizes: list[int], episodes: int = 5, batch_size
         log(f"[{cfg['app']}] {n} agents: evaluating swarm and rules on {episodes} episode(s) ...")
         perf = {"swarm (trained)": evaluate(app, ecfg, policy, episodes, seed)}
         for name, rule in app.BASELINES.items():
+            if name == "follow rule":  # the residual wrapper's copy of the rule
+                continue
             perf[name] = evaluate(app, ecfg, rule, episodes, seed)
         for name, metrics in perf.items():
             rows.append({
-                "app": cfg["app"], "agents": n, "policy": name, "trained_with": trained_n,
+                "app": cfg["app"], "agents": n, "policy": name, "trained_with": trained_n, "noise": noise,
                 **{k: metrics[k] for k in app.KEY_METRICS if k in metrics},
                 "params": params, "act_ms": act_ms, "env_step_ms": step_ms,
                 "update_ms": update_ms, "replay_kb_per_transition": bytes_per_transition / 1024,

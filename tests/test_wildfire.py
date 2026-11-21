@@ -81,3 +81,41 @@ def test_target_actions_follow_the_rule_logic():
         if term or trunc:
             break
     assert 0 <= env.episode_metrics()["forest_saved_pct"] <= 100
+
+
+def test_local_obs_does_not_depend_on_forest_size():
+    """In local mode a drone 5 cells from a fire sees the same inputs on any forest."""
+    import numpy as np
+
+    from apps.wildfire.env import BURNING, FUEL, WildfireSwarmEnv
+
+    tails = []
+    for G in (16, 208):
+        env = WildfireSwarmEnv(grid_size=G, n_drones=1, obs_mode="local", seed=0)
+        env.reset(seed=0)
+        env.grid[:] = FUEL
+        c = G // 2
+        env.grid[c, c + 5] = BURNING
+        env.pos[0] = (c, c)
+        env.pads = np.array([(c - 4, c - 4)])
+        tails.append(env._obs()[0, 3 * 49:])
+    np.testing.assert_allclose(tails[0][:-1], tails[1][:-1], atol=1e-6)  # last: local fire share
+    assert np.abs(tails[1]).max() <= 1.0
+
+
+def test_gate_margin_turns_residual_swarm_into_the_rule():
+
+    from apps import wildfire
+    from swarm.agents import make_agent
+    from swarm.residual import wrap
+
+    app = wrap(wildfire, {"rule": "nearest-fire rule"})
+    env = app.make_env({"grid_size": 12, "n_drones": 4, "obs_mode": "local"}, "test", 0)
+    obs = env.reset(seed=0)
+    agent = make_agent(env, {"hidden": [16], "gate_margin": float("inf"), "gate_follow": env.FOLLOW})
+    assert (agent.act(obs[None], env.action_mask()[None]) == env.FOLLOW).all()
+    agent.cfg["gate_margin"] = None
+    free = agent.act(obs[None], env.action_mask()[None])
+    agent.cfg["gate_margin"] = -1e6  # any override wins: plain greedy over the other actions
+    forced = agent.act(obs[None], env.action_mask()[None])
+    assert (forced != env.FOLLOW).all() and free.shape == forced.shape
