@@ -24,11 +24,11 @@ work tree, every step is also a git commit of the board folder only.
 
 | step | who | model | what it does |
 | :-- | :-- | :-- | :-- |
-| watch | Python | none | reads `results/*.json`, posts a `gap` task when the swarm's 95% interval is entirely worse than the best rule (ties are not flagged; "no battery", "random" and perfect-foresight bounds are not rules) |
+| watch | Python | none | reads `results/*.json`, posts one `gap` task per run listing every metric where the swarm's 95% interval is entirely worse than the best rule (ties are not flagged; "no battery", "random" and perfect-foresight bounds are not rules). Paused apps (hotel) are skipped unless you pass `--skip` with other prefixes |
 | triage | Router -> triage | Haiku | fix, watch or won't fix, with one sentence why |
 | fix | Router -> fixer | Sonnet | proposes `train.*` / `agent.*` overrides only; data, splits and evaluation keys are dropped; writes `proposals/<task>-overrides.yaml` and the exact `swarm train` command |
 | review | Router -> reviewer | Opus, once per run | short plain-English summary of the board |
-| gate | Python | none | after someone retrains with the proposal, keeps it only if the new swarm clearly beats the rule on the held-out test split; otherwise closes it as `rejected` |
+| gate | Python | none | after someone retrains with the proposal, keeps it only if the new swarm clearly beats the rule on the held-out test split on **every** flagged metric; otherwise closes it as `rejected` |
 
 The routing is plain Python (`crew.Router`). Nothing edits `configs/` or merges anything: nihal
 reads the proposal, runs it, gates it, and merges by hand.
@@ -39,6 +39,19 @@ Without `SWARM_LLM=1` the crew uses `OfflineClient`, a rule-based stand-in, so t
 no API key and no cost. CI never calls an API; the tests use a fake client and a mocked SDK.
 To use Claude: `pip install anthropic`, sign in (`ANTHROPIC_API_KEY` or `ant auth login`), then
 `SWARM_LLM=1 swarm board crew`.
+
+After a live run the CLI prints the calls and tokens per model and an estimated cost at list
+prices (Haiku 5.5 $0.10/$0.50, Sonnet 5.5 $2/$10, Opus 5.5 $4/$20 per million tokens in/out).
+On the current results a full run is about 6 triage calls, up to 5 fixer calls and one review,
+which comes to cents, not dollars.
+
+## Gating a proposal (step by step)
+
+1. Read the proposal: `cat runs/board/proposals/<fix-id>-overrides.yaml`. The `try` command is on the task too.
+2. Retrain with it on 3 seeds (wildfire: about 20 minutes per seed per 600k steps on 4 CPU cores):
+   `swarm seeds --config configs/wildfire.yaml --seeds 0 1 2 --set <overrides> label=wildfire-crew-<fix-id>`
+3. Gate on the held-out test fires: `swarm board gate --task <fix-id> --results-file runs/seeds-wildfire-crew-<fix-id>-*/summary.json`
+4. Kept proposals still need you to copy the overrides into `configs/` and merge. Rejected ones stay on the board as a record.
 
 ## Commands
 
