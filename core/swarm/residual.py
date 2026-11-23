@@ -111,3 +111,68 @@ def wrap(app, rcfg: dict):
     w = types.SimpleNamespace(make_env=make_env, BASELINES=baselines, REFERENCES=refs,
                               KEY_METRICS=list(app.KEY_METRICS) + ["override_rate_pct"], inner=app)
     return w
+
+
+GATE_MARGINS = (0.0, 0.02, 0.05, 0.1, 0.2, 0.5, float("inf"))
+
+
+def tune_gate(run, margins=GATE_MARGINS, episodes: int | None = None, log=print, sizes=None) -> dict:
+    """Pick how sure a residual swarm must be before it leaves the rule, on validation fires.
+
+    For each margin the gated swarm (see ``SwarmAgent.act``) plays the validation
+    episodes (never the test ones). The best margin by ``eval.select_metric`` is
+    kept; ties go to the larger margin, i.e. closer to the rule. An infinite
+    margin is the rule itself, so the chosen swarm is never worse than the rule
+    on validation. The margin is written into the run's ``model.pt``, so every
+    later tool (evaluate, scale, robustness) uses the gated swarm.
+
+    ``sizes`` (optional, apps with ``scaled_env_cfg``): also play the validation
+    fires with these swarm sizes and score each margin by its worst size. A
+    correction that only helps the trained size is then refused.
+    """
+    from pathlib import Path
+
+    import torch
+    import yaml
+
+    from .agents import make_agent
+    from .registry import get_app
+    from .trainer import evaluate, final_cfg
+
+    run = Path(run)
+    cfg = final_cfg(yaml.safe_load((run / "config.yaml").read_text()))
+    if not cfg.get("residual"):
+        raise SystemExit("tune_gate: this run is not a residual swarm (no `residual:` in its config)")
+    app = wrap(get_app(cfg["app"]), cfg["residual"])
+    vcfg = cfg.get("eval", {})
+    env_cfg = {**cfg.get("env", {}), **cfg.get("eval_env", {})}
+    n_eps = int(episodes or vcfg.get("val_episodes", 10))
+    val_seed, metric = int(vcfg.get("val_seed", 5_000)), str(vcfg.get("select_metric", "return"))
+    sign = -1.0 if str(vcfg.get("select_mode", "max")) == "min" else 1.0
+    state = torch.load(run / "model.pt", map_location="cpu", weights_only=False)
+    inner = get_app(cfg["app"])
+    cfgs = {"trained": env_cfg}
+    for n in sizes or []:
+        cfgs[f"{n} agents"] = inner.scaled_env_cfg(env_cfg, int(n))
+    follow = int(app.make_env(env_cfg, "val", val_seed).FOLLOW)
+    rows = []
+    for m in margins:
+        acfg = {**state["cfg"], "gate_margin": float(m), "gate_follow": follow}
+        scores, over = {}, []
+        for label, ecfg in cfgs.items():
+            agent = make_agent(app.make_env(ecfg, "val", val_seed), acfg)
+            agent.load_state_dict(state)
+            agent.cfg = acfg
+            res = evaluate(app, ecfg, agent.policy(), n_eps, val_seed, "val")
+            scores[label] = res[metric]
+            over.append(res.get("override_rate_pct", 0.0))
+        worst = min(scores.values(), key=lambda v: sign * v)
+        rows.append({"margin": float(m), metric: worst, "by_size": scores, "override_rate_pct": float(np.mean(over))})
+        log(f"gate margin {m}: validation {metric} " + ", ".join(f"{k} {v:.3f}" for k, v in scores.items())
+            + f", overrides {rows[-1]['override_rate_pct']:.2f}%")
+    best = max(rows, key=lambda r: (sign * r[metric], r["margin"]))
+    state["cfg"] = {**state["cfg"], "gate_margin": best["margin"], "gate_follow": follow}
+    torch.save(state, run / "model.pt")
+    (run / "gate.json").write_text(__import__("json").dumps({"chosen": best, "tried": rows}, indent=2))
+    log(f"chosen gate margin: {best['margin']} ({metric} {best[metric]:.3f} on {n_eps} validation fires)")
+    return {"chosen": best, "tried": rows}
